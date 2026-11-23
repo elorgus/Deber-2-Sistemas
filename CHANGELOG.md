@@ -11,6 +11,7 @@ Versionado: `diseno-vMAJOR.MINOR.PATCH` (MAJOR = sprint, MINOR = revisión, PATC
 - `docs/ARQUITECTURA_BASE.md` v1.0.0 — contrato maestro.
 - `docs/BACKLOG.md` v1.0.0 — product backlog y plan de 4 sprints.
 - `CHANGELOG.md` v1.0.0.
+- `equipo/P5-JessPCL/HU-08-riesgos.md` v1.0.0 — registro inicial de 18 riesgos alineado con FAL y RNF del contrato (HU-08, P5).
 
 ### Changed
 - (pendiente)
