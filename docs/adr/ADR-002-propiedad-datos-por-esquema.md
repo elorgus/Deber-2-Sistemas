@@ -1,3 +1,4 @@
+[ADR-002-propiedad-datos-por-esquema.md](https://github.com/user-attachments/files/35381867/ADR-002-propiedad-datos-por-esquema.md)
 # ADR-002: Propiedad de datos por módulo con aislamiento por esquema
 
 | Campo | Valor |
@@ -5,15 +6,16 @@
 | Fecha | 2026-11-24 |
 | Estado | Propuesto (pasa a *Aceptado* tras la revisión de P7 y el acta del equipo) |
 | Responsable | P1 · Líder de arquitectura |
-| Historia | HU-20 |
+| Historia | [HU-20](../BACKLOG.md) |
 | Revisor | P7 |
 
 ## Contexto
 
-Con el monolito modular (ADR-001), cuatro módulos (SVC-01 a SVC-04) comparten un
-despliegue (UD-1). Eso hace tentador que un módulo lea directamente las tablas de
-otro. Si lo hace, el acoplamiento por datos vuelve inútil cualquier extracción
-futura y deja de haber una fuente única de verdad (PRI-01).
+Con el monolito modular ([ADR-001](./ADR-001-monolito-modular-evolutivo.md)), cuatro
+módulos (SVC-01 a SVC-04) comparten un despliegue (UD-1). Eso hace tentador que un
+módulo lea directamente las tablas de otro. Si lo hace, el acoplamiento por datos
+vuelve inútil cualquier extracción futura y deja de haber una fuente única de
+verdad (PRI-01).
 
 El contrato exige un dueño único por dato (§5), cero escrituras cruzadas (PRI-02),
 referencias por identificador sin claves foráneas entre módulos (PRI-03) y réplicas
@@ -78,12 +80,12 @@ aislamiento por esquema**.
 
 - Las réplicas locales quedan atrasadas unos segundos (CE-02): un SKU recién creado tarda en poder recibirse.
 - No hay consultas cruzadas directas: los datos compuestos se arman con eventos, réplicas o la composición de TRX-02.
-- Los datos de referencia se duplican y su sincronización por eventos debe ser idempotente (ADR-004).
+- Los datos de referencia se duplican y su sincronización por eventos debe ser idempotente ([ADR-004](./ADR-004-sincrono-y-eventos-con-outbox.md)).
 - Exige administrar una credencial por esquema y mantenerlas fuera del repositorio (RNF-SEG-02).
 
 ## Historias y diagramas relacionados
 
-- Historias: HU-20 (este ADR), HU-12, HU-13, HU-14.
-- Diagramas: `C4N2-contenedores` (un esquema lógico por SVC; nota PRI-02).
-- ADR relacionados: ADR-001, ADR-004, ADR-009.
-- Contrato: ARQUITECTURA_BASE §2.2 (PRI-01 a PRI-04), §2.3 (Aislamiento de datos), §5; RNF-MAN-02.
+- Historias: [HU-20](../BACKLOG.md) (este ADR, §4.2), [HU-12](../BACKLOG.md), [HU-13](../BACKLOG.md), [HU-14](../BACKLOG.md).
+- Diagramas: [`C4N2-contenedores` (fuente)](../../diagramas/c4/src/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../../diagramas/c4/export/C4N2-contenedores.svg): un esquema lógico por SVC y nota PRI-02.
+- ADR relacionados: [ADR-001](./ADR-001-monolito-modular-evolutivo.md), [ADR-004](./ADR-004-sincrono-y-eventos-con-outbox.md), [ADR-009](./ADR-009-replicas-locales-de-referencia.md).
+- Contrato: [ARQUITECTURA_BASE](../ARQUITECTURA_BASE.md) §2.2 (PRI-01 a PRI-04), §2.3 (Aislamiento de datos), §5; RNF-MAN-02.
