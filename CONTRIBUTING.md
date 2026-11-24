@@ -28,7 +28,29 @@ Este documento define cómo trabaja el equipo para garantizar que los artefactos
 - No inventes nombres nuevos: si algo falta, propón un cambio vía PR + ADR "Propuesto".
 - **Fuera de alcance:** No incluyas endpoints, payloads, esquemas OpenAPI, CI/CD ni pruebas.
 
-## 4. Checklist del Pull Request (Definition of Done)
+## 4. Definition of Ready (antes de empezar una HU)
+
+Una HU pasa a *En curso* solo si cumple todo:
+
+- [ ] Tiene **responsable y revisor** asignados.
+- [ ] Sus **criterios de aceptación son verificables**.
+- [ ] Está vinculada a una **HN o a un módulo (SVC/TRX)** y a un **criterio de la rúbrica**.
+- [ ] Los **artefactos de los que depende ya están aprobados** (o se acordó trabajar en paralelo).
+- [ ] **Cabe en el sprint** según la capacidad declarada.
+
+## 5. Definition of Done (para cerrar una HU)
+
+Una HU pasa a *Terminado* solo si cumple todo:
+
+1. Cumple todos sus **criterios de aceptación** y está vinculada a su módulo (SVC/TRX) y a sus HN.
+2. Los diagramas, modelos de proceso o ADR afectados se actualizaron y **los aprobó el revisor asignado** en el PR.
+3. Los artefactos modificados están **versionados** (ver `docs/VERSIONAMIENTO.md`): leyenda con versión, entrada en `CHANGELOG.md`, y fuente y exportación en el mismo PR.
+4. Pasa la **checklist de revisión cruzada** (sección 6).
+5. La **evidencia de revisión, retroalimentación y decisiones** quedó en el registro del sprint.
+6. La tarjeta está en *Terminado* con **enlace al PR**.
+7. No se exige evidencia de pipeline ni de despliegue (fuera del alcance de la materia).
+
+## 6. Checklist del Pull Request (Definition of Done)
 
 Copia esto en la descripción de cada PR:
 
@@ -40,3 +62,12 @@ Copia esto en la descripción de cada PR:
 - [ ] Se ha actualizado el `CHANGELOG.md` (si aplica).
 - [ ] He asignado a mi revisor cruzado y este ha aprobado.
 - [ ] El issue correspondiente ha sido referenciado (`Closes #nn`).
+- [ ] Los nombres de SVC, TRX, EXT, EVT, INT, VL, estados y puertos son idénticos a `ARQUITECTURA_BASE.md`.
+- [ ] Ningún diagrama muestra a un módulo leyendo o escribiendo datos de otro (PRI-02).
+- [ ] Cada interacción indica S o A y coincide con su INT.
+- [ ] Los eventos están en pasado y los emite solo su dueño.
+- [ ] El dashboard y la proyección no aparecen como origen de decisiones ni como fuente de verdad.
+- [ ] Fuente y exportación presentes y sincronizadas; leyenda completa (`ID · vX.Y.Z · AAAA-MM-DD · autor (Px) · HU-NN`).
+- [ ] Sin secretos ni datos personales reales.
+- [ ] La tarjeta del tablero está en *En revisión* con el enlace al PR.
+```
