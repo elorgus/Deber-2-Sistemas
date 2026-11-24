@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1720" height="1190" viewBox="0 0 1720 1190" role="img">
+  <title>Smart Inventory · Reposición y Compras</title>
+  <desc>Componentes de SVC-03 para evaluar riesgo, calcular y gestionar sugerencias, emitir órdenes y enviarlas al ERP. Incluye las réplicas de catálogo y pronóstico.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#4d6882" />
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1720" height="1190" rx="0" fill="#f8fafc" stroke="none" />
+  <text x="35" y="52" font-size="32" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">Smart Inventory · Reposición y Compras</text>
+  <text x="36" y="82" font-size="17" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">C4 Nivel 3 · Diagrama de componentes</text>
+  <rect x="338" y="116" width="1320" height="878" rx="20" fill="#ffffff" stroke="#96b2cb" />
+  <text x="370" y="151" font-size="22" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">SVC-03 Reposición y Compras</text>
+  <text x="1388" y="149" font-size="12" font-family="Arial, sans-serif" fill="#445e75" font-weight="700" text-anchor="start">LÍMITE DEL MÓDULO</text>
+  <g>
+    <polyline points="271,271 390,271" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="740,268 805,268" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="640,215 640,184 1400,184 1400,215" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="560,315 560,410" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="955,410 955,315" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="1122,410 1122,380 1370,380 1370,315" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="740,470 805,470" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="1155,470 1220,470" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="271,600 370,600 370,582 1305,582 1305,536" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="1485,536 1485,638" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="1220,693 1155,693" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+    <polyline points="980,825 980,748" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" stroke-dasharray="6 5" />
+    <polyline points="980,928 980,1035" fill="none" stroke="#4d6882" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round" />
+  </g>
+  <g>
+    <rect x="36" y="223" width="235" height="100" rx="12" fill="#edf0f5" stroke="#aab8c8" />
+    <text x="53" y="246" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">TRX-03 · EXTERNO AL MÓDULO</text>
+    <text x="53" y="272" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">Broker de eventos</text>
+    <text x="53" y="295" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Entrega eventos de negocio.</text>
+    <rect x="36" y="548" width="235" height="102" rx="12" fill="#edf0f5" stroke="#aab8c8" />
+    <text x="53" y="571" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">TRX-02 · EXTERNA AL MÓDULO</text>
+    <text x="53" y="597" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">Capa de Aplicación</text>
+    <text x="53" y="620" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Canal del comprador ROL-03.</text>
+    <rect x="390" y="215" width="350" height="100" rx="12" fill="#e5f0fb" stroke="#a5bfd7" />
+    <text x="407" y="238" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">ENTRADA ASÍNCRONA</text>
+    <text x="407" y="264" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">ConsumidorIdempotente</text>
+    <text x="407" y="287" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Procesa eventos del broker de forma idempotente.</text>
+    <rect x="805" y="215" width="350" height="100" rx="12" fill="#e8f4f1" stroke="#98beb3" />
+    <text x="822" y="238" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">DATOS LOCALES</text>
+    <text x="822" y="264" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">Réplica local de catálogo</text>
+    <text x="822" y="287" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">ReplicaCatalogo expone la consulta de solo lectura.</text>
+    <rect x="1220" y="215" width="350" height="100" rx="12" fill="#e8f4f1" stroke="#98beb3" />
+    <text x="1237" y="238" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">DATOS LOCALES</text>
+    <text x="1237" y="264" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">Copia local del pronóstico</text>
+    <text x="1237" y="287" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Conserva el último pronóstico disponible por SKU.</text>
+    <rect x="390" y="410" width="350" height="126" rx="12" fill="#e5f0fb" stroke="#a5bfd7" />
+    <text x="407" y="433" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">COMPONENTE DE DOMINIO</text>
+    <text x="407" y="459" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">EvaluadorRiesgoAgotamiento</text>
+    <text x="407" y="482" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Evalúa el saldo frente a la política del SKU.</text>
+    <text x="407" y="501" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Detecta o resuelve alertas de riesgo.</text>
+    <rect x="805" y="410" width="350" height="126" rx="12" fill="#e5f0fb" stroke="#a5bfd7" />
+    <text x="822" y="433" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">STRATEGY</text>
+    <text x="822" y="459" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">EstrategiaReposicion</text>
+    <text x="822" y="482" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">ReposicionMinMax · ReposicionPuntoReorden</text>
+    <text x="822" y="501" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">ReposicionPorPronostico</text>
+    <rect x="1220" y="410" width="350" height="126" rx="12" fill="#e5f0fb" stroke="#a5bfd7" />
+    <text x="1237" y="433" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">RESPONSABILIDAD DE DOMINIO</text>
+    <text x="1237" y="459" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">Gestión de sugerencias</text>
+    <text x="1237" y="482" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">EstadoSugerencia</text>
+    <text x="1237" y="501" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Generada · Aprobada · Rechazada · Reemplazada</text>
+    <rect x="1220" y="638" width="350" height="130" rx="12" fill="#e5f0fb" stroke="#a5bfd7" />
+    <text x="1237" y="661" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">RESPONSABILIDAD DE DOMINIO</text>
+    <text x="1237" y="687" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">Gestión de órdenes de compra</text>
+    <text x="1237" y="710" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">EstadoOrdenCompra</text>
+    <text x="1237" y="729" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Emitida · Enviada · RecibidaParcial</text>
+    <text x="1237" y="748" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Cerrada · Cancelada</text>
+    <rect x="805" y="645" width="350" height="103" rx="12" fill="#e5f0fb" stroke="#a5bfd7" />
+    <text x="822" y="668" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">PUERTO DE SALIDA</text>
+    <text x="822" y="694" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">PuertoErp</text>
+    <text x="822" y="717" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Define el envío de órdenes de compra.</text>
+    <rect x="805" y="825" width="350" height="103" rx="12" fill="#e5f0fb" stroke="#a5bfd7" />
+    <text x="822" y="848" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">ADAPTADOR DE SALIDA</text>
+    <text x="822" y="874" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">AdaptadorErp</text>
+    <text x="822" y="897" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Implementa el envío asíncrono al ERP.</text>
+    <rect x="805" y="1035" width="350" height="92" rx="12" fill="#edf0f5" stroke="#aab8c8" />
+    <text x="822" y="1058" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">EXT-01 · SISTEMA EXTERNO</text>
+    <text x="822" y="1084" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">ERP corporativo</text>
+    <text x="822" y="1107" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Recibe órdenes de compra.</text>
+    <rect x="390" y="645" width="350" height="114" rx="12" fill="#f7f9fc" stroke="#c4d2df" />
+    <text x="407" y="668" font-size="12" font-family="Arial, sans-serif" fill="#325c79" font-weight="700" text-anchor="start">REGLA DE REPOSICIÓN</text>
+    <text x="407" y="694" font-size="19" font-family="Arial, sans-serif" fill="#172e45" font-weight="700" text-anchor="start">Sin pronóstico disponible</text>
+    <text x="407" y="717" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Se usa ReposicionMinMax.</text>
+    <text x="407" y="736" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">El flujo de sugerencias conserva sus pasos.</text>
+  </g>
+  <g>
+    <rect x="288.5" y="247" width="83" height="36" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="330" y="262" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">Entrega</text>
+    <text x="330" y="278" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">eventos (A)</text>
+    <rect x="744" y="217" width="57" height="36" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="772" y="232" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">EVT-01</text>
+    <text x="772" y="248" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">EVT-02</text>
+    <rect x="792.0" y="173" width="496" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="1040" y="188" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">INT-16 (A) · EVT-37 PronosticoDemandaActualizado · Origen: SVC-06 Analítica</text>
+    <rect x="438.0" y="356" width="244" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="560" y="371" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">INT-10 (A) · EVT-05 SaldoActualizado</text>
+    <rect x="894.0" y="342" width="122" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="955" y="357" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">Consulta catálogo</text>
+    <rect x="1171.5" y="359" width="167" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="1255" y="374" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">Lee pronóstico si aplica</text>
+    <rect x="745.0" y="440" width="56" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="773" y="455" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">Riesgo</text>
+    <rect x="1155.0" y="440" width="64" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="1187" y="455" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">Cantidad</text>
+    <rect x="676.5" y="561" width="283" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="818" y="576" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">INT-12 (S) · Aprobar o rechazar sugerencia</text>
+    <rect x="1408.0" y="575" width="154" height="36" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="1485" y="590" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">TX-04 · Emite la orden</text>
+    <text x="1485" y="606" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">al aprobar</text>
+    <rect x="1159.0" y="663" width="56" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="1187" y="678" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">Usa</text>
+    <rect x="942.0" y="778" width="76" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="980" y="793" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">Implementa</text>
+    <rect x="842.0" y="1003" width="276" height="20" rx="5" fill="#f8fafc" stroke="none" />
+    <text x="980" y="1018" font-size="13" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="middle">INT-14 (A) · Envía orden de compra al ERP</text>
+  </g>
+  <text x="35" y="1147" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">S = síncrono · A = asíncrono · Línea discontinua = implementación del puerto</text>
+  <text x="35" y="1171" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">C4N3-SVC03-reposicion · v0.1.0 · 2026-11-23 · luisdavidborjap-web (P7) · HU-15</text>
+  <text x="1235" y="1171" font-size="14" font-family="Arial, sans-serif" fill="#445e75" font-weight="400" text-anchor="start">Borrador · Contrato propuesto v1.0.0</text>
+</svg>
