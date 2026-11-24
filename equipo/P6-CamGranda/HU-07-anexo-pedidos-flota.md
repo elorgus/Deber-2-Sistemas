@@ -17,15 +17,15 @@
   - Las referencias entre `SVC-04` y `SVC-02` son por identificador (`PRI-03`), sin escritura directa entre esquemas (`PRI-02`).
 - **Evidencia de que SVC-02 es quien escribe y SVC-04 solo avisa:**
   - Salida de stock: `EVT-27` (`PedidoDespachado`) → `INT-30` → `SVC-02` registra `EVT-11` y `EVT-05` (`TX-03`).
-  - Liberación de reserva: `EVT-28` (`PedidoCancelado`) → `INT-31` → `SVC-02` emite `EVT-10`.
+  - Liberación de reserva por cancelación: `EVT-28` (`PedidoCancelado`) → `INT-31` → `SVC-02` emite `EVT-10`.
 - **Eventos:** `SVC-04` publica solo `EVT-21` a `EVT-28` y no consume eventos de saldo, lote ni reserva. El resultado de la reserva llega por la respuesta de `INT-19`.
 - **Réplicas locales en SVC-04:** Catálogo (`EVT-01`, `EVT-02`) y muelle asignado (`EVT-34`).
-- **Observación O-1:** la copia de asignación puede quedar desfasada si `SVC-02` libera la reserva (`EVT-10`). El desfase es del lado conservador (`CE-05`); la copia se usa solo para preparar el pedido, nunca para decidir.
+- **Observación O-1:** la copia de asignación puede quedar desfasada respecto de la reserva real en `SVC-02`. Si la reserva se libera por **cancelación** (`EVT-28`), el desfase es conservador (`CE-05`): el pedido ya está en `Cancelado` y no se prepara. Si se libera por **expiración** (`EVT-10`, §9), no lo es: `SVC-04` no consume `EVT-10` (§3.4 y §6.2), por lo que podría seguir preparando con su copia mientras ese stock se reserva para otro pedido. Ver H-2.
 
 ### SVC-05 · Flota y Operación
 - **Datos propietarios (fuente única de verdad):** `AMR`, `Misión AMR`, `Ruta`, `Telemetría` (posición y batería), `Visita de vehículo`, `Muelle`, `Patio` (acceso, zona de espera).
 - **Exclusividad de telemetría y patio:** `SVC-05` es el único dueño de la telemetría y del patio/muelles. La telemetría cruda no sale de `SVC-05`; hacia `TRX-04` se publica únicamente la señal muestreada `EVT-32` (`PosicionFlotaActualizada`), y los hechos de operación se comunican mediante eventos de negocio (`EVT-29` a `EVT-31`, `EVT-33` a `EVT-36`).
-- **Entradas externas:** solo mediante adaptadores (`EXT-03` con `INT-22` e `INT-23`; `EXT-02` con `INT-27`; `EXT-05` con `INT-28`). Las acciones manuales las ejecuta el dueño (`INT-33`).
+- **Integraciones externas:** solo mediante adaptadores. Entradas: `EXT-03` → `SVC-05` (`INT-23`) y `EXT-05` → `SVC-05` (`INT-28`). Salidas: `SVC-05` → `EXT-03` (`INT-22`) y `SVC-05` → `EXT-02` (`INT-27`). Las acciones manuales las ejecuta el dueño (`INT-33`).
 - **Sin escritura sobre Pedidos:** `SVC-05` solo consume `EVT-24`, `EVT-26` y `EVT-28`; el estado del pedido sigue en `SVC-04`.
 - **Réplicas locales en SVC-05:** Ubicaciones y layout (`EVT-03`) y órdenes de compra emitidas (`EVT-19`).
 
@@ -34,6 +34,12 @@
 
 - Mientras no se resuelva, este anexo sigue `§5`, `§6.1` y `§6.2`.
 - Estado: **PROPUESTA**. La corrección requiere un PR aparte sobre `ARQUITECTURA_BASE.md` con ADR "Propuesto" (`§0.3`), aprobado por P1 y el diseñador del módulo afectado.
+
+### Hallazgo H-2 (vacío del contrato: expiración de reserva)
+`§9` indica que una reserva pasa a `Liberada` por cancelación **o expiración** (`EVT-10`), pero los únicos consumidores de `EVT-10` son `TRX-04` y `SVC-06` (§6.2), y `SVC-04` solo guarda una copia de solo lectura de la asignación (§3.4). El contrato no define quién dispara la expiración ni cómo se entera `SVC-04` de ella.
+
+- Mientras no se resuelva, este anexo no asume ningún comportamiento para ese caso.
+- Estado: **PROPUESTA**. Opciones a evaluar en un PR aparte con ADR "Propuesto" (`§0.3`): que `SVC-04` consuma `EVT-10`, o que `SVC-04` confirme la vigencia de la reserva con `SVC-02` antes de `EnPreparacion`. La decisión corresponde a P4 (dueño de `SVC-02`) y a P6 como diseñadora de `SVC-04`, con aprobación de P1.
 
 ## 2. Entidades de SVC-04 y SVC-05 para el modelo conceptual (HU-07 CA2 y CA3)
 
@@ -75,7 +81,7 @@ stateDiagram-v2
     Reservado --> EnPreparacion : EVT-24 (PreparacionSolicitada)
     EnPreparacion --> Preparado : INT-25 confirmar preparacion, EVT-25 (PreparacionCompletada)
     Preparado --> EnDespacho : EVT-26 (DespachoSolicitado)
-    EnDespacho --> Despachado : EVT-27 (PedidoDespachado)
+    EnDespacho --> Despachado : EVT-35 (VehiculoDespachado) por INT-29, EVT-27 (PedidoDespachado)
 
     Registrado --> Cancelado : EVT-28 (PedidoCancelado)
     PendienteReserva --> Cancelado : EVT-28 (PedidoCancelado)
