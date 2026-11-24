@@ -1,5 +1,5 @@
 @startuml ACT-FB-reposicion
-' ACT-FB-reposicion · v1.0.0 · 2026-11-23 · P5 · HU-17
+' ACT-FB-reposicion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-17
 ' Contrato de referencia: docs/ARQUITECTURA_BASE.md v1.0.0
 skinparam shadowing false
 skinparam defaultFontName Arial
@@ -148,7 +148,7 @@ emite EVT-15 y la alerta sale de VL-02;
 stop
 
 legend right
-  **ACT-FB-reposicion · v1.0.0 · 2026-11-23 · P5 · HU-17**
+  **ACT-FB-reposicion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-17**
   S = síncrono (respuesta inmediata) · A = asíncrono (evento)
   «INT por definir» = interacción sin ID en §7.2 (ver PC-05 y PC-01)
 endlegend

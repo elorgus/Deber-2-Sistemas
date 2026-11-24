@@ -4,7 +4,7 @@
 |---|---|
 | Documento | `equipo/P5-JessPCL/HU-17-flujo-b-reposicion.md` |
 | Versión | **1.0.0** |
-| Estado | Borrador listo para revisión. El PR se abre cuando se cierre el issue #7 (aprobación del contrato) |
+| Estado | En revisión (PR #20). El contrato v1.0.0 quedó aprobado en el acta del Sprint 1 (HU-10) |
 | HU | HU-17 · Flujo B: riesgo de agotamiento y reposición, ADR-006 (Sprint 2 · 5 pts) |
 | HN que diseña | HN-09, HN-10 y HN-11 (usa HN-08, HN-23 y HN-24 como reglas) |
 | Dueño / Revisor | P5 / P4 |
