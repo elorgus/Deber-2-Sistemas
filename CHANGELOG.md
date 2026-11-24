@@ -1,5 +1,14 @@
 # Registro de Cambios (CHANGELOG)
 
+## diseno-v0.2.0 · Sprint 2 (en preparación)
+
+**Artefactos**
+
+| Artefacto | Versión | Cambio | HU |
+|---|---|---|---|
+| C4N3-SVC02-inventario (fuente y SVG) | 0.1.0 | Diagrama de componentes de Inventario: puertos, FEFO, réplicas, persistencia con Outbox y detección de vencimientos. | HU-14 |
+| docs/adr/ADR-003-reserva-fefo-en-inventario.md | — | ADR-003 en estado Propuesto. | HU-14 |
+
 ## diseno-v0.1.0 · 2026-11-23 · Sprint 1
 
 **HU incluidas:** HU-01 a HU-10
