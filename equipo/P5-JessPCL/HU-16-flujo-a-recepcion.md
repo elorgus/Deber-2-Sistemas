@@ -4,7 +4,7 @@
 |---|---|
 | Documento | `equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md` |
 | Versión | **1.0.0** |
-| Estado | Borrador listo para revisión. El PR se abre cuando se cierre el issue #7 (aprobación del contrato) |
+| Estado | En revisión (PR #17). El contrato v1.0.0 quedó aprobado en el acta del Sprint 1 (HU-10) |
 | HU | HU-16 · Flujo A: recepción y actualización de existencias (Sprint 2 · 3 pts) |
 | HN que diseña | HN-03 y HN-12 (usa las reglas de HN-01 y HN-02 en las validaciones) |
 | Dueño / Revisor | P5 / P4 |

@@ -1,5 +1,5 @@
 @startuml SEC-FA-recepcion
-' SEC-FA-recepcion · v1.0.0 · 2026-11-23 · P5 · HU-16
+' SEC-FA-recepcion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-16
 ' Contrato de referencia: docs/ARQUITECTURA_BASE.md v1.0.0
 skinparam shadowing false
 skinparam defaultFontName Arial
@@ -99,7 +99,7 @@ else SVC-02 responde
 end
 
 legend right
-  **SEC-FA-recepcion · v1.0.0 · 2026-11-23 · P5 · HU-16**
+  **SEC-FA-recepcion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-16**
   [S] síncrono (respuesta inmediata) · [A] asíncrono (evento)
   Flecha delgada (->>) = evento; línea punteada = respuesta
 endlegend

@@ -1,5 +1,5 @@
 @startuml ACT-FA-recepcion
-' ACT-FA-recepcion · v1.0.0 · 2026-11-23 · P5 · HU-16
+' ACT-FA-recepcion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-16
 ' Contrato de referencia: docs/ARQUITECTURA_BASE.md v1.0.0
 skinparam shadowing false
 skinparam defaultFontName Arial
@@ -125,7 +125,7 @@ end fork
 stop
 
 legend right
-  **ACT-FA-recepcion · v1.0.0 · 2026-11-23 · P5 · HU-16**
+  **ACT-FA-recepcion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-16**
   S = síncrono (respuesta inmediata) · A = asíncrono (evento)
   Consumidores idempotentes: un evento duplicado no repite efectos
 endlegend
