@@ -7,12 +7,12 @@ Versionado: `diseno-vMAJOR.MINOR.PATCH` (MAJOR = sprint, MINOR = revisión, PATC
 ## [Unreleased]
 
 ### Added
+- `equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md` v1.0.0 y diagramas `ACT-FA-recepcion` y `SEC-FA-recepcion` v1.0.0 (fuente y export) — Flujo A: recepción y actualización de existencias (HU-16, P5).
 - Estructura inicial del repositorio (`docs/`, `equipo/`, `README.md`, `CONTRIBUTING.md`).
 - `docs/ARQUITECTURA_BASE.md` v1.0.0 — contrato maestro.
 - `docs/BACKLOG.md` v1.0.0 — product backlog y plan de 4 sprints.
 - `CHANGELOG.md` v1.0.0.
 - `equipo/P5-JessPCL/HU-08-riesgos.md` v1.0.0 — registro inicial de 18 riesgos alineado con FAL y RNF del contrato (HU-08, P5).
-- `equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md` v1.0.0 y diagramas `ACT-FA-recepcion` y `SEC-FA-recepcion` v1.0.0 (fuente y export) — Flujo A: recepción y actualización de existencias (HU-16, P5).
 
 ### Changed
 - (pendiente)
