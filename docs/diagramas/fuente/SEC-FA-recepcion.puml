@@ -1,0 +1,106 @@
+@startuml SEC-FA-recepcion
+' SEC-FA-recepcion · v1.0.0 · 2026-11-23 · P5 · HU-16
+' Contrato de referencia: docs/ARQUITECTURA_BASE.md v1.0.0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ParticipantBackgroundColor #FFFFFF
+skinparam ParticipantBorderColor #444444
+skinparam QueueBackgroundColor #FFF8E1
+skinparam SequenceGroupBorderColor #1565C0
+skinparam SequenceGroupHeaderFontColor #1565C0
+skinparam NoteBackgroundColor #F5F5F5
+skinparam NoteBorderColor #9E9E9E
+skinparam sequenceMessageAlign left
+skinparam maxMessageSize 260
+
+title Flujo A · Recepción y actualización de existencias (SEC-FA-recepcion)
+
+actor "Operador de bodega\n(ROL-01)" as OB
+participant "TRX-01\nDashboard" as DSH
+participant "TRX-02\nCapa de Aplicación" as APP
+participant "SVC-02\nInventario" as INV
+queue "TRX-03\nBroker de eventos" as BRK
+participant "TRX-04\nProyección de lectura" as PRY
+participant "SVC-03\nReposición y Compras" as REP
+participant "SVC-06\nAnalítica" as ANA
+participant "SVC-05\nFlota y Operación" as FLO
+participant "EXT-05\nControl de acceso\ndel patio" as GAR
+
+autonumber
+
+opt Llega el camión del proveedor (ARQUITECTURA_BASE §6.3, paso 8)
+  GAR ->> FLO : [A] INT-28 Registro de llegada en garita
+  FLO ->> BRK : [A] EVT-33 VehiculoArribado (outbox)
+  BRK ->> PRY : [A] INT-32 Actualiza VL-05 (planta externa)
+end
+
+OB -> DSH : Registra la recepción\n(SKU, lote, cantidad, ubicación,\nvencimiento si aplica, OC opcional)
+DSH -> APP : [S] INT-01 Comando del usuario
+APP -> INV : [S] INT-06 Registrar recepción
+
+alt FAL-02 · SVC-02 no responde dentro del tiempo límite
+  APP --> DSH : No se registró la recepción
+  DSH --> OB : Aviso; el formulario conserva los datos
+
+else SVC-02 responde
+  INV -> INV : V1. Verifica rol autorizado (ROL-01 o ROL-02)
+  INV -> INV : V2 a V5. Valida con ReplicaCatalogo y la réplica de OC:\nSKU activo · lote y vencimiento si el producto los exige ·\nubicación activa · OC pendiente que incluye el SKU (si se indica)
+
+  alt A1 · Datos inválidos
+    INV --> APP : Rechazo con motivo (no se guarda nada ni se emiten eventos)
+    APP --> DSH : Rechazo con motivo
+    DSH --> OB : Muestra el motivo y conserva los datos para corregir
+
+  else Datos válidos
+    group TX-01 · una sola transacción local en SVC-02
+      INV -> INV : Crea el lote si es nuevo (estado Disponible)
+      INV -> INV : Registra el movimiento de recepción (inmutable)
+      INV -> INV : Actualiza saldo físico y disponible (SKU · ubicación · lote)
+      INV -> INV : Guarda EVT-04 y EVT-05 en el outbox
+    end
+    INV --> APP : Recepción confirmada
+    APP --> DSH : Recepción confirmada
+    DSH --> OB : Confirmación
+
+    == Propagación asíncrona (después del commit de TX-01) ==
+
+    alt Broker disponible
+      INV ->> BRK : [A] INT-07 EVT-04 RecepcionRegistrada y\nEVT-05 SaldoActualizado (PublicadorOutbox)
+    else FAL-01 · Broker no disponible
+      note over INV, BRK
+        Los eventos esperan en el outbox y SVC-02 sigue aceptando recepciones.
+        Las vistas pasan a "Con retraso" o "Desactualizada" (§8.2).
+        Al restablecerse, se publican en orden por entidad;
+        los consumidores descartan duplicados (RNF-DIS-01).
+      end note
+      INV ->> BRK : [A] INT-07 Publicación diferida de EVT-04 y EVT-05
+    end
+
+    par Proyección de lectura
+      BRK ->> PRY : [A] INT-08 Actualiza VL-01, VL-04 y VL-06 (≤ 5 s, RNF-REN-03)
+      PRY ->> APP : INT-03 Actualización en vivo (push)
+      APP ->> DSH : Vistas con "Actualizado hace X s"
+    else Reposición y Compras
+      BRK ->> REP : [A] INT-09 EVT-04 RecepcionRegistrada
+      opt EVT-04 referencia una OC
+        REP -> REP : OC pasa a RecibidaParcial o Cerrada (≤ 60 s, CE-06)
+        opt OC recibida completa
+          REP ->> BRK : [A] EVT-20 OrdenCompraCerrada (outbox)
+          BRK ->> INV : [A] EVT-20 Actualiza la réplica de OC\n«PROPUESTA DE CAMBIO: falta INT en §7.2»
+        end
+      end
+      BRK ->> REP : [A] INT-10 EVT-05 → evalúa la política del SKU
+      note right of REP : Continúa en Flujo B\n(SEC-FB-reposicion, HU-17)
+    else Analítica
+      BRK ->> ANA : [A] INT-05 EVT-04 y EVT-05 → TRX-05 (≤ 15 min, CE-07)
+    end
+  end
+end
+
+legend right
+  **SEC-FA-recepcion · v1.0.0 · 2026-11-23 · P5 · HU-16**
+  [S] síncrono (respuesta inmediata) · [A] asíncrono (evento)
+  Flecha delgada (->>) = evento; línea punteada = respuesta
+endlegend
+@enduml

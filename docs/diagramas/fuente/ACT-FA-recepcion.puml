@@ -1,0 +1,132 @@
+@startuml ACT-FA-recepcion
+' ACT-FA-recepcion · v1.0.0 · 2026-11-23 · P5 · HU-16
+' Contrato de referencia: docs/ARQUITECTURA_BASE.md v1.0.0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #444444
+skinparam ActivityDiamondBackgroundColor #FFF8E1
+skinparam PartitionBorderColor #1565C0
+skinparam NoteBackgroundColor #F5F5F5
+skinparam NoteBorderColor #9E9E9E
+skinparam SwimlaneTitleFontStyle bold
+
+title Flujo A · Recepción y actualización de existencias (ACT-FA-recepcion)
+
+|Operador de bodega (ROL-01)|
+start
+note right
+  Antes (opcional): llega el camión del proveedor
+  EXT-05 → SVC-05 por INT-28 y EVT-33
+  (ver SEC-FA-recepcion)
+end note
+repeat
+  |Operador de bodega (ROL-01)|
+  :Ingresa la recepción: SKU, lote, cantidad,
+  ubicación, fecha de vencimiento (si aplica)
+  y OC (opcional);
+  |TRX-01 Dashboard|
+  :Envía el comando
+  **[INT-01 · S]**;
+  |TRX-02 Capa de Aplicación|
+  :Verifica la sesión (identidad de EXT-04)
+  y enruta al dueño **[INT-06 · S]**;
+  if (¿SVC-02 responde dentro del tiempo límite?) then (no · FAL-02)
+    :Informa que la recepción
+    no se registró;
+    |TRX-01 Dashboard|
+    :Conserva el formulario y avisa;
+    |Operador de bodega (ROL-01)|
+    :Reintenta más tarde;
+    stop
+  else (sí)
+  endif
+  |SVC-02 Inventario|
+  :V1. Verifica rol autorizado (ROL-01 o ROL-02);
+  :V2. Con ReplicaCatalogo: el SKU existe
+  y está activo (no descontinuado);
+  if (¿El producto controla lote o requiere vencimiento?) then (sí)
+    :V3. Exige el lote y, si corresponde,
+    la fecha de vencimiento;
+    if (¿El lote ya existe?) then (sí)
+      :V3b. La fecha de vencimiento debe
+      coincidir con la del lote;
+    else (no)
+    endif
+  else (no)
+  endif
+  :V4. Con ReplicaCatalogo: la ubicación existe
+  y está activa (no bloqueada);
+  if (¿La recepción referencia una OC?) then (sí)
+    :V5. En la réplica de OC: la OC está
+    emitida, pendiente de recepción
+    e incluye el SKU;
+  else (no)
+  endif
+repeat while (¿Pasan V1 a V5?) is (no · A1: rechazo con motivo,\nno se guarda nada, la UI conserva los datos)
+-> sí;
+
+|SVC-02 Inventario|
+partition "TX-01 · una sola transacción local" {
+  :Crea el lote si es nuevo (estado Disponible);
+  :Registra el movimiento de recepción (inmutable);
+  :Actualiza el saldo físico y el disponible
+  de SKU · ubicación · lote;
+  :Guarda EVT-04 RecepcionRegistrada y
+  EVT-05 SaldoActualizado en el outbox;
+}
+|TRX-02 Capa de Aplicación|
+:Devuelve la confirmación;
+|TRX-01 Dashboard|
+:Muestra "Recepción confirmada";
+
+|SVC-02 Inventario|
+:PublicadorOutbox entrega EVT-04 y EVT-05
+**[INT-07 · A]** (después del commit);
+|TRX-03 Broker de eventos|
+if (¿Broker disponible?) then (no · FAL-01)
+  :Los eventos esperan en el outbox.
+  SVC-02 sigue aceptando recepciones.
+  Las vistas pasan a "Con retraso" o "Desactualizada";
+  :Al restablecerse, se publican en orden
+  por entidad (RNF-DIS-01);
+else (sí)
+endif
+:Distribuye EVT-04 y EVT-05
+(entrega al menos una vez);
+
+fork
+  |TRX-04 Proyección de lectura|
+  :Actualiza VL-01, VL-04 y VL-06
+  **[INT-08 · A]** · objetivo ≤ 5 s (RNF-REN-03);
+  |TRX-01 Dashboard|
+  :Recibe la actualización en vivo
+  **[INT-03]** y muestra la frescura;
+fork again
+  |SVC-03 Reposición y Compras|
+  if (¿EVT-04 trae OC?) then (sí)
+    :Avanza la OC **[INT-09 · A]**:
+    RecibidaParcial o Cerrada (≤ 60 s, CE-06);
+    if (¿OC recibida completa?) then (sí)
+      :Emite EVT-20 OrdenCompraCerrada
+      (vía outbox);
+    else (no)
+    endif
+  else (no)
+  endif
+  :EVT-05 → evalúa la política del SKU
+  **[INT-10 · A]** → continúa en Flujo B (HU-17);
+fork again
+  |SVC-06 Analítica|
+  :Guarda EVT-04 y EVT-05 en TRX-05
+  **[INT-05 · A]** (≤ 15 min, CE-07);
+end fork
+stop
+
+legend right
+  **ACT-FA-recepcion · v1.0.0 · 2026-11-23 · P5 · HU-16**
+  S = síncrono (respuesta inmediata) · A = asíncrono (evento)
+  Consumidores idempotentes: un evento duplicado no repite efectos
+endlegend
+@enduml
