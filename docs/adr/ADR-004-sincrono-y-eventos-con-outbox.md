@@ -1,3 +1,4 @@
+[ADR-004-sincrono-y-eventos-con-outbox.md](https://github.com/user-attachments/files/35381971/ADR-004-sincrono-y-eventos-con-outbox.md)
 # ADR-004: Comandos síncronos y eventos de negocio con Outbox e idempotencia
 
 | Campo | Valor |
@@ -5,7 +6,7 @@
 | Fecha | 2026-11-24 |
 | Estado | Propuesto (pasa a *Aceptado* tras la revisión de P7 y el acta del equipo) |
 | Responsable | P1 · Líder de arquitectura |
-| Historia | HU-20 |
+| Historia | [HU-20](../BACKLOG.md) |
 | Revisor | P7 |
 
 ## Contexto
@@ -45,7 +46,7 @@ ambos inconsistentes si falla uno de los dos pasos.
 - Se usa modo S únicamente para los criterios S1 a S3 de §7.1 (usuario esperando,
   invariante que debe confirmarse, dato exacto del dueño). Todo hecho de negocio se
   propaga como evento por TRX-03, guardado en el outbox en la misma transacción
-  que el cambio (TX-01 a TX-06).
+  local del dueño (TX-01 a TX-06).
 - Los consumidores son idempotentes, porque el broker entrega al menos una vez.
 
 ## Decisión
@@ -65,9 +66,9 @@ Se adopta la **Alternativa C**.
    ya procesados y tolera duplicados. El orden se garantiza por entidad. Tras
    reintentos acotados, un evento fallido pasa a la DLQ y genera una alerta (FAL-08).
 5. Los eventos informan hechos; las decisiones se toman en el dueño del dato
-   (PRI-05). Los resultados en vista de TRX-04 nunca se usan para decidir (PRI-07).
+   (PRI-05). Las vistas de TRX-04 nunca se usan para decidir (PRI-07).
 
-**Por qué eventos para la comunicación de hechos y alertas:** el destinatario puede
+**Por qué eventos para comunicar hechos y alertas:** el destinatario puede
 reaccionar segundos después sin dañar el negocio (A2). Un retraso se resuelve del
 lado conservador (A4: liberar una reserva tarde nunca provoca sobreventa; CE-04 y
 CE-05). Los destinatarios externos o inestables se desacoplan con reintentos (A3:
@@ -79,8 +80,8 @@ estén caídos.
 - Con el broker caído, los módulos siguen operando y los eventos esperan en el outbox. Al volver, se publican en orden por entidad sin pérdida ni efectos duplicados (FAL-01, RNF-DIS-01).
 - Cambio de negocio y evento nunca quedan inconsistentes, porque van en la misma transacción.
 - Agregar un consumidor (TRX-04, SVC-06, una réplica nueva) no modifica al emisor.
-- La invariante crítica (disponible ≥ 0) se protege con confirmación síncrona en el dueño (TX-02).
-- Es coherente con la extracción futura: los mismos eventos y puertos sirven en monolito y en microservicios (PRI-09).
+- El invariante crítico (disponible ≥ 0) se protege con confirmación síncrona en el dueño (TX-02).
+- Es coherente con la extracción futura: los mismos eventos y puertos sirven en monolito y en microservicios (PRI-09, [ADR-001](./ADR-001-monolito-modular-evolutivo.md)).
 
 ## Consecuencias negativas
 
@@ -92,7 +93,7 @@ estén caídos.
 
 ## Historias y diagramas relacionados
 
-- Historias: HU-20 (este ADR), HU-12, HU-24, HU-30.
-- Diagramas: `C4N2-contenedores` (relaciones S y A con su INT), secuencias de los flujos A, B y C.
-- ADR relacionados: ADR-001, ADR-002, ADR-005, ADR-009.
-- Contrato: ARQUITECTURA_BASE §6.1, §7.1, §7.3 (TX-01 a TX-06, CE-01 a CE-07), PRI-05 a PRI-07; FAL-01, FAL-08.
+- Historias: [HU-20](../BACKLOG.md) (este ADR, §4.2), [HU-12](../BACKLOG.md), [HU-24](../BACKLOG.md), [HU-30](../BACKLOG.md).
+- Diagramas: [`C4N2-contenedores` (fuente)](../../diagramas/c4/src/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../../diagramas/c4/export/C4N2-contenedores.svg): relaciones S y A con su INT; secuencias de los flujos [A](../arquitectura/flujos/flujo-a-recepcion.md), [B](../arquitectura/flujos/flujo-b-reposicion.md) y [C](../arquitectura/flujos/flujo-c-reserva-despacho.md).
+- ADR relacionados: [ADR-001](./ADR-001-monolito-modular-evolutivo.md), [ADR-002](./ADR-002-propiedad-datos-por-esquema.md), [ADR-005](./ADR-005-proyeccion-de-lectura-cqrs.md), [ADR-009](./ADR-009-replicas-locales-de-referencia.md).
+- Contrato: [ARQUITECTURA_BASE](../ARQUITECTURA_BASE.md) §6.1, §7.1, §7.3 (TX-01 a TX-06, CE-01 a CE-07); PRI-05 a PRI-07; FAL-01, FAL-08.
