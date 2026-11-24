@@ -1,0 +1,155 @@
+@startuml ACT-FB-reposicion
+' ACT-FB-reposicion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-17
+' Contrato de referencia: docs/ARQUITECTURA_BASE.md v1.0.0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #444444
+skinparam ActivityDiamondBackgroundColor #FFF8E1
+skinparam PartitionBorderColor #1565C0
+skinparam NoteBackgroundColor #F5F5F5
+skinparam NoteBorderColor #9E9E9E
+skinparam SwimlaneTitleFontStyle bold
+
+title Flujo B · Riesgo de agotamiento y reposición (ACT-FB-reposicion)
+
+|SVC-02 Inventario|
+start
+:Publica EVT-05 SaldoActualizado
+(viene del Flujo A o del Flujo C);
+|TRX-03 Broker de eventos|
+:Entrega EVT-05 a SVC-03
+**[INT-10 · A]**;
+|SVC-03 Reposición y Compras|
+:ConsumidorIdempotente descarta duplicados
+y actualiza el disponible agregado por SKU;
+:EvaluadorRiesgoAgotamiento compara el
+disponible con la política del SKU;
+if (¿Disponible < mínimo?) then (sí)
+  if (¿Ya hay alerta activa?) then (no)
+    :Crea la alerta activa y emite
+    EVT-14 RiesgoAgotamientoDetectado
+    **[INT-11 · A]**;
+  else (sí)
+  endif
+else (no)
+  if (¿Hay alerta activa?) then (sí)
+    :Resuelve la alerta y emite
+    EVT-15 RiesgoAgotamientoResuelto
+    **[INT-11 · A]**;
+  else (no)
+  endif
+endif
+if (¿La estrategia del SKU indica reponer?) then (no)
+  :Sin sugerencia nueva;
+  stop
+else (sí)
+endif
+:Elige EstrategiaReposicion:
+ReposicionPorPronostico si hay pronóstico
+vigente (EVT-37, INT-16). Si no, la de la
+política o ReposicionMinMax (FAL-04);
+:Calcula cantidad, proveedor y justificación
+(mínimo, disponible, demanda, lead time);
+note right
+  PC-06: el cálculo debería
+  considerar las OC propias
+  pendientes de recepción
+end note
+if (¿Hay una sugerencia vigente del SKU?) then (sí)
+  :La sugerencia anterior pasa a Reemplazada;
+else (no)
+endif
+:Guarda la sugerencia Generada y emite
+EVT-16 SugerenciaReposicionGenerada
+**[INT-11 · A]**;
+|TRX-04 Proyección de lectura|
+:Actualiza VL-01 (productos bajo mínimo)
+y VL-02 (alerta y sugerencia)
+«INT por definir · PC-05»;
+|TRX-01 Dashboard|
+:Muestra la alerta y la sugerencia con
+"Aprobar" y "Rechazar" **[INT-03]**;
+|Comprador (ROL-03)|
+:Revisa mínimo, disponible,
+demanda considerada y lead time;
+:Decide aprobar o rechazar;
+|TRX-02 Capa de Aplicación|
+:Enruta el comando al dueño
+**[INT-01 · S]** → **[INT-12 · S]**;
+|SVC-03 Reposición y Compras|
+:V1. Verifica rol ROL-03 (RNF-SEG-01);
+:V2. Verifica en su propio estado que la
+sugerencia siga vigente (Generada),
+nunca contra VL-02 (PRI-07);
+if (¿Pasan V1 y V2?) then (no)
+  :Rechaza con motivo claro
+  ("la sugerencia fue reemplazada"
+  o "operación no permitida");
+  |TRX-01 Dashboard|
+  :Muestra el motivo y la
+  sugerencia vigente;
+  stop
+else (sí)
+endif
+|SVC-03 Reposición y Compras|
+if (¿Qué decidió el comprador?) then (rechazar)
+  :Sugerencia → Rechazada. Emite
+  EVT-18 SugerenciaReposicionRechazada
+  **[INT-13 · A]**. La alerta sigue activa;
+  stop
+else (aprobar)
+endif
+if (¿Monto sobre el umbral de OPS-03?) then (sí)
+  :Espera la segunda aprobación
+  (umbral en HU-28, PC-07);
+else (no)
+endif
+partition "TX-04 · una sola transacción local" {
+  :Sugerencia → Aprobada;
+  :OC → Emitida;
+  :Auditoría de OPS-03 y EVT-17 + EVT-19
+  en el outbox;
+}
+|TRX-01 Dashboard|
+:Muestra "OC emitida";
+|SVC-03 Reposición y Compras|
+:PublicadorOutbox entrega EVT-17
+SugerenciaReposicionAprobada y EVT-19
+OrdenCompraEmitida **[INT-13 · A]**.
+TRX-04 actualiza VL-02 «INT por definir · PC-05»;
+fork
+  |SVC-03 Reposición y Compras|
+  :Envía la OC por PuertoErp → AdaptadorErp
+  **[INT-14 · A]** con reintentos idempotentes;
+  if (¿ERP disponible?) then (sí)
+    |EXT-01 ERP corporativo|
+    :Recibe la OC.
+    SVC-03 la marca Enviada;
+  else (no · FAL-05)
+    |SVC-03 Reposición y Compras|
+    :OC queda Emitida pendiente de envío.
+    Tras un umbral, alerta en VL-02;
+  endif
+fork again
+  |SVC-02 Inventario|
+  :Agrega la OC a su réplica de
+  recepciones esperadas (EVT-19)
+  «INT por definir · PC-01»;
+end fork
+|SVC-02 Inventario|
+:Llega la mercadería → Flujo A (HU-16):
+EVT-04 con OC y EVT-05;
+|SVC-03 Reposición y Compras|
+:INT-09: OC → RecibidaParcial o Cerrada (EVT-20).
+INT-10: si el disponible ≥ mínimo,
+emite EVT-15 y la alerta sale de VL-02;
+stop
+
+legend right
+  **ACT-FB-reposicion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-17**
+  S = síncrono (respuesta inmediata) · A = asíncrono (evento)
+  «INT por definir» = interacción sin ID en §7.2 (ver PC-05 y PC-01)
+endlegend
+@enduml
