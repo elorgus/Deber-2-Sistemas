@@ -12,6 +12,7 @@
 | equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md · ACT-FA-recepcion · SEC-FA-recepcion | 1.0.0 | Flujo A: recepción y actualización de existencias | HU-16 |
 | equipo/P5-JessPCL/HU-17-flujo-b-reposicion.md · ACT-FB-reposicion · SEC-FB-reposicion | 1.0.0 | Flujo B: riesgo de agotamiento y reposición | HU-17 |
 | docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md | — (Propuesto) | La detección de riesgo de agotamiento pertenece a Reposición | HU-17 |
+| docs/arquitectura/propiedad-de-datos.md | 0.1.0 | Matriz detallada de propiedad de datos y réplicas locales. | HU-13 |
 
 **ADR aceptados:** ninguno
 
