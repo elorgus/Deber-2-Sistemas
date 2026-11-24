@@ -1,7 +1,7 @@
 # ADR-008: Versionamiento de artefactos de diseño
 
 **Estado:** Aceptado
-**Fecha:** [Pon la fecha de hoy]
+**Fecha:** 2026-11-24
 **Decisores:** P3 (Scrum Master)
 
 ## Contexto
