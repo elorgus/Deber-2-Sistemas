@@ -1,0 +1,68 @@
+@startuml
+title Flujo C · Reserva FEFO, preparación y despacho (Actividad)
+caption ACT-FC-reserva-despacho · v1.0.0 · 2026-11-24 · P6 · HU-18
+
+|SVC-04 Pedidos y Fulfillment|
+start
+:Recibir pedido manual (INT-17) o desde EXT-01 (INT-18);
+:Guardar pedido en estado Registrado (TX-05)\ny publicar EVT-21 PedidoRegistrado;
+:Solicitar reserva FEFO síncrona (INT-19)\nvía PuertoReservasInventario;
+
+|SVC-02 Inventario|
+if (¿SVC-02 responde dentro del tiempo límite?) then (No · FAL-02)
+  |SVC-04 Pedidos y Fulfillment|
+  :Guardar pedido en PendienteReserva\n(sin evento);
+  :Reintentar INT-19 con ID de pedido\n(clave de idempotencia);
+  stop
+else (Sí)
+  |SVC-02 Inventario|
+  :Evaluar disponible excluyendo lotes\nVencido y EnCuarentena (TX-02);
+  if (¿Disponible suficiente para todo el pedido?) then (No)
+    :Rechazar reserva (todo o nada)\ny publicar EVT-09 ReservaRechazada (INT-20);
+    |SVC-04 Pedidos y Fulfillment|
+    :Pasar pedido a EnEspera (TX-05)\ny publicar EVT-23 PedidoEnEspera;
+    stop
+  else (Sí)
+    |SVC-02 Inventario|
+    :Asignar lotes con PoliticaFEFO\n(vencimiento más próximo);
+    :Guardar reserva y actualizar saldo (TX-02)\nPublicar EVT-08 y EVT-05 (INT-20);
+  endif
+endif
+
+|SVC-04 Pedidos y Fulfillment|
+:Guardar ID de reserva y copia de solo lectura\nde asignación por lote;
+:Pasar a Reservado (EVT-22) y crear tarea\nde preparación (EVT-24 · INT-21);
+
+if (¿Se cancela el pedido antes de EnDespacho?\nOPS-05 si está EnPreparacion) then (Sí)
+  :Pasar a Cancelado (TX-05)\ny publicar EVT-28 PedidoCancelado (INT-31);
+  fork
+    |SVC-02 Inventario|
+    :Liberar reserva y publicar\nEVT-10 ReservaLiberada (CE-05);
+  fork again
+    |SVC-05 Flota y Operación|
+    :Cancelar misiones AMR asociadas;
+  end fork
+  stop
+else (No)
+  |SVC-05 Flota y Operación|
+  :Asignar AMR disponible y ruta\n(EstrategiaAsignacionAmr · INT-22);
+  :Publicar EVT-29 MisionAmrAsignada\ny telemetría muestreada EVT-32 (INT-23, INT-32);
+  :Completar misión y publicar\nEVT-30 MisionAmrCompletada (INT-24);
+
+  |SVC-04 Pedidos y Fulfillment|
+  :Operador (ROL-01) confirma preparación (INT-25);
+  :Pasar a Preparado (EVT-25)\ny solicitar despacho (EVT-26 · INT-26);
+
+  |SVC-05 Flota y Operación|
+  :Coordinar vehículo con EXT-02 (INT-27)\ny registrar llegada en garita EXT-05 (INT-28 · EVT-33);
+  :Asignar muelle (TX-06 · EVT-34)\ny actualizar VL-05 (INT-32);
+  :Registrar salida de camión cargado (EXT-05)\nPublicar EVT-35 y EVT-36 (INT-29, INT-32);
+
+  |SVC-04 Pedidos y Fulfillment|
+  :Pasar pedido a Despachado (TX-05)\ny publicar EVT-27 PedidoDespachado (INT-30);
+
+  |SVC-02 Inventario|
+  :Consumir reserva, registrar salida y actualizar saldo\n(TX-03 · EVT-11 y EVT-05 · CE-04);
+  stop
+endif
+@enduml
