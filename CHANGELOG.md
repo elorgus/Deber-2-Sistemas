@@ -2,7 +2,7 @@
 
 ## diseno-v0.2.0 · Sprint 2 (En progreso)
 
-**HU incluidas:** HU-11, HU-16, HU-17
+**HU incluidas:** HU-11, HU-16, HU-17, HU-22
 
 **Artefactos**
 
@@ -12,6 +12,7 @@
 | equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md · ACT-FA-recepcion · SEC-FA-recepcion | 1.0.0 | Flujo A: recepción y actualización de existencias | HU-16 |
 | equipo/P5-JessPCL/HU-17-flujo-b-reposicion.md · ACT-FB-reposicion · SEC-FB-reposicion | 1.0.0 | Flujo B: riesgo de agotamiento y reposición | HU-17 |
 | docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md | — (Propuesto) | La detección de riesgo de agotamiento pertenece a Reposición | HU-17 |
+| docs/dashboard/propuesta-dashboard.md · DSH-planta-interna · DSH-planta-externa (fuente y SVG) | 1.0.0 | Propuesta inicial de Dashboard v1 (vistas VL-01 a VL-07, frescura y acciones hacia dueños) y bocetos de planta interna y externa | HU-22 |
 | docs/arquitectura/propiedad-de-datos.md | 0.1.0 | Matriz detallada de propiedad de datos y réplicas locales. | HU-13 |
 
 **ADR aceptados:** ninguno
