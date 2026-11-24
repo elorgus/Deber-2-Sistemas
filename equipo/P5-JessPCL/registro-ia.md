@@ -57,8 +57,55 @@
 
 ---
 
+## HU-27 · Requisitos de calidad verificables (2026-11-24)
+
+**Prompt (resumen):** "Genera los entregables de HU-27 con los comandos paso a paso: convierte los RNF del contrato en escenarios medibles y completa los que faltan."
+
+**Qué se aceptó**
+- 33 RNF en formato de escenario (15 semilla del contrato y 18 nuevos), cada uno con fuente, estímulo, entorno, respuesta y medida.
+- La validación de los SUP del contrato y el supuesto nuevo SUP-04 (horario operativo).
+- La tabla de trazabilidad y los puntos abiertos PC-09 a PC-11.
+- La actualización de HU-08 a v1.1.0: cambia el estado de dos riesgos y la cobertura de fallos.
+
+**Qué se corrigió o verificó**
+- CE-03 (≤ 5 s) más CE-01 no caben en los 5 s que pide HN-09 (H-01). La IA no cambió el contrato: lo dejó como propuesta (PC-09, CE-03 a ≤ 3 s), porque los cambios al contrato se aprueban por ARQUITECTURA_BASE §0.3.
+- RNF-DIS-04 usa "horario operativo" sin definirlo (H-04). SUP-04 quedó como supuesto propuesto (PC-10), no como ID oficial.
+- Se verificó con un script que todos los IDs existen en el contrato o están marcados como nuevos.
+- `CHANGELOG.md` no se tocó, porque lo consolida P3 (VERSIONAMIENTO §7). Las filas se propusieron en la descripción del PR.
+- El conflicto de `CHANGELOG.md` al traer `main` se resolvió conservando la versión de `main`.
+
+---
+
+## HU-39 · Informe final (2026-11-24)
+
+**Prompt (resumen):** "Arma el informe final en Word con lo que ya está en `main` y actualízalo cuando se fusionen más HU."
+
+**Qué se aceptó**
+- `docs/informe/Informe-Smart-Inventory.docx`, generado con un script, con la estructura alineada a la rúbrica y a BACKLOG §5.2.
+- Las figuras se exportaron desde las fuentes del repositorio y conservan su leyenda `ID · vX.Y.Z · fecha · autor (Px) · HU-NN`.
+- Un recuadro "PENDIENTE" con el responsable en cada sección cuya HU no está fusionada.
+- La v0.1.0 con el contenido hasta el Sprint 2 y HU-27. La v0.2.0 agrega HU-13, HU-15, HU-21 y HU-22.
+
+**Qué se corrigió o verificó**
+- Solo se incluyó contenido fusionado en `main` o aprobado; para las HU pendientes no se inventó contenido.
+- Se renderizó a PDF y se revisó página por página: tablas que no se parten, tamaño de las figuras y numeración de figuras.
+- Se validó el archivo de Word y se comprobó con un script que todos los IDs existen en el contrato.
+- Los nombres completos se tomaron del historial de commits y quedan pendientes de confirmar por cada integrante.
+
+---
+
+## Revisiones cruzadas con apoyo de IA (2026-11-23 y 2026-11-24)
+
+**Uso:** comparar los IDs de cada PR con el contrato y aplicar la checklist de `plantillas/plantilla-revision-pr.md`. La decisión de aprobar o pedir cambios fue de P5.
+
+- PR #18 (HU-07, P6) y PR #19 (HU-15, P7): revisados y aprobados.
+- Rama de HU-18 (P6), antes de abrir el PR: los IDs coinciden con §6.2, §7.2 y §9. Se le avisó a P6 que faltan los diagramas de CA1, la ruta de los diagramas según `CONTRIBUTING.md` e INT-29 en el paso 9.
+
+---
+
 ## Historial
 
 | Fecha | Cambio |
 |---|---|
 | 2026-11-23 | Registro de HU-08, HU-16 y HU-17 |
+| 2026-11-24 | Registro de HU-27, HU-39 y de las revisiones cruzadas |
