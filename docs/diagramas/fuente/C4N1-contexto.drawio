@@ -8,7 +8,7 @@
         <mxCell id="title" value="Smart Inventory · Diagrama de contexto C4" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=30;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="36" y="18" width="1100" height="33" as="geometry" />
         </mxCell>
-        <mxCell id="subtitle" value="HU-11 · Sprint 2 · Borrador basado en el contrato propuesto v1.0.0" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=15;fontColor=#52677e;fontStyle=0;" vertex="1" parent="1">
+        <mxCell id="subtitle" value="HU-11 · Sprint 2 · Contexto del sistema completo · Contrato v1.0.0" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=15;fontColor=#52677e;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="36" y="62" width="1100" height="18" as="geometry" />
         </mxCell>
         <mxCell id="people-header" value="PERSONAS" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=14;fontColor=#52677e;fontStyle=1;" vertex="1" parent="1">
@@ -62,7 +62,7 @@
         <mxCell id="ROL-02-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
           <mxGeometry x="376.0" y="242.0" width="286" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="ROL-02-caption" value="Registra ajustes y cambia el estado&#10;de lotes y define umbrales" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+        <mxCell id="ROL-02-caption" value="Supervisa lotes y vencimientos&#10;y registra ajustes" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="376.0" y="245" width="286" height="32" as="geometry" />
         </mxCell>
         <mxCell id="ROL-03" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
@@ -116,7 +116,7 @@
         <mxCell id="ROL-05-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
           <mxGeometry x="376.0" y="473.0" width="286" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="ROL-05-caption" value="Consulta la operación y gestiona&#10;pedidos y prioridades" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+        <mxCell id="ROL-05-caption" value="Gestiona pedidos y supervisa&#10;la operación en el dashboard" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="376.0" y="476" width="286" height="32" as="geometry" />
         </mxCell>
         <mxCell id="ROL-06" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
@@ -132,10 +132,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ROL-06-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
-          <mxGeometry x="376.0" y="558.0" width="286" height="22" as="geometry" />
+          <mxGeometry x="376.0" y="550.0" width="286" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="ROL-06-caption" value="Consulta indicadores y analítica" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
-          <mxGeometry x="376.0" y="561" width="286" height="16" as="geometry" />
+        <mxCell id="ROL-06-caption" value="Consulta indicadores históricos&#10;(fuera del MVP)" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="553" width="286" height="32" as="geometry" />
         </mxCell>
         <mxCell id="ROL-07" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
           <mxGeometry x="36" y="613" width="310" height="66" as="geometry" />
@@ -248,7 +248,7 @@
         <mxCell id="legend" value="Las flechas indican la dirección de la interacción. Cada enlace describe su propósito." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#52677e;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="36" y="739" width="1100" height="16" as="geometry" />
         </mxCell>
-        <mxCell id="footer" value="C4N1-contexto · v0.1.0 · 2026-11-23 · luisdavidborjap-web (P7) · HU-11" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#52677e;fontStyle=0;" vertex="1" parent="1">
+        <mxCell id="footer" value="C4N1-contexto · v0.1.1 · 2026-11-24 · luisdavidborjap-web (P7) · HU-11" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#52677e;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="36" y="762" width="1100" height="16" as="geometry" />
         </mxCell>
       </root>

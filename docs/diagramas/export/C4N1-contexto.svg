@@ -9,7 +9,7 @@
   </defs>
   <rect x="0" y="0" width="1680" height="795" rx="0" fill="#f8fafc" stroke="none" />
   <text x="36" y="48" fill="#172e45" font-size="30" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">Smart Inventory · Diagrama de contexto C4</text>
-  <text x="36" y="77" fill="#52677e" font-size="15" font-family="Arial, sans-serif" font-weight="400" text-anchor="start">HU-11 · Sprint 2 · Borrador basado en el contrato propuesto v1.0.0</text>
+  <text x="36" y="77" fill="#52677e" font-size="15" font-family="Arial, sans-serif" font-weight="400" text-anchor="start">HU-11 · Sprint 2 · Contexto del sistema completo · Contrato v1.0.0</text>
   <text x="36" y="119" fill="#52677e" font-size="14" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">PERSONAS</text>
   <text x="1314" y="119" fill="#52677e" font-size="14" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">SISTEMAS EXTERNOS</text>
   <rect x="692" y="146" width="284" height="540" rx="12" fill="#1261a0" stroke="#0d4c80" />
@@ -29,8 +29,8 @@
   <text x="53" y="275" fill="#172e45" font-size="17" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">Supervisor de bodega</text>
   <line x1="346" x2="689" y1="261" y2="261" stroke="#58718b" stroke-width="1.6" marker-end="url(#arrow)" />
   <rect x="376.0" y="242.0" width="286" height="38" rx="7" fill="#f8fafc" stroke="none" />
-  <text x="519" y="258" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">Registra ajustes y cambia el estado</text>
-  <text x="519" y="274" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">de lotes y define umbrales</text>
+  <text x="519" y="258" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">Supervisa lotes y vencimientos</text>
+  <text x="519" y="274" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">y registra ajustes</text>
   <rect x="36" y="305" width="310" height="66" rx="12" fill="#e3effb" stroke="#a1bfdb" />
   <text x="53" y="328" fill="#245f93" font-size="12" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">ROL-03</text>
   <text x="53" y="352" fill="#172e45" font-size="17" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">Comprador</text>
@@ -50,14 +50,15 @@
   <text x="53" y="506" fill="#172e45" font-size="17" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">Supervisor de operaciones</text>
   <line x1="346" x2="689" y1="492" y2="492" stroke="#58718b" stroke-width="1.6" marker-end="url(#arrow)" />
   <rect x="376.0" y="473.0" width="286" height="38" rx="7" fill="#f8fafc" stroke="none" />
-  <text x="519" y="489" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">Consulta la operación y gestiona</text>
-  <text x="519" y="505" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">pedidos y prioridades</text>
+  <text x="519" y="489" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">Gestiona pedidos y supervisa</text>
+  <text x="519" y="505" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">la operación en el dashboard</text>
   <rect x="36" y="536" width="310" height="66" rx="12" fill="#e3effb" stroke="#a1bfdb" />
   <text x="53" y="559" fill="#245f93" font-size="12" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">ROL-06</text>
   <text x="53" y="583" fill="#172e45" font-size="17" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">Analista</text>
   <line x1="346" x2="689" y1="569" y2="569" stroke="#58718b" stroke-width="1.6" marker-end="url(#arrow)" />
-  <rect x="376.0" y="558.0" width="286" height="22" rx="7" fill="#f8fafc" stroke="none" />
-  <text x="519" y="574" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">Consulta indicadores y analítica</text>
+  <rect x="376.0" y="550.0" width="286" height="38" rx="7" fill="#f8fafc" stroke="none" />
+  <text x="519" y="566" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">Consulta indicadores históricos</text>
+  <text x="519" y="582" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">(fuera del MVP)</text>
   <rect x="36" y="613" width="310" height="66" rx="12" fill="#e3effb" stroke="#a1bfdb" />
   <text x="53" y="636" fill="#245f93" font-size="12" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">ROL-07</text>
   <text x="53" y="660" fill="#172e45" font-size="17" font-family="Arial, sans-serif" font-weight="700" text-anchor="start">Administrador</text>
@@ -101,5 +102,5 @@
   <text x="1145" y="648" fill="#30465d" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="middle">Notifica llegadas y salidas de vehículos</text>
   <rect x="36" y="727" width="1608" height="1" rx="0" fill="#ccdbe8" stroke="none" />
   <text x="36" y="752" fill="#52677e" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="start">Las flechas indican la dirección de la interacción. Cada enlace describe su propósito.</text>
-  <text x="36" y="775" fill="#52677e" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="start">C4N1-contexto · v0.1.0 · 2026-11-23 · luisdavidborjap-web (P7) · HU-11</text>
+  <text x="36" y="775" fill="#52677e" font-size="13" font-family="Arial, sans-serif" font-weight="400" text-anchor="start">C4N1-contexto · v0.1.1 · 2026-11-24 · luisdavidborjap-web (P7) · HU-11</text>
 </svg>
