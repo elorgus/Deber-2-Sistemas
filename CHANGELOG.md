@@ -12,6 +12,7 @@ Versionado: `diseno-vMAJOR.MINOR.PATCH` (MAJOR = sprint, MINOR = revisión, PATC
 - `docs/BACKLOG.md` v1.0.0 — product backlog y plan de 4 sprints.
 - `CHANGELOG.md` v1.0.0.
 - `equipo/P5-JessPCL/HU-08-riesgos.md` v1.0.0 — registro inicial de 18 riesgos alineado con FAL y RNF del contrato (HU-08, P5).
+- HU-15: agrega el diagrama C4 de nivel 3 de Reposición y Compras (SVC-03), con fuente editable y exportación SVG.
 
 ### Changed
 - (pendiente)
