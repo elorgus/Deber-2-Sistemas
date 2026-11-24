@@ -2,11 +2,13 @@
 
 ## diseno-v0.2.0 · Sprint 2 (En progreso)
 
-**HU incluidas:** HU-16, HU-17
+**HU incluidas:** HU-11, HU-16, HU-17
 
 **Artefactos**
+
 | Artefacto | Versión | Cambio | HU |
 |---|---|---|---|
+| C4N1-contexto (fuente y SVG) | 0.1.1 | Diagrama de contexto de Smart Inventory con siete roles y cinco sistemas externos. Identifica la consulta de indicadores históricos como posterior al MVP. | HU-11 |
 | equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md · ACT-FA-recepcion · SEC-FA-recepcion | 1.0.0 | Flujo A: recepción y actualización de existencias | HU-16 |
 | equipo/P5-JessPCL/HU-17-flujo-b-reposicion.md · ACT-FB-reposicion · SEC-FB-reposicion | 1.0.0 | Flujo B: riesgo de agotamiento y reposición | HU-17 |
 | docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md | — (Propuesto) | La detección de riesgo de agotamiento pertenece a Reposición | HU-17 |
@@ -20,6 +22,7 @@
 **HU incluidas:** HU-01 a HU-10
 
 **Artefactos**
+
 | Artefacto | Versión | Cambio | HU |
 |---|---|---|---|
 | docs/ARQUITECTURA_BASE.md | 1.0.0 | Contrato maestro aprobado (tag contrato-v1.0.0) | HU-06 |
