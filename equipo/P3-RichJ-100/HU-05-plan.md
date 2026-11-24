@@ -14,12 +14,12 @@
 
 ## 1. Fechas de los 4 sprints (CA1)
 
-| Sprint | Inicio (Planning) | Fin (Review y Retro) | Tag al cierre |
-|---|---|---|---|
-| S1 | dom 2026-11-22 | lun 2026-11-23 | `diseno-v0.1.0` |
-| S2 | lun 2026-11-23 | mar 2026-11-24 | `diseno-v0.2.0` |
-| S3 | mar 2026-11-24 | mar 2026-11-24 | `diseno-v0.3.0` |
-| S4 | mar 2026-11-24 | mar 2026-11-24 | `diseno-v1.0.0` |
+| Sprint | Fechas | Tag al cierre |
+|---|---|---|
+| S1 | 22/11 – 23/11 | `diseno-v0.1.0` |
+| S2 | 23/11 – 24/11 | `diseno-v0.2.0` |
+| S3 | 24/11 | `diseno-v0.3.0` |
+| S4 | 24/11 | `diseno-v1.0.0` |
 
 ## 2. Objetivo e incremento de cada sprint (CA4)
 
@@ -34,10 +34,10 @@
 
 | Ceremonia | S1 | S2 | S3 | S4 |
 |---|---|---|---|---|
-| Planning (día 1, 60 min) | 22-nov | 23-nov | 24-nov | 24-nov |
+| Planning (día 1, 60 min) | 22/11 | 23/11 | 24/11 | 24/11 |
 | Sincronización (asíncrona, en el canal del equipo) | durante el sprint | varias veces al día | varias veces al día | varias veces al día |
-| Review (último día, 45 min) | 23-nov | 24-nov | 24-nov | 24-nov |
-| Retrospectiva (después de la review, 30 min) | 23-nov | 24-nov | 24-nov | 24-nov |
+| Review (último día, 45 min) | 23/11 | 24/11 | 24/11 | 24/11 |
+| Retrospectiva (después de la review, 30 min) | 23/11 | 24/11 | 24/11 | 24/11 |
 
 ## 4. Capacidad declarada por integrante (CA2)
 
