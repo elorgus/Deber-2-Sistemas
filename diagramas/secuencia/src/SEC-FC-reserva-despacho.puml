@@ -21,7 +21,7 @@ PED ->> BRK : EVT-21 PedidoRegistrado
 PED -> INV : INT-19 Solicitar reserva FEFO (S)\n[timeout + Circuit Breaker]
 
 alt Stock suficiente (camino feliz)
-  note over INV : TX-02: PoliticaSeleccionLotes (FEFO) + Reserva + Saldo + Outbox\nEjemplo: el lote que vence antes (L1) se asigna primero;\nL2 solo completa lo que falte. Vencido y EnCuarentena se excluyen.
+  note over INV : TX-02: PoliticaFEFO + Reserva + Saldo + Outbox\nEjemplo FEFO: L-003 vence antes que L-004.\nSe asigna L-003 primero y L-004 solo completa lo que falte.\nVencido y EnCuarentena se excluyen.
   INV --> PED : Reserva confirmada (ID + asignación por lote)
   INV ->> BRK : INT-20: EVT-08 ReservaConfirmada, EVT-05 SaldoActualizado
   note over PED : Guarda ID y copia de solo lectura\nTX-05: Registrado -> Reservado, luego Reservado -> EnPreparacion
@@ -29,11 +29,13 @@ alt Stock suficiente (camino feliz)
   BRK ->> FLO : INT-21: EVT-24 PreparacionSolicitada
 
   FLO -> EXT : INT-22 Enviar misión al AMR (EXT-03) (S)
+  FLO ->> BRK : EVT-29 MisionAmrAsignada
+  BRK ->> PED : INT-24: EVT-29 (estado de la tarea)
   EXT ->> FLO : INT-23 Telemetría continua (EXT-03) (A)
-  FLO ->> BRK : EVT-29 MisionAmrAsignada, EVT-32 PosicionFlotaActualizada (Señal)
+  FLO ->> BRK : EVT-32 PosicionFlotaActualizada (Señal)
   BRK ->> PRY : INT-32: EVT-32 -> VL-04 (<= 2 s posiciones AMR)
   FLO ->> BRK : EVT-30 MisionAmrCompletada, EVT-31 EstadoAmrCambiado (AMR vuelve a Disponible)
-  BRK ->> PED : INT-24: EVT-29 y EVT-30 (estado de la tarea)
+  BRK ->> PED : INT-24: EVT-30 (estado de la tarea)
   BRK ->> PRY : INT-32: EVT-31 -> VL-04
 
   OPE -> APP : Confirmar preparación
@@ -57,7 +59,8 @@ alt Stock suficiente (camino feliz)
   BRK ->> INV : INT-30: EVT-27 PedidoDespachado
   note over INV : TX-03: Consume reserva + movimiento + saldo (CE-04, <= 60 s)
   INV ->> BRK : EVT-11 SalidaRegistrada, EVT-05 SaldoActualizado
-  BRK ->> PRY : Actualiza VL-01, VL-03 y VL-06
+  BRK ->> PRY : INT-08: Actualiza VL-01 y VL-06
+  BRK ->> PRY : Actualiza VL-03 (EVT-21 a EVT-28) (INT por definir)
 
 else Sin stock suficiente (todo o nada)
   INV --> PED : Reserva rechazada
@@ -71,8 +74,8 @@ else SVC-02 no disponible (FAL-02)
 end
 
 group Cancelación (posible desde cualquier estado previo a EnDespacho)
-  SUP -> APP : Cancelar pedido (OPS-05)
-  APP -> PED : Cancelar pedido
+  SUP -> APP : Cancelar pedido (motivo obligatorio; OPS-05 si está EnPreparacion)
+  APP -> PED : Cancelar pedido (INT por definir)
   note over PED : TX-05: Estado Cancelado + Outbox
   PED ->> BRK : EVT-28 PedidoCancelado
   BRK ->> INV : INT-31: EVT-28 -> liberar reserva
