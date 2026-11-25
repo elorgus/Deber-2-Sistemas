@@ -31,14 +31,16 @@ Este documento describe el flujo de extremo a extremo desde el ingreso de un ped
 | 2 | `SVC-04` solicita la reserva FEFO a `SVC-02` mediante `PuertoReservasInventario` → `GestionReservas`. | `SVC-04` → `SVC-02` | `INT-19` | **S** (timeout + Circuit Breaker) | `TX-02` en `SVC-02` |
 | 3 | `SVC-02` verifica disponible, asigna lotes con `PoliticaFEFO`, guarda la reserva y publica el hecho vía Outbox. | `SVC-02` → `TRX-03` | `INT-20` | A | `EVT-08` (`ReservaConfirmada`), `EVT-05` (`SaldoActualizado`) |
 | 4 | `SVC-04` guarda el ID de reserva y una copia de solo lectura de la asignación por lote, pasa el pedido a `Reservado` y luego a `EnPreparacion`. | `SVC-04` → `TRX-03` → `SVC-05` | `INT-21` | A | `TX-05`, `EVT-22` (`PedidoReservado`), `EVT-24` (`PreparacionSolicitada`) |
-| 5 | `SVC-05` selecciona un AMR disponible (`EstrategiaAsignacionAmr`), calcula la ruta usando su réplica de ubicaciones (`EVT-03`) y envía la misión a `EXT-03`. | `SVC-05` → `EXT-03` | `INT-22` | S | `EVT-29` (`MisionAmrAsignada`) |
-| 6 | `EXT-03` emite telemetría continua hacia `SVC-05`; `SVC-05` publica la señal muestreada `EVT-32` y cambios de estado a `TRX-04` (`VL-04`). | `EXT-03` → `SVC-05` → `TRX-03` → `TRX-04` | `INT-23`, `INT-32` | A | `EVT-31`, `EVT-32` (Señal) |
-| 7 | Al finalizar el AMR, `SVC-05` notifica la finalización de la misión a `SVC-04`. | `SVC-05` → `TRX-03` → `SVC-04` | `INT-24` | A | `EVT-29`, `EVT-30` (`MisionAmrCompletada`) |
+| 5 | `SVC-05` selecciona un AMR disponible (`EstrategiaAsignacionAmr`), calcula la ruta usando su réplica de ubicaciones (`EVT-03`) y envía la misión a `EXT-03`. `SVC-05` publica `EVT-29` y `SVC-04` lo recibe para actualizar el estado de la tarea. | `SVC-05` → `EXT-03`; `SVC-05` → `TRX-03` → `SVC-04` | `INT-22`, `INT-24` | S / A | `EVT-29` (`MisionAmrAsignada`) |
+| 6 | `EXT-03` emite telemetría continua hacia `SVC-05`; `SVC-05` publica la señal muestreada `EVT-32`, que `TRX-04` usa para `VL-04` (≤ 2 s en posiciones de AMR). | `EXT-03` → `SVC-05` → `TRX-03` → `TRX-04` | `INT-23`, `INT-32` | A | `EVT-32` (Señal) |
+| 7 | Al finalizar la misión, `SVC-05` publica `EVT-30` y `SVC-04` lo recibe. El AMR vuelve a `Disponible` (`EVT-31`, que llega a `TRX-04` con `INT-32`). | `SVC-05` → `TRX-03` → `SVC-04` y `TRX-04` | `INT-24`, `INT-32` | A | `EVT-30` (`MisionAmrCompletada`), `EVT-31` (`EstadoAmrCambiado`) |
 | 8 | El operador (`ROL-01`) confirma la preparación en `SVC-04`. El pedido pasa a `Preparado` y luego a `EnDespacho`. | `TRX-02` → `SVC-04` → `TRX-03` → `SVC-05` | `INT-25`, `INT-26` | S / A | `TX-05`, `EVT-25` (`PreparacionCompletada`), `EVT-26` (`DespachoSolicitado`) |
-| 9 | `SVC-05` coordina el vehículo con `EXT-02`, registra la llegada en garita (`EXT-05`), asigna muelle (`TX-06`) y actualiza `VL-05`. | `SVC-05` ↔ `EXT-02`, `EXT-05` → `SVC-05` → `TRX-04` | `INT-27`, `INT-28`, `INT-32` | A | `TX-06`, `EVT-33` (`VehiculoArribado`), `EVT-34` (`MuelleAsignado`) |
+| 9 | `SVC-05` coordina el vehículo con `EXT-02`, registra la llegada en garita (`EXT-05`) y asigna muelle (`TX-06`). Publica `EVT-33` y `EVT-34`: `SVC-04` recibe el muelle asignado y `TRX-04` actualiza `VL-05`. | `SVC-05` ↔ `EXT-02`; `EXT-05` → `SVC-05`; `SVC-05` → `TRX-03` → `SVC-04` y `TRX-04` | `INT-27`, `INT-28`, `INT-29`, `INT-32` | A | `TX-06`, `EVT-33` (`VehiculoArribado`), `EVT-34` (`MuelleAsignado`) |
 | 10 | El camión cargado sale del patio (`EXT-05`), `SVC-05` libera el muelle y notifica el despacho a `SVC-04`. | `SVC-05` → `TRX-03` → `SVC-04` | `INT-29`, `INT-32` | A | `EVT-35` (`VehiculoDespachado`), `EVT-36` (`MuelleLiberado`) |
 | 11 | `SVC-04` cierra el pedido en estado `Despachado` y notifica a `SVC-02`. | `SVC-04` → `TRX-03` → `SVC-02` | `INT-30` | A | `TX-05`, `EVT-27` (`PedidoDespachado`) |
-| 12 | `SVC-02` consume la reserva, registra el movimiento de salida y actualiza el saldo en una transacción local. | `SVC-02` → `TRX-03` | `INT-30` | A | `TX-03`, `EVT-11` (`SalidaRegistrada`), `EVT-05` (`SaldoActualizado`) |
+| 12 | `SVC-02` consume la reserva, registra el movimiento de salida y actualiza el saldo en una transacción local. `TRX-04` actualiza `VL-01` y `VL-06`. | `SVC-02` → `TRX-03` → `TRX-04` | `INT-30`, `INT-08` | A | `TX-03`, `EVT-11` (`SalidaRegistrada`), `EVT-05` (`SaldoActualizado`) |
+
+> `VL-03` (`EVT-21` a `EVT-28`) no tiene una interacción definida en §7.2; ver sección 7.
 
 ---
 
@@ -63,6 +65,7 @@ Supóngase un pedido de **80 unidades** del SKU `LEC-1L` (controla lote y vencim
 ### 4.1 Sin stock suficiente (`EnEspera`)
 - En el MVP la reserva es **todo o nada**. Si el disponible total de lotes elegibles es menor a lo solicitado, `SVC-02` rechaza la reserva en `INT-19` y publica `EVT-09` (`ReservaRechazada`) vía `INT-20` (consumido por `SVC-03` como demanda no atendida).
 - `SVC-04` transiciona el pedido a estado `EnEspera` y publica `EVT-23` (`PedidoEnEspera`), visible en `VL-02` y `VL-03`. No se realiza ninguna reserva parcial.
+- La salida de `EnEspera` no está definida en §9; este flujo termina aquí sin asumirla (Q-1, ver sección 7).
 
 ### 4.2 `SVC-02` Inventario no disponible (`PendienteReserva` · `FAL-02`)
 - Si `INT-19` excede el tiempo límite o se abre el Circuit Breaker de `AdaptadorReservasInventario`, ningún pedido se pierde (`RNF-DIS-02`).
@@ -72,6 +75,7 @@ Supóngase un pedido de **80 unidades** del SKU `LEC-1L` (controla lote y vencim
 - Un pedido puede cancelarse únicamente antes de entrar en `EnDespacho` (si ya está en `EnPreparacion`, requiere `ROL-05` y motivo obligatorio según `OPS-05`).
 - `SVC-04` transiciona el pedido a `Cancelado` (`TX-05`) y publica `EVT-28` (`PedidoCancelado`).
 - Mediante `INT-31`, `SVC-02` libera la reserva (`EVT-10` `ReservaLiberada`, recuperando el disponible en `≤ 60 s` según `CE-05`) y `SVC-05` aborta o cancela las misiones AMR asociadas.
+- El comando de cancelación (`TRX-02` → `SVC-04`) no tiene una interacción definida en §7.2 (ver sección 7).
 
 ### 4.4 Degradación en Flota (`FAL-03` y `FAL-09`)
 - Si un AMR pierde telemetría por más de 10 s (`FAL-03`, `RNF-DIS-03`), se marca "sin señal" en `VL-04`, su misión pasa a `Fallida` y se reasigna (`INT-33`) o se completa por picking manual sin afectar a `SVC-02` ni `SVC-04`.
@@ -97,3 +101,14 @@ Supóngase un pedido de **80 unidades** del SKU `LEC-1L` (controla lote y vencim
 
 - **Diagrama de actividad:** `diagramas/actividad/src/ACT-FC-reserva-despacho.puml` (exportación en `diagramas/actividad/export/ACT-FC-reserva-despacho.svg`).
 - **Diagrama de secuencia:** `diagramas/secuencia/src/SEC-FC-reserva-despacho.puml` (exportación en `diagramas/secuencia/export/SEC-FC-reserva-despacho.svg`).
+
+---
+
+## 7. Puntos abiertos
+
+| ID | Punto abierto | Estado |
+|---|---|---|
+| Q-1 | §9 no define cómo sale un pedido de `EnEspera`. Los diagramas y este documento terminan en `EnEspera` sin inventar la salida. | Abierto; se resuelve vía §0.3 |
+| INT por definir (1) | Cancelar pedido, `TRX-02` → `SVC-04` (`OPS-05`). §7.2 no define ninguna interacción para este comando. | Abierto; se completa en HU-24 |
+| INT por definir (2) | Actualización de `VL-03` (`EVT-21` a `EVT-28`) en `TRX-04`. `INT-08` cubre `VL-01`, `VL-04` y `VL-06`, pero no `VL-03`. | Abierto; se completa en HU-24 |
+| H-2 (informativo) | §9 indica que la reserva también se libera por expiración (`EVT-10`), pero `SVC-04` no consume `EVT-10`. Este flujo solo modela la liberación por cancelación. Detalle en `equipo/P6-CamGranda/HU-07-anexo-pedidos-flota.md`. | Abierto; propuesta aparte vía §0.3 |
