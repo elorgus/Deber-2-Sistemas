@@ -12,7 +12,7 @@ start
 
 if (¿SVC-02 responde dentro del tiempo límite?\n(timeout y Circuit Breaker)) then (No · FAL-02)
   :Pasar pedido a PendienteReserva (TX-05, sin evento);
-  :Reintentar INT-19 (reintento idempotente);
+  :Reintentar INT-19 con el identificador del pedido\ncomo clave de idempotencia (reintento idempotente);
   note right
     El resultado del reintento reingresa
     al flujo: EVT-22 o EVT-23.
