@@ -31,10 +31,10 @@ else (Sí)
     end note
     stop
   else (Sí)
-    :Asignar lotes con PoliticaSeleccionLotes (FEFO);
+    :Asignar lotes con PoliticaFEFO;
     note right
-      Ejemplo FEFO: el lote L1 vence antes que L2.
-      Se asigna L1 primero y L2 solo completa
+      Ejemplo FEFO: L-003 vence antes que L-004.
+      Se asigna L-003 primero y L-004 solo completa
       lo que falte. Sin vencimiento se usa FIFO.
     end note
     :Guardar reserva y actualizar saldo (TX-02)\nPublicar EVT-08 y EVT-05 (INT-20);
@@ -60,12 +60,13 @@ if (¿ROL-05 cancela el pedido? (motivo obligatorio)\nPosible en cualquier estad
 else (No)
   |SVC-05 Flota y Operación|
   :Recibir EVT-24 (INT-21), asignar AMR disponible y ruta\n(EstrategiaAsignacionAmr) y enviar la misión (INT-22);
+  :Publicar EVT-29 MisionAmrAsignada (INT-24);
 
   |Externos (EXT-01, EXT-02, EXT-03, EXT-05)|
   :EXT-03 ejecuta la misión y envía\ntelemetría continua (INT-23);
 
   |SVC-05 Flota y Operación|
-  :Publicar EVT-29 MisionAmrAsignada y la señal\nmuestreada EVT-32 (INT-32 hacia VL-04);
+  :Publicar la señal muestreada EVT-32\n(INT-32 hacia VL-04);
   :Registrar misión completada y publicar EVT-30 MisionAmrCompletada (INT-24)\ny EVT-31 EstadoAmrCambiado (AMR vuelve a Disponible);
 
   |Usuarios (ROL-05 y ROL-01)|
