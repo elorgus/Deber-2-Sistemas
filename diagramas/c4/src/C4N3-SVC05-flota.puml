@@ -1,0 +1,76 @@
+@startuml
+!include <C4/C4_Component>
+
+title C4 Nivel 3 · Flota y Operación (SVC-05)
+caption C4N3-SVC05-flota · v1.0.0 · 2026-11-24 · CamGranda (P6) · HU-19
+
+Container_Ext(app, "TRX-02 Capa de Aplicación", "", "Operación manual de ROL-04")
+ContainerQueue_Ext(brk, "TRX-03 Broker de eventos", "", "Eventos de negocio y señal")
+ContainerDb_Ext(pry, "TRX-04 Proyección de lectura", "", "VL-04 y VL-05")
+System_Ext(ext03, "EXT-03 Controlador AMR", "Hardware de flota")
+System_Ext(ext02, "EXT-02 Transportistas", "Propios y externos")
+System_Ext(ext05, "EXT-05 Garita", "Registro de llegada y salida")
+
+Container_Boundary(svc05, "SVC-05 Flota y Operación (UD-2)") {
+
+  Component(consumidor, "ConsumidorIdempotente", "Componente", "Recibe EVT-03, EVT-24, EVT-26 y EVT-28 sin duplicar efectos")
+  ComponentDb(replica, "ReplicaCatalogo", "Puerto de salida, solo lectura", "Ubicaciones y layout (EVT-03)")
+
+  Component(misiones, "Gestión de misiones AMR", "Aplicación (nombre descriptivo)", "Orquesta el picking con AMR")
+  Component(estMision, "EstadoMisionAmr", "Estado (State)", "Ciclo de vida de la misión")
+  Component(estrategia, "EstrategiaAsignacionAmr", "Estrategia (Strategy)", "Elige AMR y ruta")
+  Component(cercania, "AsignacionPorCercania", "Estrategia concreta", "")
+  Component(carga, "AsignacionPorCarga", "Estrategia concreta", "")
+  Component(puertoAmr, "PuertoControladorAmr", "Puerto", "Enviar misión")
+  Component(adapAmr, "AdaptadorControladorAmr", "Adaptador", "Traduce hacia EXT-03")
+
+  Component(telemetria, "Procesamiento de telemetría", "Aplicación (nombre descriptivo)", "Muestrea la telemetría cruda; solo la señal EVT-32 sale de SVC-05")
+
+  Component(visitas, "Gestión de visitas y despacho", "Aplicación (nombre descriptivo)", "Orquesta el despacho de vehículos")
+  Component(estVisita, "EstadoVisitaVehiculo", "Estado (State)", "Ciclo de vida de la visita")
+  Component(muelles, "AsignadorMuelles", "Dominio", "Asigna muelle (TX-06)")
+  Component(puertoTrans, "PuertoTransportista", "Puerto", "Solicitar y confirmar vehículo")
+  Component(transPropio, "AdaptadorTransportistaPropio", "Adaptador", "")
+  Component(transExt, "AdaptadorTransportistaExterno", "Adaptador", "")
+  Component(adapGarita, "Adaptador de garita (EXT-05)", "Adaptador (nombre descriptivo)", "Llegadas y salidas")
+
+  Component(publicador, "PublicadorEventos", "Puerto de salida", "Eventos de negocio")
+  Component(outbox, "PublicadorOutbox", "Adaptador (Outbox)", "Publica con la transacción local")
+}
+
+Rel(brk, consumidor, "INT-04, INT-21, INT-26, INT-31", "A")
+Rel(consumidor, replica, "Actualiza")
+Rel(consumidor, misiones, "EVT-24 y EVT-28")
+Rel(consumidor, visitas, "EVT-26")
+
+Rel(app, misiones, "INT-33: reasignar misión", "S")
+Rel(app, visitas, "INT-33: registrar llegada y asignar muelle", "S")
+
+Rel(misiones, estMision, "Usa")
+Rel(misiones, estrategia, "Elige AMR y ruta")
+Rel(cercania, estrategia, "Implementa")
+Rel(carga, estrategia, "Implementa")
+Rel(misiones, puertoAmr, "INT-22: enviar misión", "S")
+Rel(adapAmr, puertoAmr, "Implementa")
+Rel(adapAmr, ext03, "INT-22: misión", "S")
+Rel(ext03, adapAmr, "INT-23: telemetría continua", "A")
+Rel(adapAmr, telemetria, "Telemetría cruda")
+Rel(telemetria, misiones, "Estado del AMR (FAL-03)")
+
+Rel(visitas, estVisita, "Usa")
+Rel(visitas, muelles, "Asigna muelle")
+Rel(visitas, puertoTrans, "INT-27: solicitar vehículo", "A")
+Rel(transPropio, puertoTrans, "Implementa")
+Rel(transExt, puertoTrans, "Implementa")
+Rel(transPropio, ext02, "INT-27", "A")
+Rel(transExt, ext02, "INT-27", "A")
+Rel(ext05, adapGarita, "INT-28: llegada y salida", "A")
+Rel(adapGarita, visitas, "Llegada y salida")
+
+Rel(misiones, publicador, "EVT-29 a EVT-31")
+Rel(visitas, publicador, "EVT-33 a EVT-36")
+Rel(outbox, publicador, "Implementa")
+Rel(outbox, brk, "Eventos de negocio: INT-24, INT-29, INT-32", "A")
+Rel(telemetria, brk, "Señal EVT-32: INT-32", "A")
+Rel(brk, pry, "INT-32: VL-04 y VL-05", "A")
+@enduml
