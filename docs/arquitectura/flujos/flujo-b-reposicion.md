@@ -2,18 +2,18 @@
 
 | Campo | Valor |
 |---|---|
-| Documento | `equipo/P5-JessPCL/HU-17-flujo-b-reposicion.md` |
-| Versión | **1.0.0** |
-| Estado | En revisión (PR #20). El contrato v1.0.0 quedó aprobado en el acta del Sprint 1 (HU-10) |
+| Documento | `docs/arquitectura/flujos/flujo-b-reposicion.md` |
+| Versión | **1.1.0** |
+| Estado | Aprobado: PR #20 fusionado el 2026-11-24. El contrato v1.0.0 quedó aprobado en el acta del Sprint 1 (HU-10) |
 | HU | HU-17 · Flujo B: riesgo de agotamiento y reposición, ADR-006 (Sprint 2 · 5 pts) |
 | HN que diseña | HN-09, HN-10 y HN-11 (usa HN-08, HN-23 y HN-24 como reglas) |
 | Dueño / Revisor | P5 / P4 |
-| Diagramas | [`ACT-FB-reposicion`](../../docs/diagramas/fuente/ACT-FB-reposicion.puml) v1.0.0 · [`SEC-FB-reposicion`](../../docs/diagramas/fuente/SEC-FB-reposicion.puml) v1.0.0 |
-| ADR | [`ADR-006`](../../docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md) · La detección de riesgo de agotamiento pertenece a Reposición (Propuesto) |
-| Contrato de referencia | [`docs/ARQUITECTURA_BASE.md`](../../docs/ARQUITECTURA_BASE.md) v1.0.0 (§3.3, §5, §6, §7, §9, §10, §11) |
-| Flujo anterior | `equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md` (PR #17): entrega EVT-05 → INT-10 |
+| Diagramas | [`ACT-FB-reposicion`](../../../diagramas/actividad/src/ACT-FB-reposicion.puml) v1.0.0 · [`SEC-FB-reposicion`](../../../diagramas/secuencia/src/SEC-FB-reposicion.puml) v1.0.0 |
+| ADR | [`ADR-006`](../../adr/ADR-006-deteccion-riesgo-en-reposicion.md) · La detección de riesgo de agotamiento pertenece a Reposición (Propuesto) |
+| Contrato de referencia | [`docs/ARQUITECTURA_BASE.md`](../../ARQUITECTURA_BASE.md) v1.0.0 (§3.3, §5, §6, §7, §9, §10, §11) |
+| Flujo anterior | `docs/arquitectura/flujos/flujo-a-recepcion.md` (PR #17): entrega EVT-05 → INT-10 |
 | Criterio de la rúbrica | Flujos e interacciones arquitectónicas |
-| Fecha | 2026-11-23 |
+| Fecha | 2026-11-27 |
 
 ---
 
@@ -65,7 +65,8 @@ Cada vez que llega EVT-05, `EvaluadorRiesgoAgotamiento` aplica estas reglas sobr
 | Disponible < mínimo y **no** hay alerta activa | Crea la alerta activa | EVT-14 RiesgoAgotamientoDetectado |
 | Disponible < mínimo y ya hay alerta activa | Nada (no duplica la alerta) | — |
 | Disponible ≥ mínimo y hay alerta activa | Resuelve la alerta | EVT-15 RiesgoAgotamientoResuelto |
-| La estrategia del SKU indica reponer | Calcula la sugerencia; si ya había una vigente, esa pasa a *Reemplazada* | EVT-16 SugerenciaReposicionGenerada |
+| La estrategia del SKU indica reponer y **no** hay sugerencia vigente | Calcula y guarda la sugerencia | EVT-16 SugerenciaReposicionGenerada |
+| La estrategia indica reponer y ya hay una sugerencia vigente | Solo genera una nueva si cambia la **cantidad** o el **proveedor** calculado; en ese caso la anterior pasa a *Reemplazada*. Si no cambia nada, mantiene la vigente (PC-08) | EVT-16 solo si hay una nueva |
 | La estrategia no indica reponer | Nada | — |
 
 **Ejemplo (HN-09):** con mínimo 100, si el disponible baja a 90 se emite EVT-14 y la alerta aparece en VL-02. Cuando el disponible vuelve a 100 o más, EVT-15 la retira.
@@ -84,14 +85,14 @@ Todas comparten la interfaz `EstrategiaReposicion`. Agregar una nueva no cambia 
 
 ## 5. Camino principal
 
-La columna **SEC** indica el número de mensaje en [`SEC-FB-reposicion`](../../docs/diagramas/export/SEC-FB-reposicion.svg).
+La columna **SEC** indica el número de mensaje en [`SEC-FB-reposicion`](../../../diagramas/secuencia/export/SEC-FB-reposicion.svg).
 
 | Paso | SEC | Qué ocurre | Responsable | Interacción | Modo | Evento / consistencia |
 |---|---|---|---|---|---|---|
 | 0 *(opcional)* | 1–2 | Analítica publica un pronóstico y SVC-03 actualiza su copia local | SVC-06 → TRX-03 → SVC-03 | INT-16 | A | EVT-37 |
 | 1 | 3–4 | Un cambio de saldo llega a SVC-03 | SVC-02 → TRX-03 → SVC-03 | INT-10 | A | EVT-05 · CE-03 |
 | 2 | 5–8 | SVC-03 descarta duplicados, evalúa la política y, si corresponde, crea la alerta | SVC-03 → TRX-03 | INT-11 | A | **EVT-14** |
-| 3 | 9–13 | SVC-03 elige la estrategia, calcula la sugerencia y reemplaza la anterior si existe | SVC-03 → TRX-03 | INT-11 | A | **EVT-16** |
+| 3 | 9–13 | SVC-03 elige la estrategia y calcula la sugerencia; si ya hay una vigente, solo la reemplaza cuando cambia la cantidad o el proveedor (§4) | SVC-03 → TRX-03 | INT-11 | A | **EVT-16** |
 | 4 | 14–17 | La proyección actualiza VL-01 y VL-02 y el comprador ve la sugerencia | TRX-03 → TRX-04 → TRX-02 → TRX-01 | «INT por definir», INT-03 | A | CE-01 |
 | 5 | 18–20 | El comprador decide y TRX-02 enruta el comando a SVC-03 | ROL-03 → TRX-01 → TRX-02 → SVC-03 | INT-01, INT-12 | S | — |
 | 6 | 22–23 | SVC-03 valida rol y estado vigente (§6) | SVC-03 | interna | — | — |
@@ -173,13 +174,13 @@ La decisión **siempre es humana** en el MVP (§3.3). SVC-03 la valida con **sus
 
 ### 10.1 Actividad · ACT-FB-reposicion v1.0.0
 
-![ACT-FB-reposicion](../../docs/diagramas/export/ACT-FB-reposicion.svg)
+![ACT-FB-reposicion](../../../diagramas/actividad/export/ACT-FB-reposicion.svg)
 
 ### 10.2 Secuencia · SEC-FB-reposicion v1.0.0
 
-![SEC-FB-reposicion](../../docs/diagramas/export/SEC-FB-reposicion.svg)
+![SEC-FB-reposicion](../../../diagramas/secuencia/export/SEC-FB-reposicion.svg)
 
-Fuentes PlantUML: `docs/diagramas/fuente/ACT-FB-reposicion.puml` y `docs/diagramas/fuente/SEC-FB-reposicion.puml`.
+Fuentes PlantUML: `diagramas/actividad/src/ACT-FB-reposicion.puml` y `diagramas/secuencia/src/SEC-FB-reposicion.puml`.
 
 ---
 
@@ -192,7 +193,7 @@ La numeración continúa la de HU-16 (PC-01 a PC-04). Ninguno se usa como oficia
 | PC-05 | **Interacciones del Flujo B que no tienen ID en §7.2:** (a) TRX-03 → TRX-04 con EVT-14 a EVT-19 para VL-01 y VL-02 (el Flujo A sí la tiene: INT-08); (b) TRX-03 → SVC-03 con EVT-09, la demanda no atendida; (c) la consulta síncrona del detalle de la sugerencia, que §5 menciona; (d) TRX-02 → SVC-03 para configurar la política (HN-08, OPS-04). En los diagramas aparecen como «INT por definir» | Agregarlas a §7.2 (MINOR) | P1, P6 (HU-24) |
 | PC-06 | **Riesgo de compra duplicada:** mientras la OC aprobada no llega, el disponible sigue bajo el mínimo y cada EVT-05 podría generar otra sugerencia | Que `EstrategiaReposicion` considere las OC propias en *Emitida*, *Enviada* o *RecibidaParcial*. Es un dato de SVC-03, así que no rompe PRI-02 | P5, P1 |
 | PC-07 | **Segunda aprobación de OPS-03:** §9 no define un estado intermedio para la sugerencia mientras espera la segunda aprobación, ni quién la da | Definirlo junto con el umbral en HU-28 y reflejarlo en EST-sugerencia (HU-25) | P2 (HU-28), P4 (HU-25) |
-| PC-08 | **Cuándo se regenera una sugerencia:** "una nueva reemplaza a la anterior" (§3.3) no dice cuándo se genera una nueva. Si se regenera con cada EVT-05, VL-02 cambia todo el tiempo y aumentan los rechazos por reemplazo (B2) | Regenerar solo si cambia la cantidad o el proveedor calculado | P5 |
+| PC-08 | **Cuándo se regenera una sugerencia:** "una nueva reemplaza a la anterior" (§3.3) no dice cuándo se genera una nueva. Si se regenera con cada EVT-05, VL-02 cambia todo el tiempo y aumentan los rechazos por reemplazo (B2) | Regenerar solo si cambia la cantidad o el proveedor calculado | P5 · **Resuelto en v1.1.0** (§4) |
 
 ---
 
@@ -212,3 +213,4 @@ La numeración continúa la de HU-16 (PC-01 a PC-04). Ninguno se usa como oficia
 | Versión | Fecha | Autor | Cambio | HU |
 |---|---|---|---|---|
 | 1.0.0 | 2026-11-23 | P5 | Versión inicial: reglas de evaluación, camino principal, decisión humana, caminos B1 a B8, estados, patrones, trazabilidad y PC-05 a PC-08 | HU-17 |
+| 1.1.0 | 2026-11-27 | P5 | Resuelve PC-08: una sugerencia nueva solo se genera si cambia la cantidad o el proveedor calculado (§4). Se mueve a `docs/arquitectura/flujos/` y los diagramas a `diagramas/actividad/` y `diagramas/secuencia/` (BACKLOG §8.1 y CONTRIBUTING); se actualizan el estado y los enlaces | HU-17 |

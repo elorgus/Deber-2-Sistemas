@@ -2,16 +2,16 @@
 
 | Campo | Valor |
 |---|---|
-| Documento | `equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md` |
-| Versión | **1.0.0** |
-| Estado | En revisión (PR #17). El contrato v1.0.0 quedó aprobado en el acta del Sprint 1 (HU-10) |
+| Documento | `docs/arquitectura/flujos/flujo-a-recepcion.md` |
+| Versión | **1.0.1** |
+| Estado | Aprobado: PR #17 fusionado el 2026-11-24. El contrato v1.0.0 quedó aprobado en el acta del Sprint 1 (HU-10) |
 | HU | HU-16 · Flujo A: recepción y actualización de existencias (Sprint 2 · 3 pts) |
 | HN que diseña | HN-03 y HN-12 (usa las reglas de HN-01 y HN-02 en las validaciones) |
 | Dueño / Revisor | P5 / P4 |
-| Diagramas | [`ACT-FA-recepcion`](../../docs/diagramas/fuente/ACT-FA-recepcion.puml) v1.0.0 · [`SEC-FA-recepcion`](../../docs/diagramas/fuente/SEC-FA-recepcion.puml) v1.0.0 |
-| Contrato de referencia | [`docs/ARQUITECTURA_BASE.md`](../../docs/ARQUITECTURA_BASE.md) v1.0.0 (§3.2, §5, §6, §7, §11) |
+| Diagramas | [`ACT-FA-recepcion`](../../../diagramas/actividad/src/ACT-FA-recepcion.puml) v1.0.0 · [`SEC-FA-recepcion`](../../../diagramas/secuencia/src/SEC-FA-recepcion.puml) v1.0.0 |
+| Contrato de referencia | [`docs/ARQUITECTURA_BASE.md`](../../ARQUITECTURA_BASE.md) v1.0.0 (§3.2, §5, §6, §7, §11) |
 | Criterio de la rúbrica | Flujos e interacciones arquitectónicas |
-| Fecha | 2026-11-23 |
+| Fecha | 2026-11-27 |
 
 ---
 
@@ -49,7 +49,7 @@ Este flujo es el primer tramo del recorrido vertical **recepción → actualizac
 
 ## 4. Camino principal
 
-La columna **SEC** indica el número de mensaje en [`SEC-FA-recepcion`](../../docs/diagramas/export/SEC-FA-recepcion.svg).
+La columna **SEC** indica el número de mensaje en [`SEC-FA-recepcion`](../../../diagramas/secuencia/export/SEC-FA-recepcion.svg).
 
 | Paso | SEC | Qué ocurre | Responsable | Interacción | Modo | Evento / consistencia |
 |---|---|---|---|---|---|---|
@@ -111,13 +111,13 @@ En el diagrama de actividad, V3 y V5 aparecen como decisiones ("cuando correspon
 
 ### 8.1 Actividad · ACT-FA-recepcion v1.0.0
 
-![ACT-FA-recepcion](../../docs/diagramas/export/ACT-FA-recepcion.svg)
+![ACT-FA-recepcion](../../../diagramas/actividad/export/ACT-FA-recepcion.svg)
 
 ### 8.2 Secuencia · SEC-FA-recepcion v1.0.0
 
-![SEC-FA-recepcion](../../docs/diagramas/export/SEC-FA-recepcion.svg)
+![SEC-FA-recepcion](../../../diagramas/secuencia/export/SEC-FA-recepcion.svg)
 
-Fuentes PlantUML: `docs/diagramas/fuente/ACT-FA-recepcion.puml` y `docs/diagramas/fuente/SEC-FA-recepcion.puml`.
+Fuentes PlantUML: `diagramas/actividad/src/ACT-FA-recepcion.puml` y `diagramas/secuencia/src/SEC-FA-recepcion.puml`.
 
 ---
 
@@ -149,3 +149,4 @@ Ninguno se usa como oficial hasta aprobarse por ARQUITECTURA_BASE §0.3.
 | Versión | Fecha | Autor | Cambio | HU |
 |---|---|---|---|---|
 | 1.0.0 | 2026-11-23 | P5 | Versión inicial: camino principal, validaciones V1 a V5, caminos A1 a A4, trazabilidad y PC-01 a PC-04 | HU-16 |
+| 1.0.1 | 2026-11-27 | P5 | Se mueve a `docs/arquitectura/flujos/` y los diagramas a `diagramas/actividad/` y `diagramas/secuencia/` (BACKLOG §8.1 y CONTRIBUTING); se actualizan el estado y los enlaces. Sin cambios de contenido | HU-16 |
