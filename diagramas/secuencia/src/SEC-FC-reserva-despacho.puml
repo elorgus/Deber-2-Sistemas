@@ -1,0 +1,85 @@
+@startuml
+title Flujo C · Reserva FEFO, preparación y despacho (Secuencia)
+caption SEC-FC-reserva-despacho · v1.0.0 · 2026-11-24 · CamGranda (P6) · HU-18
+autonumber
+
+actor "ROL-05\nSupervisor de operaciones" as SUP
+actor "ROL-01\nOperador de bodega" as OPE
+participant "TRX-02\nCapa de Aplicación" as APP
+participant "SVC-04\nPedidos y Fulfillment" as PED
+participant "SVC-02\nInventario" as INV
+participant "SVC-05\nFlota y Operación" as FLO
+participant "EXT-03 / EXT-02 / EXT-05\nSistemas Externos" as EXT
+queue "TRX-03\nBroker de eventos" as BRK
+database "TRX-04\nProyección de lectura" as PRY
+
+SUP -> APP : Registrar pedido
+APP -> PED : INT-17 Registrar pedido (S)\n(o INT-18 desde EXT-01, modo A)
+note over PED : TX-05: Estado Registrado + Outbox
+PED ->> BRK : EVT-21 PedidoRegistrado
+
+PED -> INV : INT-19 Solicitar reserva FEFO (S)\n[timeout + Circuit Breaker]
+
+alt Stock suficiente (camino feliz)
+  note over INV : TX-02: PoliticaFEFO + Reserva + Saldo + Outbox\nEjemplo FEFO: L-003 vence antes que L-004.\nSe asigna L-003 primero y L-004 solo completa lo que falte.\nVencido y EnCuarentena se excluyen.
+  INV --> PED : Reserva confirmada (ID + asignación por lote)
+  INV ->> BRK : INT-20: EVT-08 ReservaConfirmada, EVT-05 SaldoActualizado
+  note over PED : Guarda ID y copia de solo lectura\nTX-05: Registrado -> Reservado, luego Reservado -> EnPreparacion
+  PED ->> BRK : EVT-22 PedidoReservado, EVT-24 PreparacionSolicitada
+  BRK ->> FLO : INT-21: EVT-24 PreparacionSolicitada
+
+  FLO -> EXT : INT-22 Enviar misión al AMR (EXT-03) (S)
+  FLO ->> BRK : EVT-29 MisionAmrAsignada
+  BRK ->> PED : INT-24: EVT-29 (estado de la tarea)
+  EXT ->> FLO : INT-23 Telemetría continua (EXT-03) (A)
+  FLO ->> BRK : EVT-32 PosicionFlotaActualizada (Señal)
+  BRK ->> PRY : INT-32: EVT-32 -> VL-04 (<= 2 s posiciones AMR)
+  FLO ->> BRK : EVT-30 MisionAmrCompletada, EVT-31 EstadoAmrCambiado (AMR vuelve a Disponible)
+  BRK ->> PED : INT-24: EVT-30 (estado de la tarea)
+  BRK ->> PRY : INT-32: EVT-31 -> VL-04
+
+  OPE -> APP : Confirmar preparación
+  APP -> PED : INT-25 Confirmar preparación (S)
+  note over PED : TX-05: EnPreparacion -> Preparado -> EnDespacho
+  PED ->> BRK : EVT-25 PreparacionCompletada, EVT-26 DespachoSolicitado
+  BRK ->> FLO : INT-26: EVT-26 DespachoSolicitado
+
+  FLO ->> EXT : INT-27 Solicitar y confirmar vehículo (EXT-02) (A, con reintentos)
+  EXT ->> FLO : INT-28 Llegada en garita (EXT-05) (A)
+  note over FLO : TX-06: Asignar muelle + visita + Outbox
+  FLO ->> BRK : EVT-33 VehiculoArribado, EVT-34 MuelleAsignado
+  BRK ->> PRY : INT-32: EVT-33, EVT-34 -> VL-05 (<= 5 s)
+  EXT ->> FLO : INT-28 Salida de camión cargado (EXT-05) (A)
+  FLO ->> BRK : EVT-35 VehiculoDespachado, EVT-36 MuelleLiberado
+  BRK ->> PED : INT-29: EVT-34 y EVT-35
+  BRK ->> PRY : INT-32: EVT-35, EVT-36 -> VL-05
+
+  note over PED : TX-05: EnDespacho -> Despachado + Outbox
+  PED ->> BRK : EVT-27 PedidoDespachado
+  BRK ->> INV : INT-30: EVT-27 PedidoDespachado
+  note over INV : TX-03: Consume reserva + movimiento + saldo (CE-04, <= 60 s)
+  INV ->> BRK : EVT-11 SalidaRegistrada, EVT-05 SaldoActualizado
+  BRK ->> PRY : INT-08: Actualiza VL-01 y VL-06
+  BRK ->> PRY : Actualiza VL-03 (EVT-21 a EVT-28) (INT por definir)
+
+else Sin stock suficiente (todo o nada)
+  INV --> PED : Reserva rechazada
+  INV ->> BRK : INT-20: EVT-09 ReservaRechazada
+  note over PED : TX-05: Registrado -> EnEspera + Outbox\nSin reserva parcial. La salida de EnEspera no está definida en §9 (Q-1).
+  PED ->> BRK : EVT-23 PedidoEnEspera
+
+else SVC-02 no disponible (FAL-02)
+  note over PED, INV : INT-19 sin respuesta
+  PED -> PED : Tiempo límite / Circuit Breaker abierto\nTX-05: Registrado -> PendienteReserva (sin evento)\nReintento idempotente de INT-19
+end
+
+group Cancelación (posible desde cualquier estado previo a EnDespacho)
+  SUP -> APP : Cancelar pedido (motivo obligatorio; OPS-05 si está EnPreparacion)
+  APP -> PED : Cancelar pedido (INT por definir)
+  note over PED : TX-05: Estado Cancelado + Outbox
+  PED ->> BRK : EVT-28 PedidoCancelado
+  BRK ->> INV : INT-31: EVT-28 -> liberar reserva
+  INV ->> BRK : EVT-10 ReservaLiberada (CE-05, <= 60 s)
+  BRK ->> FLO : INT-31: EVT-28 -> cancelar misiones AMR
+end
+@enduml

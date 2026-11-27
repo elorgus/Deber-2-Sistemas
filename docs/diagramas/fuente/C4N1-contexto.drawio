@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram id="c4n1-contexto" name="C4N1-contexto">
+    <mxGraphModel grid="0" page="1" pageScale="1" pageWidth="1680" pageHeight="795" background="#f8fafc">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Smart Inventory · Diagrama de contexto C4" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=30;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="18" width="1100" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="HU-11 · Sprint 2 · Contexto del sistema completo · Contrato v1.0.0" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=15;fontColor=#52677e;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="36" y="62" width="1100" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="people-header" value="PERSONAS" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=14;fontColor=#52677e;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="105" width="600" height="17" as="geometry" />
+        </mxCell>
+        <mxCell id="externals-header" value="SISTEMAS EXTERNOS" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=14;fontColor=#52677e;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1314" y="105" width="330" height="17" as="geometry" />
+        </mxCell>
+        <mxCell id="smart" value="" style="rounded=1;arcSize=15;html=0;fillColor=#1261a0;strokeColor=#0d4c80;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="692" y="146" width="284" height="540" as="geometry" />
+        </mxCell>
+        <mxCell id="smart-type" value="SISTEMA DE SOFTWARE" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#d6eafa;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="708.0" y="365" width="252" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="smart-name" value="Smart Inventory" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=27;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="708.0" y="390" width="252" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="smart-purpose" value="Gestiona inventario, reposición,&#10;pedidos, flota y analítica." style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=14;fontColor=#eef7ff;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="708.0" y="440" width="252" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-01" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="151" width="310" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-01-id" value="ROL-01" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#245f93;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="162" width="270" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-01-name" value="Operador de bodega" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="181" width="276" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-01-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.07037037037037037;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="ROL-01" target="smart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-01-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="165.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-01-caption" value="Registra recepciones y transferencias&#10;y confirma la preparación" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="168" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-02" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="228" width="310" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-02-id" value="ROL-02" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#245f93;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="239" width="270" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-02-name" value="Supervisor de bodega" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="258" width="276" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-02-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.21296296296296297;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="ROL-02" target="smart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-02-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="242.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-02-caption" value="Supervisa lotes y vencimientos&#10;y registra ajustes" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="245" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-03" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="305" width="310" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-03-id" value="ROL-03" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#245f93;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="316" width="270" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-03-name" value="Comprador" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="335" width="276" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-03-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.35555555555555557;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="ROL-03" target="smart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-03-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="319.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-03-caption" value="Gestiona políticas y proveedores&#10;y aprueba o rechaza sugerencias" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="322" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-04" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="382" width="310" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-04-id" value="ROL-04" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#245f93;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="393" width="270" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-04-name" value="Operador de patio y flota" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="412" width="276" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-04-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.4981481481481482;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="ROL-04" target="smart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-04-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="396.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-04-caption" value="Gestiona vehículos, muelles&#10;y misiones AMR" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="399" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-05" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="459" width="310" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-05-id" value="ROL-05" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#245f93;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="470" width="270" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-05-name" value="Supervisor de operaciones" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="489" width="276" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-05-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.6407407407407407;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="ROL-05" target="smart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-05-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="473.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-05-caption" value="Gestiona pedidos y supervisa&#10;la operación en el dashboard" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="476" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-06" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="536" width="310" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-06-id" value="ROL-06" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#245f93;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="547" width="270" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-06-name" value="Analista" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="566" width="276" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-06-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.7833333333333333;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="ROL-06" target="smart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-06-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="550.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-06-caption" value="Consulta indicadores históricos&#10;(fuera del MVP)" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="553" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-07" value="" style="rounded=1;arcSize=15;html=0;fillColor=#e3effb;strokeColor=#a1bfdb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="36" y="613" width="310" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-07-id" value="ROL-07" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#245f93;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="624" width="270" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-07-name" value="Administrador" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="643" width="276" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-07-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.5;entryX=0;entryY=0.9259259259259259;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="ROL-07" target="smart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-07-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="627.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="ROL-07-caption" value="Administra catálogo, ubicaciones,&#10;usuarios y roles" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="376.0" y="630" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-01" value="" style="rounded=1;arcSize=15;html=0;fillColor=#eaf0f5;strokeColor=#acbccb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="1314" y="165" width="330" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-01-id" value="EXT-01" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#506a81;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="177" width="280" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-01-name" value="ERP corporativo" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="195" width="290" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-01-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=block;endArrow=block;exitX=1;exitY=0.11296296296296296;entryX=0;entryY=0.5;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="smart" target="EXT-01">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-01-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="188.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-01-caption" value="Envía órdenes de compra&#10;y recibe pedidos de venta" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="191" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-02" value="" style="rounded=1;arcSize=15;html=0;fillColor=#eaf0f5;strokeColor=#acbccb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="1314" y="274" width="330" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-02-id" value="EXT-02" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#506a81;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="286" width="280" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-02-name" value="Sistemas de transportistas" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="304" width="290" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-02-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.3148148148148148;entryX=0;entryY=0.5;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="smart" target="EXT-02">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-02-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="297.0" width="286" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-02-caption" value="Solicita transporte y recibe confirmación&#10;de vehículos y horarios de retiro" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="300" width="286" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-03" value="" style="rounded=1;arcSize=15;html=0;fillColor=#eaf0f5;strokeColor=#acbccb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="1314" y="383" width="330" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-03-id" value="EXT-03" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#506a81;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="395" width="280" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-03-name" value="Controlador de flota AMR&#10;(fabricante)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="413" width="290" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-03-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=block;endArrow=block;exitX=1;exitY=0.5166666666666667;entryX=0;entryY=0.5;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="smart" target="EXT-03">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-03-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="414" width="286" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-03-caption" value="Envía misiones y recibe telemetría" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="417" width="286" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-04" value="" style="rounded=1;arcSize=15;html=0;fillColor=#eaf0f5;strokeColor=#acbccb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="1314" y="492" width="330" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-04-id" value="EXT-04" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#506a81;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="504" width="280" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-04-name" value="Proveedor de identidad (IdP)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="522" width="290" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-04-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=none;endArrow=block;exitX=1;exitY=0.7185185185185186;entryX=0;entryY=0.5;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="smart" target="EXT-04">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-04-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="523.0" width="286" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-04-caption" value="Solicita autenticación y obtiene roles" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="526" width="286" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-05" value="" style="rounded=1;arcSize=15;html=0;fillColor=#eaf0f5;strokeColor=#acbccb;movable=1;" vertex="1" parent="1">
+          <mxGeometry x="1314" y="601" width="330" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-05-id" value="EXT-05" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=12;fontColor=#506a81;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="613" width="280" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-05-name" value="Control de acceso del patio&#10;(garita / sensores)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=17;fontColor=#172e45;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1332" y="631" width="290" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-05-edge" style="edgeStyle=none;html=0;strokeColor=#58718b;strokeWidth=1.6;startArrow=block;endArrow=none;exitX=1;exitY=0.9203703703703704;entryX=0;entryY=0.5;entryPerimeter=0;exitPerimeter=0;" edge="1" parent="1" source="smart" target="EXT-05">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-05-caption-background" value="" style="rounded=1;html=0;strokeColor=none;fillColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="632.0" width="286" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="EXT-05-caption" value="Notifica llegadas y salidas de vehículos" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#30465d;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1002.0" y="635" width="286" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="Las flechas indican la dirección de la interacción. Cada enlace describe su propósito." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#52677e;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="36" y="739" width="1100" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" value="C4N1-contexto · v0.1.1 · 2026-11-24 · luisdavidborjap-web (P7) · HU-11" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=visible;spacing=0;fontFamily=Arial;fontSize=13;fontColor=#52677e;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="36" y="762" width="1100" height="16" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

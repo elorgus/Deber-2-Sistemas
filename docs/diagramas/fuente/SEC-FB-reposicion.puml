@@ -1,0 +1,144 @@
+@startuml SEC-FB-reposicion
+' SEC-FB-reposicion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-17
+' Contrato de referencia: docs/ARQUITECTURA_BASE.md v1.0.0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam ParticipantBackgroundColor #FFFFFF
+skinparam ParticipantBorderColor #444444
+skinparam QueueBackgroundColor #FFF8E1
+skinparam SequenceGroupBorderColor #1565C0
+skinparam SequenceGroupHeaderFontColor #1565C0
+skinparam NoteBackgroundColor #F5F5F5
+skinparam NoteBorderColor #9E9E9E
+skinparam sequenceMessageAlign left
+skinparam maxMessageSize 360
+
+title Flujo B · Riesgo de agotamiento y reposición (SEC-FB-reposicion)
+
+actor "Comprador\n(ROL-03)" as CO
+participant "TRX-01\nDashboard" as DSH
+participant "TRX-02\nCapa de Aplicación" as APP
+participant "SVC-03\nReposición y Compras" as REP
+queue "TRX-03\nBroker de eventos" as BRK
+participant "TRX-04\nProyección de lectura" as PRY
+participant "SVC-02\nInventario" as INV
+participant "SVC-06\nAnalítica" as ANA
+participant "EXT-01\nERP corporativo" as ERP
+
+autonumber
+
+opt Antes: hay un pronóstico de demanda (HN-23)
+  ANA ->> BRK : [A] EVT-37 PronosticoDemandaActualizado
+  BRK ->> REP : [A] INT-16 Actualiza la copia local del pronóstico
+end
+
+== 1 · Detección del riesgo en SVC-03 (ADR-006) ==
+
+INV ->> BRK : [A] EVT-05 SaldoActualizado (viene del Flujo A o del Flujo C)
+BRK ->> REP : [A] INT-10 EVT-05 → evaluar la política del SKU
+REP -> REP : ConsumidorIdempotente descarta duplicados y actualiza\nel disponible agregado por SKU (réplica local)
+REP -> REP : EvaluadorRiesgoAgotamiento compara el disponible\ncon la política del SKU (mínimo y punto de reorden)
+
+opt Disponible < mínimo y no hay alerta activa
+  REP -> REP : Crea la alerta activa y guarda EVT-14 en el outbox
+  REP ->> BRK : [A] INT-11 EVT-14 RiesgoAgotamientoDetectado
+end
+
+opt La estrategia del SKU indica reponer
+  REP -> REP : Elige EstrategiaReposicion: ReposicionPorPronostico si hay\npronóstico vigente; si no, la de la política o ReposicionMinMax (FAL-04)
+  REP -> REP : Calcula cantidad, proveedor y justificación\n(mínimo, disponible, demanda considerada, lead time)
+  note right of REP
+    PC-06: el cálculo debería considerar
+    las OC propias pendientes de recepción
+  end note
+  opt Ya existe una sugerencia vigente del SKU (caso B2)
+    REP -> REP : La sugerencia anterior pasa a Reemplazada
+  end
+  REP -> REP : Guarda la sugerencia Generada y EVT-16 en el outbox
+  REP ->> BRK : [A] INT-11 EVT-16 SugerenciaReposicionGenerada
+end
+
+BRK ->> PRY : [A] EVT-14 y EVT-16 → VL-01 y VL-02\n«INT por definir · PC-05»
+PRY ->> APP : INT-03 Actualización en vivo (push)
+APP ->> DSH : VL-02: alerta y sugerencia con "Aprobar" y "Rechazar"
+DSH -> CO : Muestra mínimo, disponible, demanda y lead time
+
+== 2 · Decisión humana (validada contra el estado vigente en SVC-03) ==
+
+CO -> DSH : Aprueba o rechaza la sugerencia
+DSH -> APP : [S] INT-01 Comando del usuario
+APP -> REP : [S] INT-12 Aprobar o rechazar sugerencia
+
+alt SVC-03 no responde dentro del tiempo límite
+  APP --> DSH : Acción no disponible; se informa al usuario
+
+else SVC-03 responde
+  REP -> REP : V1. Verifica rol ROL-03 (RNF-SEG-01)
+  REP -> REP : V2. Verifica en su propio estado que la sugerencia\nsiga vigente (Generada), nunca contra VL-02 (PRI-07)
+
+  alt B2 · Sugerencia ya reemplazada o B6 · usuario sin ROL-03
+    REP --> APP : Rechazo con motivo claro\n("La sugerencia fue reemplazada" u "Operación no permitida")
+    APP --> DSH : Rechazo; VL-02 muestra la sugerencia vigente
+    DSH --> CO : Muestra el motivo
+
+  else B1 · El comprador rechaza
+    REP -> REP : Sugerencia → Rechazada y EVT-18 en el outbox\n(la alerta sigue activa)
+    REP --> APP : Sugerencia rechazada
+    APP --> DSH : Sugerencia rechazada
+    REP ->> BRK : [A] INT-13 EVT-18 SugerenciaReposicionRechazada
+
+  else El comprador aprueba
+    opt Monto sobre el umbral de OPS-03 (definido en HU-28)
+      note over REP : Requiere segunda aprobación antes de TX-04 (PC-07)
+    end
+    group TX-04 · una sola transacción local en SVC-03
+      REP -> REP : Sugerencia → Aprobada
+      REP -> REP : OC → Emitida
+      REP -> REP : Auditoría de OPS-03 y EVT-17 + EVT-19 en el outbox
+    end
+    REP --> APP : OC emitida
+    APP --> DSH : OC emitida
+    DSH --> CO : Confirmación
+
+    REP ->> BRK : [A] INT-13 EVT-17 SugerenciaReposicionAprobada\ny EVT-19 OrdenCompraEmitida
+    par Proyección
+      BRK ->> PRY : [A] VL-02 actualizada «INT por definir · PC-05»
+    else Inventario
+      BRK ->> INV : [A] EVT-19 → réplica de recepciones esperadas\n«INT por definir · PC-01»
+    else ERP
+      REP ->> ERP : [A] INT-14 Envía la OC (PuertoErp → AdaptadorErp,\nreintentos idempotentes)
+      alt ERP disponible
+        REP -> REP : OC → Enviada
+      else FAL-05 · ERP no disponible
+        note over REP, ERP
+          La OC queda Emitida pendiente de envío y se reintenta.
+          Tras un umbral aparece una alerta en VL-02.
+        end note
+      end
+    end
+  end
+end
+
+== 3 · Cierre del ciclo: llega la OC (Flujo A, HU-16) ==
+
+INV ->> BRK : [A] EVT-04 RecepcionRegistrada (con OC) y EVT-05
+BRK ->> REP : [A] INT-09 EVT-04 → OC RecibidaParcial o Cerrada (EVT-20)
+BRK ->> REP : [A] INT-10 EVT-05 → reevalúa la política
+opt B3 · Disponible ≥ mínimo y la alerta está activa
+  REP -> REP : Resuelve la alerta y guarda EVT-15 en el outbox
+  REP ->> BRK : [A] INT-11 EVT-15 RiesgoAgotamientoResuelto
+  BRK ->> PRY : [A] La alerta sale de VL-02 «INT por definir · PC-05»
+end
+
+note across
+  SVC-06 recibe todos los eventos de negocio de este flujo para el histórico (INT-05).
+  EVT-19 también llega a SVC-05 para anticipar la llegada del proveedor.
+end note
+
+legend right
+  **SEC-FB-reposicion · v1.0.0 · 2026-11-23 · JessPCL (P5) · HU-17**
+  [S] síncrono (respuesta inmediata) · [A] asíncrono (evento)
+  «INT por definir» = interacción sin ID en §7.2 (ver PC-05 y PC-01)
+endlegend
+@enduml

@@ -1,0 +1,50 @@
+@startsalt
+' DSH-planta-externa · v1.0.0 · 2026-11-24 · P2 · HU-22
+{
+  {+
+    <b>Smart Inventory · LogistPulse — Centro de operaciones (Planta externa)</b> | [ Planta interna → INT-01, INT-03 ] | [ Planta externa ] | ROL-05 Supervisor de operaciones (INT-02)
+  }
+  {+
+    <b>VL-01 KPIs operativos</b> | Actualizado hace X s | EVT-05, EVT-12 a EVT-15, EVT-21 a EVT-28 | objetivo ≤ 5 s
+  }
+  {#
+    Unidades disponibles | Productos bajo mínimo | Lotes por vencer | Pedidos en preparación
+    <b>12.840</b> | <b>18</b> | <b>7</b> | <b>24</b>
+  }
+  {
+    {+
+      <b>VL-05 Planta externa</b> · muelles, patio, acceso | Actualizado hace X s | objetivo ≤ 5 s
+      {#
+        Muelle 1 · Ocupado | Muelle 2 · Disponible | Muelle 3 · Disponible | Muelle 4 · FueraDeServicio
+        Camión T-2205 · EnPatio | Acceso principal | Zona de espera | Tractor de patio
+      }
+      [ Registrar llegada → INT-33 ] | [ Asignar muelle → INT-33 ]
+    } | {+
+      <b>VL-02 Alertas y acciones</b> | Actualizado hace X s | objetivo ≤ 5 s
+      {#
+        Riesgo de agotamiento SKU-0412 (EVT-14) | [ Aprobar → INT-12 ] | [ Rechazar → INT-12 ]
+        Lote L1 por vencer (EVT-12) | [ Ver detalle → INT-15 ] | .
+        Pedido PED-118 en espera (EVT-23) | [ Ver detalle → INT-15 ] | .
+      }
+    }
+  }
+  {
+    {+
+      <b>VL-03 Flujo de pedidos</b> | Actualizado hace X s
+      {#
+        Reservado | EnPreparacion | EnDespacho | EnEspera
+        <b>12</b> | <b>24</b> | <b>5</b> | <b>3</b>
+      }
+      [ Cancelar pedido → OPS-05 (INT pendiente) ]
+    } | {+
+      <b>VL-06 Actividad reciente</b> | Actualizado hace X s
+      {
+        10:42 Camión T-2205 arribado (EVT-33)
+        10:41 Muelle 1 asignado (EVT-34)
+        10:40 Pedido despachado (EVT-27)
+      }
+    }
+  }
+  {+ <i>DSH-planta-externa · v1.0.0 · 2026-11-24 · P2 · HU-22</i> }
+}
+@endsalt
