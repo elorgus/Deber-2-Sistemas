@@ -1,0 +1,39 @@
+@startuml
+title Diagrama de estados · Lote (SVC-02 Inventario)
+caption EST-lote · v1.0.0 · 2026-11-27 · joshdavr (P4) · HU-25
+
+hide empty description
+
+state Disponible
+state EnCuarentena
+state Vencido
+
+[*] --> Disponible : Recepción de un lote nuevo (INT-06, S)\nTX-01 · publica EVT-04 RecepcionRegistrada\ny EVT-05 SaldoActualizado
+
+Disponible --> EnCuarentena : OPS-02 cambiar estado de lote (cuarentena)\nejecuta ROL-02 · se refleja en EVT-05
+EnCuarentena --> Disponible : OPS-02 cambiar estado de lote (liberación)\nejecuta ROL-02 · se refleja en EVT-05
+Disponible --> Vencido : Proceso periódico de vencimientos de SVC-02\npublica EVT-13 LoteVencido
+
+Vencido --> [*]
+
+note right of Disponible
+  Único estado que cuenta como disponible
+  y que PoliticaFEFO puede asignar a una reserva.
+  EVT-12 LoteProximoAVencer es una alerta:
+  NO cambia el estado del lote.
+end note
+
+note left of EnCuarentena
+  No cuenta como disponible
+  ni se asigna a reservas.
+end note
+
+note bottom of Vencido
+  <b>Transiciones inválidas</b>
+  • Vencido → Disponible o EnCuarentena (Vencido es final).
+  • EnCuarentena → Vencido: §9 no la define (pregunta Q-1).
+  • Asignar a una reserva un lote EnCuarentena o Vencido.
+  • Cambiar el estado sin ROL-02 (OPS-02).
+end note
+
+@enduml

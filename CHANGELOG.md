@@ -1,5 +1,19 @@
 # Registro de Cambios (CHANGELOG)
 
+## diseno-v0.3.0 · Sprint 3 (En progreso)
+
+**HU incluidas:** HU-25
+
+**Artefactos**
+
+| Artefacto | Versión | Cambio | HU |
+|---|---|---|---|
+| EST-lote · EST-reserva · EST-sugerencia · EST-orden-compra (fuente y SVG) · equipo/P4-joshdavr/HU-25-diagramas-estado.md | 1.0.0 | Diagramas de estado de Lote, Reserva, Sugerencia de reposición y Orden de compra, con disparadores, transiciones inválidas y preguntas abiertas (Q-1 a Q-5) | HU-25 |
+
+**ADR aceptados:** ninguno
+
+---
+
 ## diseno-v0.2.0 · Sprint 2 (En progreso)
 
 **HU incluidas:** HU-11, HU-16, HU-17, HU-22

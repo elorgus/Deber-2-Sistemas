@@ -1,0 +1,39 @@
+@startuml
+title Diagrama de estados · Sugerencia de reposición (SVC-03 Reposición y Compras)
+caption EST-sugerencia · v1.0.0 · 2026-11-27 · joshdavr (P4) · HU-25
+
+hide empty description
+
+state Generada
+state Aprobada
+state Rechazada
+state Reemplazada
+
+[*] --> Generada : Evaluación de la política tras EVT-05 (INT-10, A)\nEstrategiaReposicion calcula la sugerencia\npublica EVT-16 SugerenciaReposicionGenerada
+
+Generada --> Aprobada : Aprobar sugerencia (INT-12, S) · ROL-03 · OPS-03\nvalidado contra el estado vigente · TX-04 (crea OC Emitida)\npublica EVT-17 SugerenciaReposicionAprobada
+Generada --> Rechazada : Rechazar sugerencia (INT-12, S) · ROL-03\npublica EVT-18 SugerenciaReposicionRechazada
+Generada --> Reemplazada : Nueva EVT-16 para el mismo SKU\n(una sola sugerencia vigente por SKU)
+
+Aprobada --> [*]
+Rechazada --> [*]
+Reemplazada --> [*]
+
+note right of Generada
+  Estado gestionado por EstadoSugerencia
+  (patrón State, §10).
+  Solo una sugerencia Generada (vigente) por SKU.
+end note
+
+note bottom of Reemplazada
+  <b>Transiciones inválidas</b>
+  • Aprobar o rechazar una sugerencia Reemplazada:
+    la acción se rechaza con un mensaje claro (HN-11).
+  • Aprobar una sugerencia Rechazada, o rechazar una Aprobada.
+  • Aprobar dos veces la misma sugerencia (no se emite una segunda OC).
+  • Reemplazar una sugerencia Aprobada o Rechazada:
+    una nueva EVT-16 solo reemplaza a la sugerencia Generada.
+  • Aprobar o rechazar sin ROL-03.
+end note
+
+@enduml
