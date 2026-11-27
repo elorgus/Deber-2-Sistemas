@@ -2,12 +2,12 @@
 
 | Campo | Valor |
 |---|---|
-| Versión del informe | 0.1.0 |
-| Fecha | 2026-11-23 |
+| Versión del informe | 0.1.1 |
+| Fecha | 2026-11-27 |
 | Estado | Borrador para revisión |
 | Responsable | P7 · `luisdavidborjap-web` |
 | Revisor | P1 · `elorgus` |
-| Base de diseño | [Contrato de arquitectura v1.0.0 propuesto](../ARQUITECTURA_BASE.md) y [backlog de HU-30](../BACKLOG.md#hu-30--informe-de-patrones-y-adr-005) |
+| Base de diseño | [Contrato de arquitectura v1.0.0](../ARQUITECTURA_BASE.md) y [backlog de HU-30](../BACKLOG.md#hu-30--informe-de-patrones-y-adr-005) |
 
 El informe justifica seis decisiones de diseño. Cada apartado identifica el problema, la ubicación, el beneficio, el costo, el límite y el diagrama que permite revisar el patrón.
 
@@ -21,7 +21,7 @@ El informe justifica seis decisiones de diseño. Cada apartado identifica el pro
 
 **Costo y límite.** Cada estrategia necesita entradas y reglas de selección coherentes con la política. Un cálculo devuelve una recomendación. La aprobación sigue a cargo del comprador y se valida en SVC-03.
 
-**Evidencia.** `C4N3-SVC03-reposicion` muestra la separación entre evaluación, estrategia y gestión de sugerencias, junto con la copia del pronóstico. `SEC-FB-reposicion` muestra la selección de estrategia antes de guardar la sugerencia. [HU-15 · PR #19, borrador](https://github.com/elorgus/Deber-2-Sistemas/pull/19/files) · [HU-17 · PR #20, borrador](https://github.com/elorgus/Deber-2-Sistemas/pull/20/files)
+**Evidencia.** El [C4N3-SVC03-reposicion (HU-15)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/C4N3-SVC03-reposicion.svg) muestra la separación entre evaluación, estrategia y gestión de sugerencias, y la copia local del pronóstico. La secuencia [SEC-FB-reposicion (HU-17)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/SEC-FB-reposicion.svg) muestra cuándo se selecciona la estrategia y se calcula la sugerencia.
 
 ## 2. Puertos y adaptadores
 
@@ -33,7 +33,7 @@ El informe justifica seis decisiones de diseño. Cada apartado identifica el pro
 
 **Costo y límite.** El puerto y el adaptador requieren mantener sus responsabilidades y significados alineados. Si el ERP está caído, la orden puede quedar *Emitida* pendiente de envío, como prevé FAL-05.
 
-**Evidencia.** El diagrama de HU-15 distingue el uso de `PuertoErp`, la implementación por `AdaptadorErp` y la interacción con EXT-01. [HU-15 · PR #19, borrador](https://github.com/elorgus/Deber-2-Sistemas/pull/19/files)
+**Evidencia.** El [C4N3-SVC03-reposicion (HU-15)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/C4N3-SVC03-reposicion.svg) distingue el uso de `PuertoErp`, su implementación por `AdaptadorErp` y la interacción INT-14 con EXT-01.
 
 ## 3. Outbox e idempotencia
 
@@ -45,7 +45,7 @@ El informe justifica seis decisiones de diseño. Cada apartado identifica el pro
 
 **Costo y límite.** Se mantienen eventos pendientes y se puede acumular retraso durante una caída. La transacción protege los datos del módulo y el registro de eventos. La propagación a otros módulos permanece asíncrona.
 
-**Evidencia.** `SEC-FA-recepcion` muestra TX-01 y la publicación posterior. Contrastar la explicación con el ADR-004 de Elías cuando se publique en HU-20. [HU-16 · PR #17, borrador](https://github.com/elorgus/Deber-2-Sistemas/pull/17/files)
+**Evidencia.** La secuencia [SEC-FA-recepcion (HU-16)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/SEC-FA-recepcion.svg) muestra que TX-01 guarda el cambio y sus eventos, y que el Outbox los publica después mediante INT-07. El [ADR-004 (HU-20)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/adr/ADR-004-sincrono-y-eventos-con-outbox.md) documenta la publicación posterior, la entrega al menos una vez y el consumo idempotente.
 
 ## 4. CQRS y proyección de lectura
 
@@ -57,7 +57,7 @@ El informe justifica seis decisiones de diseño. Cada apartado identifica el pro
 
 **Costo y límite.** Las vistas pueden retrasarse y hay que observar su frescura. Una vista puede mostrar una sugerencia que ya cambió de estado. SVC-03 confirma su vigencia al procesar la decisión del usuario.
 
-**Evidencia.** `SEC-FA-recepcion` muestra **INT-08 Actualizar VL-01, VL-04 y VL-06 (A)** tras la recepción. Contrastar la representación general con HU-12 y los indicadores de frescura con HU-32. La decisión se explica en el [ADR-005 propuesto](../adr/ADR-005-proyeccion-de-lectura-cqrs.md). [HU-16 · PR #17, borrador](https://github.com/elorgus/Deber-2-Sistemas/pull/17/files)
+**Evidencia.** El [C4N2-contenedores (HU-12)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/C4N2-contenedores.svg) sitúa TRX-04 en UD-5 y distingue INT-03 (S + A), para consultar la proyección, de INT-12 (S), que lleva la aprobación a SVC-03. La secuencia [SEC-FA-recepcion (HU-16)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/SEC-FA-recepcion.svg) muestra INT-08 y la actualización asíncrona de VL-01, VL-04 y VL-06. La decisión se desarrolla en [ADR-005, Propuesto](../adr/ADR-005-proyeccion-de-lectura-cqrs.md).
 
 ## 5. State
 
@@ -69,7 +69,7 @@ El informe justifica seis decisiones de diseño. Cada apartado identifica el pro
 
 **Costo y límite.** Cada transición y su disparador necesitan una revisión explícita. El estado de la sugerencia protege su propio ciclo. El envío y la recepción de la orden siguen el ciclo de la orden de compra.
 
-**Evidencia.** `C4N3-SVC03-reposicion` muestra ambos estados como parte del diseño de SVC-03. `SEC-FB-reposicion` muestra el rechazo de una aprobación cuando la sugerencia está reemplazada. `EST-sugerencia` y `EST-orden-compra` de HU-25 (P4) aportarán el detalle de transiciones. [HU-15 · PR #19, borrador](https://github.com/elorgus/Deber-2-Sistemas/pull/19/files) · [HU-17 · PR #20, borrador](https://github.com/elorgus/Deber-2-Sistemas/pull/20/files)
+**Evidencia.** El [C4N3-SVC03-reposicion (HU-15)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/C4N3-SVC03-reposicion.svg) identifica `EstadoSugerencia` y `EstadoOrdenCompra`. La secuencia [SEC-FB-reposicion (HU-17)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/SEC-FB-reposicion.svg) muestra que se rechaza la aprobación de una sugerencia reemplazada y que una aprobación válida deja la sugerencia *Aprobada* y la orden *Emitida* dentro de TX-04.
 
 ## 6. Circuit Breaker y reintentos
 
@@ -81,12 +81,11 @@ El informe justifica seis decisiones de diseño. Cada apartado identifica el pro
 
 **Costo y límite.** Se debe recuperar la operación cuando Inventario vuelva a responder. Durante el fallo, el pedido permanece pendiente. La existencia disponible y el resultado de la reserva se confirman en SVC-02.
 
-**Evidencia pendiente.** `SEC-FC-reserva-despacho` de HU-18 (P6) debe mostrar INT-19 y el caso alternativo de Inventario no disponible. Contrastar ese comportamiento con la matriz de HU-24 y con FAL-02 de HU-29 cuando se publiquen.
+**Evidencia.** La secuencia [SEC-FC-reserva-despacho (HU-18)](https://github.com/elorgus/Deber-2-Sistemas/blob/main/diagramas/secuencia/export/SEC-FC-reserva-despacho.svg) muestra la reserva síncrona INT-19. En la rama de FAL-02, el tiempo límite o la apertura del Circuit Breaker deja el pedido en *PendienteReserva* y permite el reintento idempotente.
 
-## Evidencia que falta confirmar antes del cierre
+## Validaciones pendientes del Sprint 3
 
-- **P1 · HU-06, HU-12 y HU-20.** Comparar la versión aprobada del contrato con el informe y verificar la ubicación de TRX-04 y el ADR-004. La base de este borrador es el contrato propuesto v1.0.0.
-- **P5 · HU-16, HU-17 y HU-27.** Verificar las versiones aceptadas de `SEC-FA-recepcion` y `SEC-FB-reposicion` y contrastar los requisitos de calidad utilizados en el informe. HU-16 y HU-17 tienen PR en borrador.
-- **P4 y P6 · HU-25 y HU-18.** Añadir enlaces a los diagramas de estados y a la secuencia de reserva cuando estén disponibles. Alinear INT-19 con HU-24 (P6) y el escenario FAL-02 con HU-29 (P1).
-- **P2 · HU-32.** Comprobar que el dashboard represente las tres marcas de frescura definidas en el contrato.
-- **P7 y P1 · HU-15 y ADR-005.** Actualizar los enlaces a los diagramas definitivos y registrar la aceptación de ADR-005 conforme a la revisión de HU-30.
+- **HU-25.** Incorporar `EST-sugerencia` y `EST-orden-compra` cuando se publiquen. La evidencia de State ya está en el C4 de Reposición y en la secuencia del flujo B.
+- **HU-24 y HU-29.** Contrastar INT-19 y FAL-02 con la matriz de interacciones y el análisis de disponibilidad cuando se integren.
+- **HU-27 y HU-32.** Contrastar los objetivos de frescura con los requisitos refinados y comprobar cómo se muestran los tres estados de frescura en el dashboard v2.
+- **ADR-005.** Registrar la decisión de aceptación después de la revisión de P1.
