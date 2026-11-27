@@ -1,11 +1,11 @@
 @startsalt
-' DSH-planta-interna · v1.0.0 · 2026-11-24 · P2 · HU-22
+' DSH-planta-interna · v1.1.0 · 2026-11-24 · P2 · HU-32
 {
   {+
-    <b>Smart Inventory · LogistPulse — Centro de operaciones (Planta interna)</b> | [ Planta interna ] | [ Planta externa → INT-01, INT-03 ] | ROL-05 Supervisor de operaciones (INT-02)
+    <b>Smart Inventory · LogistPulse — Centro de operaciones (Planta interna)</b> <b>(1)</b> | [ Planta interna ] | [ Planta externa → INT-01, INT-03 ] | ROL-05 Supervisor de operaciones (INT-02)
   }
   {+
-    <b>VL-01 KPIs operativos</b> | Actualizado hace X s | EVT-05, EVT-12 a EVT-15, EVT-21 a EVT-28 | objetivo ≤ 5 s
+    <b>VL-01 KPIs operativos</b> <b>(2)</b> | <color:#1a7f37>● En vivo</color> · hace 2 s | EVT-05, EVT-12 a EVT-15, EVT-21 a EVT-28 | objetivo ≤ 5 s
   }
   {#
     Unidades disponibles | Productos bajo mínimo | Lotes por vencer | Pedidos en preparación
@@ -13,15 +13,15 @@
   }
   {
     {+
-      <b>VL-04 Planta interna</b> · racks, lotes, AMR | Actualizado hace X s | objetivo ≤ 2 s posiciones · ≤ 5 s ocupación
+      <b>VL-04 Planta interna</b> <b>(3)</b> · racks, lotes, AMR | <color:#1a7f37>● En vivo</color> · hace 1 s | objetivo ≤ 2 s posiciones · ≤ 5 s ocupación
       {#
         Pasillo A | Pasillo B | Zona C · 74 % | Recepción
         Rack A1 · lote L1 | Rack B3 · lote L2 | <b>AMR-03 Picking</b> | Muelle de recepción
         . | . | Zona de picking | .
       }
-      [ Reasignar misión → INT-33 ]
+      [ (4) Reasignar misión → INT-33 ]
     } | {+
-      <b>VL-02 Alertas y acciones</b> | Actualizado hace X s | objetivo ≤ 5 s
+      <b>VL-02 Alertas y acciones</b> <b>(5)</b> | <color:#1a7f37>● En vivo</color> · hace 3 s | objetivo ≤ 5 s
       {#
         Riesgo de agotamiento SKU-0412 (EVT-14) | [ Aprobar → INT-12 ] | [ Rechazar → INT-12 ]
         Lote L1 por vencer (EVT-12) | [ Ver detalle → INT-15 ] | .
@@ -32,14 +32,14 @@
   }
   {
     {+
-      <b>VL-03 Flujo de pedidos</b> | Actualizado hace X s
+      <b>VL-03 Flujo de pedidos</b> <b>(6)</b> | <color:#1a7f37>● En vivo</color> · hace 2 s
       {#
         Reservado | EnPreparacion | EnDespacho | EnEspera
         <b>12</b> | <b>24</b> | <b>5</b> | <b>3</b>
       }
-      [ Cancelar pedido → OPS-05 (INT pendiente) ]
+      [ (7) Cancelar pedido → OPS-05 (INT pendiente) ]
     } | {+
-      <b>VL-06 Actividad reciente</b> | Actualizado hace X s
+      <b>VL-06 Actividad reciente</b> <b>(8)</b> | <color:#1a7f37>● En vivo</color> · hace 1 s
       {
         10:42 Recepción registrada (EVT-04)
         10:41 Sugerencia generada (EVT-16)
@@ -47,6 +47,6 @@
       }
     }
   }
-  {+ <i>DSH-planta-interna · v1.0.0 · 2026-11-24 · P2 · HU-22</i> }
+  {+ <i>DSH-planta-interna · v1.1.0 · 2026-11-24 · P2 · HU-32</i> }
 }
 @endsalt

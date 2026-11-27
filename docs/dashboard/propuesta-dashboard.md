@@ -1,154 +1,203 @@
-# Smart Inventory · Dashboard v1: vistas y datos
+# Smart Inventory · Dashboard v2: vistas interna y externa
 
 | Campo | Valor |
 |---|---|
-| Documento | `equipo/P2-EstebanEsp07/HU-22-dashboard-v1.md` (borrador de `docs/dashboard/propuesta-dashboard.md`) |
-| Versión | **1.0.0** |
-| Estado | Propuesto para revisión (PR de HU-22) |
+| Documento | `equipo/P2-EstebanEsp07/HU-32-dashboard-v2.md` (versión final de `docs/dashboard/propuesta-dashboard.md`) |
+| Versión | **1.1.0** (MINOR: agrega, de forma compatible, modos, indicador de frescura y capturas anotadas sobre la v1.0.0 de HU-22) |
+| Estado | Propuesto para revisión (PR de HU-32) |
 | Autor | P2 · Product Owner (`EstebanEsp07`) |
 | Revisor | P3 · Scrum Master y gestor de versiones (`docs/BACKLOG.md` §1.2) |
 | Fecha | 2026-11-24 |
-| HU | **HU-22** Dashboard v1: vistas y datos · Sprint 2 · rúbrica: Trazabilidad y presentación |
+| HU | **HU-32** Dashboard v2: vistas interna y externa · Sprint 3 · rúbrica: Trazabilidad y presentación |
 | Épica | **EP-06** Dashboard operativo (TRX-01, TRX-02, TRX-04) |
-| Historias | HN-20 y HN-21 (Must); HN-09 aporta la alerta de VL-02 |
-| Diagramas | `DSH-planta-interna` y `DSH-planta-externa`, v1.0.0 |
-| Contrato de referencia | `docs/ARQUITECTURA_BASE.md` v1.0.0 (§4.1, §6.2, §7.2, §8, §9) |
+| Historias | HN-20 y HN-21 (Must) |
+| Diagramas | `DSH-planta-interna`, `DSH-planta-externa` y `DSH-frescura-estados`, v1.1.0 |
+| Depende de | HU-22 (`HU-22-dashboard-v1.md`) y HU-28 (`HU-28-seguridad-roles.md`) |
+| Contrato de referencia | `docs/ARQUITECTURA_BASE.md` v1.0.0 (§6.2, §7.2, §8, §9, §11.3) |
 
-> Todos los identificadores son los del contrato. No se crearon identificadores nuevos. Lo que el contrato no cubre aparece como **PROPUESTA** en §6 y no se usa como oficial. Los datos de los bocetos son ilustrativos (enunciado §10).
+> Todos los identificadores son los del contrato. No se crearon identificadores nuevos. Lo que el contrato no cubre aparece como **PROPUESTA** en §7. Los datos de los bocetos son ilustrativos (enunciado §10).
 
----
+**Propósito.** Explicar cómo se supervisa la operación en la planta interna y en la externa, y cómo se informa al usuario que lo que ve es consistente solo de forma eventual.
 
-## 1. Propósito y reglas
+**Cambios respecto a la v1.0.0 (HU-22)**
 
-El dashboard (TRX-01 Dashboard, «LogistPulse · Centro de operaciones») es la interfaz de supervisión de Smart Inventory. Tiene dos modos, **Planta interna** y **Planta externa**, que comparten KPIs, alertas, flujo de pedidos y actividad reciente.
-
-| Regla | Qué implica para el diseño | Fuente |
-|---|---|---|
-| El dashboard no guarda datos de negocio ni decide | Todo lo que muestra sale de la proyección de lectura (TRX-04); toda alerta la crea y resuelve su dueño | TRX-01, PRI-05, §8.3 |
-| La proyección no es fuente de verdad | Para el dato exacto se consulta al dueño (INT-15) | PRI-07, FAL-06 |
-| Sus botones solo envían comandos al dueño, a través de TRX-02 | Toda acción pasa por INT-01 y la autorización final la hace el módulo dueño | TRX-01, TRX-02, §11.4 |
-| Consistencia eventual informada | Cada vista muestra «Actualizado hace X s» y su estado de frescura | §8.2, RNF-CON-02, CE-01 |
-
----
-
-## 2. Catálogo de vistas VL-01 a VL-07 (CA1)
-
-### 2.1 Resumen
-
-| Vista | Contenido | Eventos de origen | Frescura objetivo (p95) | Acciones → dueño |
-|---|---|---|---|---|
-| **VL-01** KPIs operativos | Unidades disponibles, productos bajo mínimo, lotes por vencer, pedidos en preparación | EVT-05, EVT-12, EVT-13, EVT-14, EVT-15, EVT-21 a EVT-28 | ≤ 5 s | — |
-| **VL-02** Alertas y acciones | Riesgos de agotamiento, sugerencias pendientes, lotes por vencer, pedidos en espera, AMR detenidos | EVT-09, EVT-12, EVT-14 a EVT-18, EVT-23, EVT-31 | ≤ 5 s | Aprobar o rechazar sugerencia → SVC-03 (INT-12); ver detalle de lote → SVC-02 (INT-15) |
-| **VL-03** Flujo de pedidos | Cantidad de pedidos por estado (§9) | EVT-21 a EVT-28 | ≤ 5 s | Cancelar pedido → SVC-04 (OPS-05) |
-| **VL-04** Planta interna | Racks y ocupación por zona, lotes, AMR (posición y estado), misiones | EVT-03, EVT-05, EVT-29 a EVT-32 | ≤ 2 s posiciones AMR; ≤ 5 s ocupación | Reasignar misión → SVC-05 (INT-33) |
-| **VL-05** Planta externa | Muelles (ocupado o disponible), camiones en acceso, patio y zona de espera | EVT-26, EVT-33 a EVT-36 | ≤ 5 s | Registrar llegada o asignar muelle → SVC-05 (INT-33) |
-| **VL-06** Actividad reciente | Últimos hechos de negocio relevantes | Todos los eventos de tipo *Negocio* | ≤ 5 s | — |
-| **VL-07** Indicadores históricos | Rotación, quiebres, vencimientos y puntualidad | EVT-38; consulta INT-34 | Corte diario (≤ 24 h) | — |
-
-Composición por modo (§8.1): **Planta interna** = VL-04 al centro + VL-01, VL-02, VL-03 y VL-06. **Planta externa** = VL-05 al centro + las mismas vistas compartidas. VL-07 se consulta aparte y no pertenece a ninguno de los dos modos.
-
-### 2.2 De dónde sale cada dato
-
-La proyección (TRX-04) solo consolida; el dueño de cada dato es quien publica el evento.
-
-| Vista | Dato que se muestra | Evento(s) | Dueño que lo publica |
-|---|---|---|---|
-| VL-01 | Unidades disponibles | EVT-05 SaldoActualizado | SVC-02 |
-| VL-01 | Productos bajo mínimo | EVT-14, EVT-15 | SVC-03 |
-| VL-01 | Lotes por vencer | EVT-12, EVT-13 | SVC-02 |
-| VL-01 | Pedidos en preparación | EVT-24, EVT-25 (y demás EVT-21 a EVT-28) | SVC-04 |
-| VL-02 | Riesgos de agotamiento | EVT-14, EVT-15 | SVC-03 |
-| VL-02 | Sugerencias pendientes | EVT-16, EVT-17, EVT-18 | SVC-03 |
-| VL-02 | Lotes por vencer | EVT-12 | SVC-02 |
-| VL-02 | Pedidos en espera | EVT-23 (causa: EVT-09) | SVC-04 (SVC-02) |
-| VL-02 | AMR detenidos | EVT-31 EstadoAmrCambiado | SVC-05 |
-| VL-03 | Pedidos por estado | EVT-21 a EVT-28 | SVC-04 |
-| VL-04 | Ocupación por zona y lotes | EVT-03, EVT-05 | SVC-01, SVC-02 |
-| VL-04 | Posición de AMR (señal, muestreada) | EVT-32 PosicionFlotaActualizada | SVC-05 |
-| VL-04 | Estado de AMR y misiones | EVT-29, EVT-30, EVT-31 | SVC-05 |
-| VL-05 | Muelles, camiones, acceso y espera | EVT-26, EVT-33, EVT-34, EVT-35, EVT-36 | SVC-04 (EVT-26), SVC-05 |
-| VL-06 | Actividad reciente | Eventos de tipo *Negocio* (no EVT-32, que es señal) | Todos los dueños |
-| VL-07 | Indicadores históricos | EVT-38 IndicadoresHistoricosActualizados | SVC-06 |
-
-### 2.3 Cómo llegan los datos a la pantalla
-
-| Tramo | Interacción | Modo |
-|---|---|---|
-| Usuario → dashboard → capa de aplicación | INT-01 | S |
-| Autenticación y roles | INT-02 (TRX-02 → EXT-04) | S |
-| Snapshot inicial y actualizaciones en vivo | INT-03 (TRX-02 → TRX-04) | S + A (push) |
-| Eventos hacia la proyección | INT-08 (VL-01, VL-04, VL-06) e INT-32 (VL-04, VL-05) | A |
-| Detalle exacto de existencias y lotes | INT-15 (TRX-02 → SVC-02) | S |
-| Indicadores históricos | INT-34 (TRX-02 → SVC-06) | S |
-
----
-
-## 3. Estados de frescura (resumen)
-
-Cada vista muestra «Actualizado hace X s», calculado con el momento del último evento aplicado (§8.2). En esta versión el boceto solo reserva el espacio de ese texto; el indicador con sus tres estados (*En vivo*, *Con retraso*, *Desactualizada*) se diseña en HU-32.
-
----
-
-## 4. Acciones del dashboard y su destino (CA2)
-
-Toda acción viaja de TRX-01 a TRX-02 por INT-01. La columna INT indica la interacción que la lleva hasta el dueño. El rol autorizado se verifica en el dueño, no en la pantalla.
-
-| # | Acción | Vista | Rol | SVC dueño | INT | Modo | Por qué va a ese dueño | Si el destino falla |
-|---|---|---|---|---|---|---|---|---|
-| 1 | Aprobar sugerencia | VL-02 | ROL-03 | SVC-03 | INT-12 | S | SVC-03 es dueño de sugerencias y OC; aprueba y emite la OC en una sola transacción (TX-04, OPS-03) | Acción no disponible; se informa al usuario |
-| 2 | Rechazar sugerencia | VL-02 | ROL-03 | SVC-03 | INT-12 | S | SVC-03 es dueño del estado de la sugerencia (EVT-18) | Acción no disponible; se informa al usuario |
-| 3 | Ver detalle de lote | VL-02 | ROL-01, ROL-02, ROL-03, ROL-05, ROL-06 *(propuesta de visibilidad, ver HU-28)* | SVC-02 | INT-15 | S | SVC-02 es dueño de existencias y lotes; la proyección no es fuente de verdad (PRI-07) | Se muestra la proyección marcada como «vista» |
-| 4 | Cancelar pedido | VL-03 | ROL-05 | SVC-04 | **sin INT en el contrato** (OPS-05) | S | SVC-04 es dueño del estado del pedido; la cancelación dispara EVT-28 y la compensación (INT-31) | Ver §6, observación 1 |
-| 5 | Reasignar misión | VL-04 | ROL-04 | SVC-05 | INT-33 | S | SVC-05 es dueño de misiones y AMR (OPS-08) | Acción no disponible; se informa al usuario |
-| 6 | Registrar llegada | VL-05 | ROL-04 | SVC-05 | INT-33 | S | SVC-05 es dueño de visitas de vehículo; el registro manual cubre la falla de EXT-05 (INT-28) | Acción no disponible; se informa al usuario |
-| 7 | Asignar muelle | VL-05 | ROL-04 | SVC-05 | INT-33 | S | SVC-05 es dueño de muelles; la asignación es una transacción local (TX-06) | Acción no disponible; se informa al usuario |
-
-Alternar entre Planta interna y Planta externa no es un comando: solo cambia el mapa central y lee el snapshot de la otra vista (INT-01 → INT-03).
-
----
-
-## 5. Bocetos (CA3)
-
-Basados en las Figuras 3 y 4 del enunciado. Fuente PlantUML y exportación SVG con el mismo nombre; leyenda dentro del diagrama.
-
-**Planta interna** · `DSH-planta-interna` v1.0.0 · HU-22
-
-![DSH-planta-interna](diagramas/dashboard/HU-22/export/DSH-planta-interna.svg)
-
-**Planta externa** · `DSH-planta-externa` v1.0.0 · HU-22
-
-![DSH-planta-externa](diagramas/dashboard/HU-22/export/DSH-planta-externa.svg)
-
-| Diagrama | Fuente | Exportación |
-|---|---|---|
-| DSH-planta-interna | `diagramas/dashboard/HU-22/src/DSH-planta-interna.puml` | `diagramas/dashboard/HU-22/export/DSH-planta-interna.svg` |
-| DSH-planta-externa | `diagramas/dashboard/HU-22/src/DSH-planta-externa.puml` | `diagramas/dashboard/HU-22/export/DSH-planta-externa.svg` |
-
-Elementos tomados del enunciado: KPIs (Unidades disponibles 12.840, Productos bajo mínimo 18, Lotes por vencer 7, Pedidos en preparación 24), Pasillo A, Zona C · 74 %, AMR-03 Picking, muelles 1 a 4, camión T-2205, Acceso principal, Zona de espera y Tractor de patio.
-
----
-
-## 6. Observaciones y propuestas de cambio
-
-No cambian el contrato. Cualquier ajuste se tramita con PR (y ADR si aplica) según `ARQUITECTURA_BASE` §0.3.
-
-1. **Cancelar pedido no tiene INT.** VL-03 ofrece «Cancelar pedido → SVC-04 (OPS-05)», pero §7.2 no define la interacción TRX-02 → SVC-04 para cancelar (sí existen INT-17 y INT-25 para registrar y confirmar). **PROPUESTA DE CAMBIO:** agregar esa interacción síncrona en la matriz de HU-24 (P6, con P1). Hasta entonces el boceto la marca «INT pendiente».
-2. **«Sin señal» de un AMR.** RNF-DIS-03 y FAL-03 piden que VL-04 marque «sin señal» a un AMR tras 10 s sin telemetría, pero «sin señal» no es un estado de AMR (§9) y la proyección no genera alertas (PRI-05). **PROPUESTA:** que SVC-05 lo comunique con EVT-31 y aclararlo en HU-19 y HU-24.
-3. **Alimentación de VL-02 y VL-03.** INT-08 e INT-32 citan VL-01, VL-04, VL-05 y VL-06, pero ningún INT cita el tramo broker → proyección para VL-02 y VL-03, aunque §6.2 ya lista a TRX-04 como consumidor de esos eventos. **PROPUESTA:** completarlo en la matriz de HU-24.
-4. **Pedidos en *PendienteReserva*.** Ese estado no publica evento (§9), por lo que VL-03 no puede contarlos. **PROPUESTA:** mostrarlos solo como parte de «Registrado» con consulta al dueño, o aceptar que no se ven; decidirlo con P6 y P1.
-5. **Cronómetro de HN-09.** La alerta en VL-02 pide ≤ 5 s, mientras CE-03 y CE-01 podrían sumar hasta ~10 s; aclarar el punto de inicio en HU-27.
-
----
-
-## 7. Trazabilidad
-
-| Criterio (`docs/BACKLOG.md` §4.2) | Dónde se cumple |
+| Cambio | Dónde |
 |---|---|
-| CA1. VL-01 a VL-07 con contenido, eventos de origen y frescura objetivo, coherentes con ARQUITECTURA_BASE §8 | §2.1 y §2.2 |
-| CA2. Cada acción indica su SVC e INT | §4 |
-| CA3. Boceto de planta interna y externa basado en las Figuras 3 y 4, en `diagramas/dashboard/` | §5 |
+| Modos Planta interna y Planta externa, y vistas compartidas | §1 |
+| Indicador de frescura con sus 3 estados, en cada vista | §3 |
+| Bocetos actualizados con el indicador y capturas anotadas (VL e INT en cada elemento) | §4 |
+| Nuevo diagrama `DSH-frescura-estados` | §3.3 |
+| Visibilidad por rol alineada con HU-28 | §5 |
 
-Épica EP-06 · HN-20, HN-21 · Rúbrica *Trazabilidad y presentación*. Continúa en HU-32 (`HU-32-dashboard-v2.md`).
+---
+
+## 1. Modos y vistas compartidas (CA1)
+
+### 1.1 Composición de cada modo
+
+| | **Planta interna** | **Planta externa** |
+|---|---|---|
+| Mapa central | **VL-04**: racks, ocupación por zona, lotes, AMR (posición y estado) y misiones | **VL-05**: muelles, camiones en acceso, patio y zona de espera |
+| Qué se supervisa | Interior de la planta: almacenamiento y flota AMR | Exterior: llegada y salida de camiones y uso de muelles |
+| Acción propia del mapa | Reasignar misión → SVC-05 (INT-33) | Registrar llegada o asignar muelle → SVC-05 (INT-33) |
+| Eventos que lo alimentan | EVT-03, EVT-05, EVT-29 a EVT-32 | EVT-26, EVT-33 a EVT-36 |
+| Frescura objetivo (p95) | ≤ 2 s posiciones AMR; ≤ 5 s ocupación | ≤ 5 s |
+
+### 1.2 Vistas compartidas por ambos modos
+
+| Vista | Contenido | Frescura objetivo | Acciones → dueño |
+|---|---|---|---|
+| **VL-01** KPIs operativos | Unidades disponibles, productos bajo mínimo, lotes por vencer, pedidos en preparación | ≤ 5 s | — |
+| **VL-02** Alertas y acciones | Riesgos de agotamiento, sugerencias pendientes, lotes por vencer, pedidos en espera, AMR detenidos | ≤ 5 s | Aprobar o rechazar → SVC-03 (INT-12); ver detalle de lote → SVC-02 (INT-15) |
+| **VL-03** Flujo de pedidos | Pedidos por estado (§9) | ≤ 5 s | Cancelar pedido → SVC-04 (OPS-05) |
+| **VL-06** Actividad reciente | Últimos hechos de negocio relevantes | ≤ 5 s | — |
+
+**VL-07** (indicadores históricos; EVT-38, INT-34, corte diario) no pertenece a ningún modo: se consulta aparte.
+
+### 1.3 Qué ocurre al cambiar de modo (HN-21)
+
+- **Cambia solo el mapa central** (VL-04 ↔ VL-05).
+- **Se mantienen** KPIs, alertas, flujo de pedidos y actividad reciente (VL-01, VL-02, VL-03 y VL-06).
+- Cambiar de modo **no es un comando**: TRX-01 lee el snapshot de la otra vista (INT-01 → INT-03) y se suscribe a sus actualizaciones.
+- Las vistas compartidas conservan su estado de frescura; no se reinician al cambiar de modo.
+
+---
+
+## 2. Origen de los datos y acciones (resumen de HU-22)
+
+El detalle completo de eventos de origen, dueños y acciones está en `HU-22-dashboard-v1.md` §2 y §4. En este documento solo se repite lo necesario para leer los bocetos.
+
+| Acción | Vista | Rol | SVC dueño | INT |
+|---|---|---|---|---|
+| Aprobar o rechazar sugerencia | VL-02 | ROL-03 | SVC-03 | INT-12 |
+| Ver detalle de lote | VL-02 | Ver §5 | SVC-02 | INT-15 |
+| Cancelar pedido | VL-03 | ROL-05 | SVC-04 | sin INT en el contrato (OPS-05, §7 obs. 1) |
+| Reasignar misión | VL-04 | ROL-04 | SVC-05 | INT-33 |
+| Registrar llegada o asignar muelle | VL-05 | ROL-04 | SVC-05 | INT-33 |
+
+Toda acción viaja de TRX-01 a TRX-02 por INT-01; la sesión y los roles se obtienen con INT-02; el snapshot y las actualizaciones en vivo llegan por INT-03.
+
+---
+
+## 3. Indicador de frescura (CA2)
+
+### 3.1 Estados
+
+Cada vista muestra **«Actualizado hace X s»**, calculado con el momento del último evento aplicado (`ARQUITECTURA_BASE` §8.2, RNF-CON-02).
+
+| Estado | Condición | Qué ve el usuario | Acciones |
+|---|---|---|---|
+| ● **En vivo** | Retraso ≤ objetivo de la vista | Indicador verde y «Actualizado hace X s» | Disponibles |
+| ● **Con retraso** | Retraso > objetivo y ≤ 60 s | Indicador ámbar y hora del último dato | Disponibles |
+| ● **Desactualizada** | Retraso > 60 s o conexión perdida | Banner rojo «Los datos pueden no estar al día» | Disponibles: siempre se validan en el dueño (PRI-07) |
+
+### 3.2 Reglas de diseño
+
+- **Cada vista tiene su propio indicador**, porque cada una tiene su objetivo de frescura (§8.1). Una vista puede estar *En vivo* y otra *Con retraso*.
+- El objetivo de cada estado es el de la vista: 5 s para VL-01, VL-02, VL-03, VL-05 y VL-06; 2 s para las posiciones de AMR y 5 s para la ocupación en VL-04.
+- La frescura **no bloquea acciones**: la pantalla nunca autoriza ni decide (HU-28 §6).
+- Al recuperarse los eventos, la vista vuelve a *En vivo* sola; no requiere acción del usuario.
+
+| Causa de pérdida de frescura | Escenario | Efecto en el dashboard |
+|---|---|---|
+| Broker no disponible | FAL-01 | Las vistas pasan a *Desactualizada*; los eventos esperan en el outbox y se publican en orden al volver |
+| Proyección caída o corrupta | FAL-06 | El dashboard avisa y el detalle se consulta al dueño (INT-15); la proyección se reconstruye reprocesando eventos |
+| Inventario no disponible | FAL-02 | El dashboard muestra la última vista con su marca de frescura |
+| Analítica no disponible | FAL-04 | VL-07 muestra el último corte; sin impacto operativo |
+| Telemetría de un AMR perdida (> 10 s) | FAL-03, RNF-DIS-03 | VL-04 marca el AMR «sin señal»; ver §7 obs. 2 |
+
+### 3.3 Diagrama de estados
+
+`DSH-frescura-estados` v1.1.0 · HU-32
+
+![DSH-frescura-estados](diagramas/dashboard/HU-32/export/DSH-frescura-estados.svg)
+
+---
+
+## 4. Capturas anotadas (CA3)
+
+Convención de las anotaciones: **(n)** marca cada elemento visual; cada vista indica su **VL** y cada botón su **INT** (u **OPS** cuando el contrato aún no define la interacción). El indicador de frescura aparece en cada vista.
+
+### 4.1 Planta interna
+
+`DSH-planta-interna` v1.1.0 · HU-32
+
+![DSH-planta-interna](diagramas/dashboard/HU-32/export/DSH-planta-interna.svg)
+
+| Marca | Elemento | VL / módulo | Datos (eventos) | Botón → INT |
+|---|---|---|---|---|
+| (1) | Encabezado, selector de modo y sesión | TRX-01 | — | Planta externa → INT-01, INT-03 · sesión → INT-02 |
+| (2) | KPIs operativos | VL-01 | EVT-05, EVT-12 a EVT-15, EVT-21 a EVT-28 | — |
+| (3) | Mapa de planta interna: racks, lotes y AMR | VL-04 | EVT-03, EVT-05, EVT-29 a EVT-32 | — |
+| (4) | Reasignar misión | VL-04 | — | INT-33 (OPS-08, ROL-04) |
+| (5) | Alertas y acciones | VL-02 | EVT-09, EVT-12, EVT-14 a EVT-18, EVT-23, EVT-31 | Aprobar y Rechazar → INT-12 · Ver detalle → INT-15 |
+| (6) | Flujo de pedidos por estado | VL-03 | EVT-21 a EVT-28 | — |
+| (7) | Cancelar pedido | VL-03 | — | OPS-05 (ROL-05); **INT pendiente** (§7 obs. 1) |
+| (8) | Actividad reciente | VL-06 | Eventos de tipo *Negocio* | — |
+
+### 4.2 Planta externa
+
+`DSH-planta-externa` v1.1.0 · HU-32
+
+![DSH-planta-externa](diagramas/dashboard/HU-32/export/DSH-planta-externa.svg)
+
+En este boceto VL-05 se muestra *Con retraso* (hace 18 s, objetivo ≤ 5 s) para ilustrar un estado distinto de *En vivo* en una vista del mismo tablero.
+
+| Marca | Elemento | VL / módulo | Datos (eventos) | Botón → INT |
+|---|---|---|---|---|
+| (1) | Encabezado, selector de modo y sesión | TRX-01 | — | Planta interna → INT-01, INT-03 · sesión → INT-02 |
+| (2) | KPIs operativos | VL-01 | EVT-05, EVT-12 a EVT-15, EVT-21 a EVT-28 | — |
+| (3) | Mapa de planta externa: muelles, patio, acceso y espera | VL-05 | EVT-26, EVT-33 a EVT-36 | — |
+| (4) | Registrar llegada y Asignar muelle | VL-05 | — | INT-33 (ROL-04) |
+| (5) | Alertas y acciones | VL-02 | EVT-09, EVT-12, EVT-14 a EVT-18, EVT-23, EVT-31 | Aprobar y Rechazar → INT-12 · Ver detalle → INT-15 |
+| (6) | Flujo de pedidos por estado | VL-03 | EVT-21 a EVT-28 | — |
+| (7) | Cancelar pedido | VL-03 | — | OPS-05 (ROL-05); **INT pendiente** (§7 obs. 1) |
+| (8) | Actividad reciente | VL-06 | Eventos de tipo *Negocio* | — |
+
+### 4.3 Archivos de diagrama
+
+| Diagrama | Versión | Fuente | Exportación |
+|---|---|---|---|
+| DSH-planta-interna | 1.1.0 | `diagramas/dashboard/HU-32/src/DSH-planta-interna.puml` | `diagramas/dashboard/HU-32/export/DSH-planta-interna.svg` |
+| DSH-planta-externa | 1.1.0 | `diagramas/dashboard/HU-32/src/DSH-planta-externa.puml` | `diagramas/dashboard/HU-32/export/DSH-planta-externa.svg` |
+| DSH-frescura-estados | 1.1.0 | `diagramas/dashboard/HU-32/src/DSH-frescura-estados.puml` | `diagramas/dashboard/HU-32/export/DSH-frescura-estados.svg` |
+
+---
+
+## 5. Visibilidad por rol (alineada con HU-28)
+
+Según la matriz de `HU-28-seguridad-roles.md` §3 (filas 30 y 31, **PROPUESTA**):
+
+| Vista | ROL-01 | ROL-02 | ROL-03 | ROL-04 | ROL-05 | ROL-06 | ROL-07 |
+|---|---|---|---|---|---|---|---|
+| VL-01 a VL-06 | L | L | L | L | L | L | — |
+| VL-07 | — | — | — | — | L | L | — |
+
+L = solo consulta. Los botones se muestran según el rol, pero la autorización la hace siempre el módulo dueño (HU-28 §6).
+
+---
+
+## 6. Trazabilidad
+
+| Criterio (`docs/BACKLOG.md` §4.3) | Dónde se cumple |
+|---|---|
+| CA1. Explica los modos Planta interna y Planta externa y las vistas que comparten | §1 |
+| CA2. El indicador de frescura con sus 3 estados (§8.2) aparece en el boceto | §3 y §4 (el indicador se ve en cada vista de los bocetos y en `DSH-frescura-estados`) |
+| CA3. Capturas anotadas: cada elemento visual indica su VL y cada botón su INT | §4 |
+
+HN-20 (antigüedad del dato) y HN-21 (alternar modos) · EP-06 · Rúbrica *Trazabilidad y presentación*. Insumo de HU-34, HU-35 y HU-39.
+
+---
+
+## 7. Observaciones y propuestas de cambio
+
+Heredan las de HU-22 (§6) y no cambian el contrato; se tramitan con PR (y ADR si aplica) según `ARQUITECTURA_BASE` §0.3.
+
+1. **Cancelar pedido sin INT.** El contrato no define la interacción TRX-02 → SVC-04 para cancelar. **PROPUESTA:** agregarla en la matriz de HU-24 (P6, con P1). Hasta entonces los bocetos la marcan «INT pendiente».
+2. **«Sin señal» de un AMR.** No es un estado de AMR (§9) y la proyección no genera alertas (PRI-05). **PROPUESTA:** que SVC-05 lo comunique con EVT-31 (HU-19, HU-24).
+3. **Frescura de VL-07.** Su objetivo es el corte diario, no los 5 s de las demás vistas. **PROPUESTA:** que VL-07 muestre «Corte del <fecha>» y el banner de *Desactualizada* si pasan más de 24 h sin corte; no usa *Con retraso*.
+4. **Pedidos en *PendienteReserva*.** Ese estado no publica evento (§9), por lo que VL-03 no puede contarlos. **PROPUESTA:** decidir con P6 y P1 si se muestran mediante consulta al dueño o se aceptan como no visibles.
+5. **Cronómetro de HN-09.** La alerta en VL-02 pide ≤ 5 s, mientras CE-03 y CE-01 podrían sumar hasta ~10 s; aclarar el punto de inicio de la medición en HU-27.
 
 ---
 
@@ -156,4 +205,5 @@ No cambian el contrato. Cualquier ajuste se tramita con PR (y ADR si aplica) seg
 
 | Versión | Fecha | Autor | Cambio | HU |
 |---|---|---|---|---|
-| 1.0.0 | 2026-11-24 | P2 | Versión inicial: vistas VL-01 a VL-07, acciones y bocetos de planta interna y externa | HU-22 |
+| 1.0.0 | 2026-11-24 | P2 | Versión inicial: vistas VL-01 a VL-07, acciones y bocetos | HU-22 |
+| 1.1.0 | 2026-11-24 | P2 | Modos y vistas compartidas, indicador de frescura con 3 estados, capturas anotadas y visibilidad por rol | HU-32 |
