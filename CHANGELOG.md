@@ -16,7 +16,7 @@
 
 ## diseno-v0.2.0 · Sprint 2 (En progreso)
 
-**HU incluidas:** HU-11, HU-16, HU-17, HU-22
+**HU incluidas:** HU-11, HU-13, HU-14, HU-16, HU-17, HU-22
 
 **Artefactos**
 
@@ -28,6 +28,8 @@
 | docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md | — (Propuesto) | La detección de riesgo de agotamiento pertenece a Reposición | HU-17 |
 | docs/dashboard/propuesta-dashboard.md · DSH-planta-interna · DSH-planta-externa (fuente y SVG) | 1.0.0 | Propuesta inicial de Dashboard v1 (vistas VL-01 a VL-07, frescura y acciones hacia dueños) y bocetos de planta interna y externa | HU-22 |
 | docs/arquitectura/propiedad-de-datos.md | 0.1.0 | Matriz detallada de propiedad de datos y réplicas locales. | HU-13 |
+| C4N3-SVC02-inventario (fuente y SVG) | 0.1.0 | Diagrama de componentes de Inventario: puertos, FEFO, réplicas, persistencia con Outbox y detección de vencimientos. | HU-14 |
+| docs/adr/ADR-003-reserva-fefo-en-inventario.md | — (Propuesto) | La reserva de stock y la selección FEFO pertenecen a Inventario | HU-14 |
 
 **ADR aceptados:** ninguno
 
