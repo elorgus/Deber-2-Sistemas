@@ -2,12 +2,14 @@
 
 ## diseno-v0.3.0 · Sprint 3 (En progreso)
 
-**HU incluidas:** HU-25
+**HU incluidas:** HU-25, HU-30
 
 **Artefactos**
 
 | Artefacto | Versión | Cambio | HU |
 |---|---|---|---|
+| docs/diseno/patrones.md | 0.1.1 | Justifica seis patrones de Smart Inventory y enlaza sus diagramas de evidencia. | HU-30 |
+| docs/adr/ADR-005-proyeccion-de-lectura-cqrs.md | — (Propuesto) | Documenta la separación entre consultas del dashboard y escrituras del negocio, y los estados de frescura de las vistas. | HU-30 |
 | EST-lote · EST-reserva · EST-sugerencia · EST-orden-compra (fuente y SVG) · equipo/P4-joshdavr/HU-25-diagramas-estado.md | 1.0.0 | Diagramas de estado de Lote, Reserva, Sugerencia de reposición y Orden de compra, con disparadores, transiciones inválidas y preguntas abiertas (Q-1 a Q-5) | HU-25 |
 
 **ADR aceptados:** ninguno
