@@ -1,0 +1,49 @@
+@startuml CLS-SOLID-reposicion
+title SRP y OCP · Reposición y Compras
+
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam classBackgroundColor #F1F6FC
+skinparam classBorderColor #315376
+skinparam ArrowColor #315376
+skinparam packageBackgroundColor #F8FAFE
+skinparam packageBorderColor #829BB2
+skinparam noteBackgroundColor #FFF7E6
+skinparam noteBorderColor #B38B41
+hide empty members
+
+package "SVC-02 · Inventario" {
+  interface RegistroMovimientos <<puerto de entrada>>
+}
+
+package "SVC-03 · Reposición y Compras" {
+  class EvaluadorRiesgoAgotamiento <<dominio>>
+  interface EstrategiaReposicion <<estrategia>>
+  class ReposicionMinMax
+  class ReposicionPuntoReorden
+  class ReposicionPorPronostico
+
+  ReposicionMinMax ..|> EstrategiaReposicion
+  ReposicionPuntoReorden ..|> EstrategiaReposicion
+  ReposicionPorPronostico ..|> EstrategiaReposicion
+}
+
+note bottom of RegistroMovimientos
+  Registra movimientos en Inventario.
+  SVC-02 publica EVT-05 vía TRX-03.
+end note
+
+note right of EvaluadorRiesgoAgotamiento
+  Compara el disponible con la política del SKU.
+  SVC-03 recibe EVT-05 por INT-10 (A).
+end note
+
+note bottom of EstrategiaReposicion
+  El flujo de sugerencias usa la interfaz.
+  Una nueva estrategia conserva ese flujo.
+end note
+
+legend bottom
+  CLS-SOLID-reposicion · v0.1.0 · 2026-11-27 · luisdavidborjap-web (P7) · HU-31
+endlegend
+@enduml
