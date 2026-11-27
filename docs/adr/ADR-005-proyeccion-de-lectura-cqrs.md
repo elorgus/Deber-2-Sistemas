@@ -6,8 +6,8 @@
 | Estado | Propuesto |
 | Responsable | P7 · `luisdavidborjap-web` |
 | Revisor | P1 · `elorgus` |
-| Historia de trabajo | HU-30 |
-| Base de diseño | [Contrato de arquitectura v1.0.0 propuesto](../ARQUITECTURA_BASE.md) |
+| Historia de trabajo | [HU-30](https://github.com/elorgus/Deber-2-Sistemas/issues/74) |
+| Base de diseño | [Contrato de arquitectura v1.0.0](../ARQUITECTURA_BASE.md) |
 
 ## Contexto
 
@@ -42,10 +42,10 @@ Cada vista muestra la leyenda «Actualizado hace X s», calculada desde el últi
 
 | Referencia | Qué aporta |
 |---|---|
-| [HU-30 · Informe de patrones](../diseno/patrones.md) | Justificación de CQRS y sus límites. |
-| [HU-16 · SEC-FA-recepcion](https://github.com/elorgus/Deber-2-Sistemas/pull/17/files) | El borrador del PR #17 muestra el paso asíncrono INT-08 que actualiza la proyección tras una recepción. |
-| HU-12 · C4 Nivel 2 | Validación futura de la ubicación de TRX-04 en UD-5 y sus relaciones. |
-| HU-27 · Requisitos de calidad verificables | Validación futura de los objetivos de frescura aplicables. |
-| HU-32 · Dashboard v2 | Validación futura de las tres marcas de frescura y las acciones del usuario. |
+| [HU-30 · Informe de patrones](../diseno/patrones.md) | Justificación de CQRS, sus beneficios y límites. |
+| [HU-12 · C4N2-contenedores](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/C4N2-contenedores.svg) | Ubica TRX-04 en UD-5 y muestra INT-03 (S + A) para el snapshot inicial y las actualizaciones en vivo. |
+| [HU-16 · SEC-FA-recepcion](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/SEC-FA-recepcion.svg) | Muestra INT-08 (A), que actualiza VL-01, VL-04 y VL-06 tras una recepción. |
+| [HU-17 · SEC-FB-reposicion](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/diagramas/export/SEC-FB-reposicion.svg) | Muestra cómo INT-12 (S) lleva la acción a SVC-03, que valida la vigencia de la sugerencia en su propio estado. |
+| [HU-20 · ADR-004](https://github.com/elorgus/Deber-2-Sistemas/blob/main/docs/adr/ADR-004-sincrono-y-eventos-con-outbox.md) | Documenta la publicación asíncrona por Outbox, la idempotencia y la separación entre vistas y decisiones de negocio. |
 
-La aceptación se registra después de la revisión de P1. Los enlaces provisionales se sustituyen por las versiones aprobadas de los artefactos a medida que se integren.
+P1 revisa esta propuesta en HU-30. [HU-27](https://github.com/elorgus/Deber-2-Sistemas/issues/71) y [HU-32](https://github.com/elorgus/Deber-2-Sistemas/issues/76) permiten contrastar posteriormente las metas de frescura y su representación en el dashboard.
