@@ -2,13 +2,16 @@
 
 ## diseno-v0.3.0 · Sprint 3 (En progreso)
 
-**HU incluidas:** HU-31
+**HU incluidas:** HU-25, HU-30, HU-31
 
 **Artefactos**
 
 | Artefacto | Versión | Cambio | HU |
 |---|---|---|---|
 | docs/diseno/solid.md · CLS-SOLID-inventario · CLS-SOLID-reposicion · CLS-SOLID-flota (fuente y SVG) | 0.1.0 | Documenta los cinco principios SOLID con pseudocódigo, diagramas de clases y un cambio futuro por principio. | HU-31 |
+| docs/diseno/patrones.md | 0.1.1 | Justifica seis patrones de Smart Inventory y enlaza sus diagramas de evidencia. | HU-30 |
+| docs/adr/ADR-005-proyeccion-de-lectura-cqrs.md | — (Propuesto) | Documenta la separación entre consultas del dashboard y escrituras del negocio, y los estados de frescura de las vistas. | HU-30 |
+| EST-lote · EST-reserva · EST-sugerencia · EST-orden-compra (fuente y SVG) · equipo/P4-joshdavr/HU-25-diagramas-estado.md | 1.0.0 | Diagramas de estado de Lote, Reserva, Sugerencia de reposición y Orden de compra, con disparadores, transiciones inválidas y preguntas abiertas (Q-1 a Q-5) | HU-25 |
 
 **ADR aceptados:** ninguno
 
@@ -16,7 +19,7 @@
 
 ## diseno-v0.2.0 · Sprint 2 (En progreso)
 
-**HU incluidas:** HU-11, HU-16, HU-17, HU-22
+**HU incluidas:** HU-11, HU-13, HU-14, HU-16, HU-17, HU-22
 
 **Artefactos**
 
@@ -28,6 +31,8 @@
 | docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md | — (Propuesto) | La detección de riesgo de agotamiento pertenece a Reposición | HU-17 |
 | docs/dashboard/propuesta-dashboard.md · DSH-planta-interna · DSH-planta-externa (fuente y SVG) | 1.0.0 | Propuesta inicial de Dashboard v1 (vistas VL-01 a VL-07, frescura y acciones hacia dueños) y bocetos de planta interna y externa | HU-22 |
 | docs/arquitectura/propiedad-de-datos.md | 0.1.0 | Matriz detallada de propiedad de datos y réplicas locales. | HU-13 |
+| C4N3-SVC02-inventario (fuente y SVG) | 0.1.0 | Diagrama de componentes de Inventario: puertos, FEFO, réplicas, persistencia con Outbox y detección de vencimientos. | HU-14 |
+| docs/adr/ADR-003-reserva-fefo-en-inventario.md | — (Propuesto) | La reserva de stock y la selección FEFO pertenecen a Inventario | HU-14 |
 
 **ADR aceptados:** ninguno
 

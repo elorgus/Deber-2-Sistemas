@@ -1,0 +1,48 @@
+@startuml
+title Diagrama de estados · Orden de compra (SVC-03 Reposición y Compras)
+caption EST-orden-compra · v1.0.0 · 2026-11-27 · joshdavr (P4) · HU-25
+
+hide empty description
+
+state Emitida
+state Enviada
+state RecibidaParcial
+state Cerrada
+state Cancelada
+
+[*] --> Emitida : Aprobación de la sugerencia · TX-04\npublica EVT-19 OrdenCompraEmitida
+
+Emitida --> Enviada : Envío al ERP vía PuertoErp → AdaptadorErp\n(INT-14, A con reintentos)
+Enviada --> RecibidaParcial : EVT-04 RecepcionRegistrada con la OC (INT-09, A)\ncantidad recibida < cantidad de la OC (HN-12)
+RecibidaParcial --> Cerrada : EVT-04 que completa la cantidad (INT-09, A)\npublica EVT-20 OrdenCompraCerrada
+Enviada -[dashed]-> Cerrada : «PROPUESTA» recepción completa en una sola entrega\n(HN-12: 200 de 200) · publica EVT-20 · Q-2
+
+Emitida --> Cancelada : Cancelar OC\n(disparador y evento no definidos en §9 · Q-3)
+Enviada --> Cancelada : Cancelar OC\n(disparador y evento no definidos en §9 · Q-3)
+
+Cerrada --> [*]
+Cancelada --> [*]
+
+note right of Emitida
+  Estado gestionado por EstadoOrdenCompra
+  (patrón State, §10).
+  Si EXT-01 no está disponible, la OC
+  permanece Emitida con reintentos (FAL-05).
+end note
+
+note left of RecibidaParcial
+  Una nueva recepción parcial que todavía
+  no completa la cantidad deja la OC
+  en RecibidaParcial.
+end note
+
+note bottom of Cancelada
+  <b>Transiciones inválidas</b>
+  • Cerrada o Cancelada → cualquier estado (son finales).
+  • Registrar una recepción contra una OC Cerrada o Cancelada.
+  • Cancelar una OC RecibidaParcial (§9 solo permite cancelar desde Emitida o Enviada).
+  • Emitida → RecibidaParcial sin pasar por Enviada (§9 no lo define).
+  • Emitir una segunda OC para la misma sugerencia aprobada.
+end note
+
+@enduml
