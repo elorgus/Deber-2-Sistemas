@@ -1,0 +1,36 @@
+@startuml
+title Diagrama de estados · Reserva (SVC-02 Inventario)
+caption EST-reserva · v1.0.0 · 2026-11-27 · joshdavr (P4) · HU-25
+
+hide empty description
+
+state Activa
+state Consumida
+state Liberada
+
+[*] --> Activa : Solicitar reserva FEFO (INT-19, S) desde SVC-04\nvía GestionReservas · disponible suficiente\nTX-02 · publica EVT-08 ReservaConfirmada y EVT-05
+
+Activa --> Consumida : Consume EVT-27 PedidoDespachado (INT-30, A)\nregistrar salida · TX-03\npublica EVT-11 SalidaRegistrada y EVT-05
+Activa --> Liberada : Consume EVT-28 PedidoCancelado (INT-31, A)\no expiración de la reserva\npublica EVT-10 ReservaLiberada
+
+Consumida --> [*]
+Liberada --> [*]
+
+note left of Activa
+  Si el disponible no alcanza para todo el pedido
+  (reserva todo o nada), NO se crea la reserva:
+  se publica EVT-09 ReservaRechazada.
+  Los lotes se asignan con PoliticaFEFO.
+end note
+
+note bottom of Consumida
+  <b>Transiciones inválidas</b>
+  • Consumida → Liberada o Activa (Consumida es final).
+  • Liberada → Consumida o Activa (Liberada es final):
+    no se registra salida contra una reserva liberada.
+  • Crear una reserva parcial (la reserva es todo o nada).
+  • Un EVT-27 o EVT-28 repetido no vuelve a cambiar el estado:
+    ConsumidorIdempotente lo descarta.
+end note
+
+@enduml
