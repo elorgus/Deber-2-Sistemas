@@ -1,83 +1,52 @@
-# Changelog — Smart Inventory
+# Registro de Cambios (CHANGELOG)
 
-Todos los cambios relevantes de los artefactos de diseño se documentan aquí.
-Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
-Versionado: `diseno-vMAJOR.MINOR.PATCH` (MAJOR = sprint, MINOR = revisión, PATCH = corrección).
+## diseno-v0.3.0 · Sprint 3 (En progreso)
 
-## [Unreleased]
+**HU incluidas:** HU-30
 
-### Added
-- Estructura inicial del repositorio (`docs/`, `equipo/`, `README.md`, `CONTRIBUTING.md`).
-- `docs/ARQUITECTURA_BASE.md` v1.0.0 — contrato maestro.
-- `docs/BACKLOG.md` v1.0.0 — product backlog y plan de 4 sprints.
-- `CHANGELOG.md` v1.0.0.
-- `equipo/P5-JessPCL/HU-08-riesgos.md` v1.0.0 — registro inicial de 18 riesgos alineado con FAL y RNF del contrato (HU-08, P5).
-- HU-30: agrega el borrador del informe de patrones y la propuesta ADR-005 sobre CQRS.
+**Artefactos**
 
-### Changed
-- (pendiente)
+| Artefacto | Versión | Cambio | HU |
+|---|---|---|---|
+| docs/diseno/patrones.md | 0.1.1 | Justifica seis patrones de Smart Inventory y enlaza sus diagramas de evidencia. | HU-30 |
+| docs/adr/ADR-005-proyeccion-de-lectura-cqrs.md | — (Propuesto) | Documenta la separación entre consultas del dashboard y escrituras del negocio, y los estados de frescura de las vistas. | HU-30 |
 
-### Fixed
-- (pendiente)
+**ADR aceptados:** ninguno
 
 ---
 
-## [diseno-v0.1.0] — Sprint 1 (fecha por confirmar)
+## diseno-v0.2.0 · Sprint 2 (En progreso)
 
-### Added
-- Product backlog priorizado (EP-01 a EP-08, HN-01 a HN-24).
-- Plan de 4 sprints con objetivos, incrementos y tags.
-- Tablero del proyecto con HU-01 a HU-42.
-- Actas de planning, revisión y retrospectiva del Sprint 1.
-- Aprobación del contrato `ARQUITECTURA_BASE.md` v1.0.0 por los 7 integrantes.
+**HU incluidas:** HU-11, HU-16, HU-17, HU-22
 
-### Changed
-- `ARQUITECTURA_BASE.md`: aprobación pasa a ser facilitada por P3 (RichJ-100).
+**Artefactos**
 
----
+| Artefacto | Versión | Cambio | HU |
+|---|---|---|---|
+| C4N1-contexto (fuente y SVG) | 0.1.1 | Diagrama de contexto de Smart Inventory con siete roles y cinco sistemas externos. Identifica la consulta de indicadores históricos como posterior al MVP. | HU-11 |
+| equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md · ACT-FA-recepcion · SEC-FA-recepcion | 1.0.0 | Flujo A: recepción y actualización de existencias | HU-16 |
+| equipo/P5-JessPCL/HU-17-flujo-b-reposicion.md · ACT-FB-reposicion · SEC-FB-reposicion | 1.0.0 | Flujo B: riesgo de agotamiento y reposición | HU-17 |
+| docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md | — (Propuesto) | La detección de riesgo de agotamiento pertenece a Reposición | HU-17 |
+| docs/dashboard/propuesta-dashboard.md · DSH-planta-interna · DSH-planta-externa (fuente y SVG) | 1.0.0 | Propuesta inicial de Dashboard v1 (vistas VL-01 a VL-07, frescura y acciones hacia dueños) y bocetos de planta interna y externa | HU-22 |
+| docs/arquitectura/propiedad-de-datos.md | 0.1.0 | Matriz detallada de propiedad de datos y réplicas locales. | HU-13 |
 
-## [diseno-v0.2.0] — Sprint 2 (pendiente)
-
-### Added
-- C4 N1 (contexto) y N2 (contenedores).
-- C4 N3 de SVC-01, SVC-02, SVC-03, SVC-04, SVC-05, TRX-04, SVC-06.
-- Modelo de propiedad de datos validado (contrato §5).
-- Flujos UML A, B y C.
-- ADR-001 a ADR-004 y ADR-006 a ADR-008.
-- Dashboard v1 (VL-01 a VL-07, planta interna/externa).
+**ADR aceptados:** ninguno
 
 ---
 
-## [diseno-v0.3.0] — Sprint 3 (pendiente)
+## diseno-v0.1.0 · 2026-11-23 · Sprint 1
 
-### Added
-- Matriz de interacciones INT-01 a INT-34.
-- Diagramas de estado (Pedido, Reserva, Lote, Sugerencia, OC, Misión AMR, Visita, Muelle).
-- Requisitos de calidad verificables (RNF-*) y escenarios de fallo (FAL-*).
-- Informe de patrones y evidencia SOLID.
-- ADR-005 y ADR-009.
-- Dashboard v2 (frescura y acciones).
+**HU incluidas:** HU-01 a HU-10
 
----
+**Artefactos**
 
-## [diseno-v0.4.0] — Sprint 4 (pendiente)
+| Artefacto | Versión | Cambio | HU |
+|---|---|---|---|
+| docs/ARQUITECTURA_BASE.md | 1.0.0 | Contrato maestro aprobado (tag contrato-v1.0.0) | HU-06 |
+| docs/BACKLOG.md | 1.0.0 | Product backlog priorizado, plan de sprints y estructura | HU-04, HU-05 |
+| CONTRIBUTING.md | 1.0.1 | DoR, DoD y checklist ampliada | HU-09 |
+| docs/VERSIONAMIENTO.md | 1.0.0 | Política de versionamiento | HU-09 |
+| equipo/P5-JessPCL/HU-08-riesgos.md | 1.0.0 | Documentación de riesgos | HU-08 |
+| equipo/P3-RichJ-100/HU-10-acta-sprint-1.md | 1.0.0 | Acta del Sprint 1 | HU-10 |
 
-### Added
-- Revisión integral de consistencia y trazabilidad.
-- Política de versionamiento final (`docs/VERSIONAMIENTO.md`).
-- Informe consolidado en `docs/informe/`.
-- Presentación final (recepción → stock → alerta → reposición).
-
-### Fixed
-- (completar con hallazgos de la revisión final)
-
----
-
-## Tipos de cambio
-
-- **Added:** artefactos nuevos (diagramas, ADR, secciones).
-- **Changed:** modificaciones a un artefacto ya versionado.
-- **Deprecated:** artefactos que se reemplazan.
-- **Removed:** artefactos eliminados.
-- **Fixed:** correcciones de consistencia o errores.
-- **Security:** decisiones o controles de seguridad.
+**ADR aceptados:** ninguno

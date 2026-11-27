@@ -1,0 +1,148 @@
+@startuml C4N2-contenedores
+!include <C4/C4_Container>
+
+LAYOUT_TOP_DOWN()
+LAYOUT_WITH_LEGEND()
+
+AddRelTag("sync", $lineColor="#1F4E79", $textColor="#1F4E79", $legendText="S: síncrono (respuesta inmediata)")
+AddRelTag("async", $lineColor="#7F6000", $textColor="#7F6000", $lineStyle=DashedLine(), $legendText="A: asíncrono (evento vía TRX-03)")
+AddRelTag("own", $lineColor="#2E7D32", $textColor="#2E7D32", $legendText="Acceso exclusivo del dueño a su esquema (PRI-02)")
+
+title C4N2-contenedores · Smart Inventory · Nivel 2 (Contenedores)
+
+Person(usr, "Usuarios", "ROL-01 a ROL-07: operan y supervisan desde el dashboard")
+
+System_Ext(ext04, "EXT-04 Proveedor de identidad", "Autentica usuarios y entrega sus roles")
+System_Ext(ext01, "EXT-01 ERP corporativo", "Recibe órdenes de compra; envía pedidos de venta")
+System_Ext(ext02, "EXT-02 Sistemas de transportistas", "Confirman vehículos y horarios de retiro")
+System_Ext(ext03, "EXT-03 Controlador de flota AMR", "Ejecuta misiones; emite telemetría")
+System_Ext(ext05, "EXT-05 Control de acceso del patio", "Garita y sensores: llegadas y salidas de vehículos")
+
+System_Boundary(si, "Smart Inventory") {
+
+    Container_Boundary(ud4, "UD-4 Acceso") {
+        Container(trx01, "TRX-01 Dashboard", "Planta interna / Planta externa", "Supervisión con indicador de frescura por vista. No guarda datos de negocio ni decide.")
+        Container(trx02, "TRX-02 Capa de Aplicación", "", "Autentica, compone vistas y enruta cada comando a su dueño. Sin reglas de negocio ni base de datos de negocio.")
+    }
+
+    Container_Boundary(ud1, "UD-1 Núcleo transaccional (monolito modular)") {
+        Container(svc01, "SVC-01 Catálogo y Ubicaciones", "Módulo", "Fuente de verdad de SKU, categoría, bodega, zona y ubicación")
+        ContainerDb(db01, "Esquema SVC-01", "Esquema lógico + outbox", "Producto, categoría, bodega, zona, ubicación")
+        Container(svc02, "SVC-02 Inventario", "Módulo", "Saldo, lote, vencimiento, movimientos y reservas FEFO (TX-01 a TX-03)")
+        ContainerDb(db02, "Esquema SVC-02", "Esquema lógico + outbox + réplicas", "Saldo, lote, movimiento, recepción, ajuste, reserva")
+        Container(svc03, "SVC-03 Reposición y Compras", "Módulo", "Riesgo de agotamiento, sugerencias y órdenes de compra (TX-04)")
+        ContainerDb(db03, "Esquema SVC-03", "Esquema lógico + outbox + réplicas", "Política, alerta, sugerencia, proveedor, OC")
+        Container(svc04, "SVC-04 Pedidos y Fulfillment", "Módulo", "Ciclo de vida del pedido (TX-05)")
+        ContainerDb(db04, "Esquema SVC-04", "Esquema lógico + outbox + réplicas", "Pedido, tarea de preparación, solicitud de despacho")
+    }
+
+    Container_Boundary(ud2, "UD-2 Flota y Operación") {
+        Container(svc05, "SVC-05 Flota y Operación", "", "AMR, misiones, rutas, telemetría, vehículos, muelles y patio (TX-06)")
+        ContainerDb(db05, "Esquema SVC-05", "Esquema lógico + outbox + réplicas", "AMR, misión, ruta, telemetría, visita, muelle, patio")
+    }
+
+    Container_Boundary(ud3, "UD-3 Analítica") {
+        Container(svc06, "SVC-06 Analítica", "", "Histórico, indicadores y pronóstico de demanda. Nunca es fuente de verdad operativa")
+        ContainerDb(lkh, "TRX-05 Data Lakehouse", "Zona cruda y zona curada", "Almacén histórico de SVC-06; indicadores y pronóstico")
+    }
+
+    Container_Boundary(ud5, "UD-5 Proyección de lectura") {
+        Container(trx04, "TRX-04 Proyección de lectura (CQRS)", "", "Mantiene VL-01 a VL-07 desde eventos; reconstruible. No recibe comandos ni decide (PRI-05, PRI-07)")
+        ContainerDb(vistas, "Vistas VL-01 a VL-07", "Derivado, no es fuente de verdad", "Snapshot y último evento aplicado por vista")
+    }
+
+    Boundary(infra, "Infraestructura gestionada") {
+        ContainerQueue(trx03, "TRX-03 Broker de eventos", "Pub/Sub, al menos una vez, DLQ", "Canal de eventos de negocio (durables) y canal de señales (EVT-32)")
+    }
+}
+
+' ---------- Usuarios y acceso ----------
+Rel(usr, trx01, "Supervisa y opera")
+Rel(trx01, trx02, "S · INT-01 · Toda consulta y comando", $tags="sync")
+Rel(trx02, ext04, "S · INT-02 · Autenticar y obtener roles", $tags="sync")
+Rel(trx02, trx04, "S + A (push) · INT-03 · Snapshot y suscripción en vivo", $tags="sync")
+
+' ---------- Comandos y consultas hacia los dueños (S) ----------
+Rel(trx02, svc02, "S · INT-06, INT-15 · Registrar recepción; detalle exacto de existencias", $tags="sync")
+Rel(trx02, svc03, "S · INT-12 · Aprobar o rechazar sugerencia", $tags="sync")
+Rel(trx02, svc04, "S · INT-17, INT-25 · Registrar pedido; confirmar preparación", $tags="sync")
+Rel(trx02, svc05, "S · INT-33 · Operación manual de flota y patio", $tags="sync")
+Rel(trx02, svc06, "S · INT-34 · Indicadores históricos", $tags="sync")
+
+' ---------- Única llamada síncrona entre módulos ----------
+Rel(svc04, svc02, "S · INT-19 · Solicitar reserva FEFO (PuertoReservasInventario → GestionReservas)", $tags="sync")
+
+' ---------- Publicación de eventos (A, vía Outbox): INT y EVT tal como en ARQUITECTURA_BASE §7.2 ----------
+Rel(svc01, trx03, "A · INT-04 · EVT-01, EVT-02, EVT-03", $tags="async")
+Rel(svc02, trx03, "A · INT-07 · EVT-04, EVT-05 | INT-20 · EVT-08 o EVT-09, EVT-05 (Outbox)", $tags="async")
+Rel(svc03, trx03, "A · INT-11 · EVT-14, EVT-15, EVT-16 | INT-13 · EVT-17, EVT-18, EVT-19 (Outbox)", $tags="async")
+Rel(svc04, trx03, "A · INT-21 · EVT-24 | INT-26 · EVT-26 | INT-30 · EVT-27 | INT-31 · EVT-28 (Outbox)", $tags="async")
+Rel(svc05, trx03, "A · INT-24 · EVT-29, EVT-30 | INT-29 · EVT-34, EVT-35 | INT-32 · EVT-31 a EVT-36", $tags="async")
+Rel(svc06, trx03, "A · INT-16 · EVT-37", $tags="async")
+
+' ---------- Consumo de eventos (A) ----------
+Rel(trx03, svc02, "A · INT-04 · EVT-01 a EVT-03 | INT-30 · EVT-27 | INT-31 · EVT-28", $tags="async")
+Rel(trx03, svc03, "A · INT-04 · EVT-01, EVT-02 | INT-09 · EVT-04 | INT-10 · EVT-05 | INT-16 · EVT-37", $tags="async")
+Rel(trx03, svc04, "A · INT-04 · EVT-01, EVT-02 | INT-24 · EVT-29, EVT-30 | INT-29 · EVT-34, EVT-35", $tags="async")
+Rel(trx03, svc05, "A · INT-04 · EVT-03 | INT-21 · EVT-24 | INT-26 · EVT-26 | INT-31 · EVT-28", $tags="async")
+Rel(trx03, svc06, "A · INT-05 · Todos los EVT de tipo Negocio (EVT-32 solo muestreada)", $tags="async")
+Rel(trx03, trx04, "A · INT-08 · Actualizar VL-01, VL-04, VL-06 | INT-32 · EVT-31 a EVT-36", $tags="async")
+
+' ---------- Datos propios (un esquema por módulo, credencial exclusiva) ----------
+Rel(svc01, db01, "Lee y escribe solo su esquema", $tags="own")
+Rel(svc02, db02, "Lee y escribe solo su esquema", $tags="own")
+Rel(svc03, db03, "Lee y escribe solo su esquema", $tags="own")
+Rel(svc04, db04, "Lee y escribe solo su esquema", $tags="own")
+Rel(svc05, db05, "Lee y escribe solo su esquema", $tags="own")
+Rel(svc06, lkh, "Persiste y consulta el histórico (INT-05)", $tags="own")
+Rel(trx04, vistas, "Mantiene y sirve las vistas", $tags="own")
+
+' ---------- Sistemas externos (siempre vía adaptador) ----------
+Rel(svc03, ext01, "A · INT-14 · Enviar OC (AdaptadorErp)", $tags="async")
+Rel(ext01, svc04, "A · INT-18 · Importar pedidos de venta", $tags="async")
+Rel(svc05, ext03, "S · INT-22 · Enviar misión al AMR", $tags="sync")
+Rel(ext03, svc05, "A · INT-23 · Telemetría continua", $tags="async")
+Rel(svc05, ext02, "A · INT-27 · Solicitar y confirmar vehículo", $tags="async")
+Rel(ext05, svc05, "A · INT-28 · Llegadas y salidas en garita", $tags="async")
+
+note as N_PRI02 #E8F5E9
+  **PRI-02 / RNF-MAN-02 · Sin acceso cruzado a datos**
+  Cada módulo tiene su propio esquema y su propia credencial con
+  permisos solo sobre ese esquema (en el MVP pueden compartir motor
+  físico). Ningún contenedor lee ni escribe el esquema de otro: solo
+  hay llamadas S al dueño (INT-19) o eventos A por TRX-03 (PRI-03,
+  PRI-04). La única flecha que llega a cada esquema sale de su módulo.
+end note
+
+note as N_MVP #FFF8E1
+  **Agrupación del MVP y ruta de evolución (ARQUITECTURA_BASE §2.4)**
+  MVP: UD-1 agrupa SVC-01 a SVC-04 (monolito modular); SVC-05 (UD-2)
+  y SVC-06 + TRX-05 (UD-3) separados desde el inicio; UD-4 y UD-5
+  escalan solos. Extracción futura, por señales medibles:
+  1) SVC-02 (INT-19 pasa a remota, mismo puerto GestionReservas)
+  2) SVC-04  3) SVC-03.  SVC-01 permanece agrupado.
+end note
+
+note as N_INT #F5F5F5
+  **Eventos sin INT propio en §7.2** (se resuelven en la matriz HU-24;
+  no se inventan INT aquí): EVT-06, EVT-07, EVT-10 a EVT-13, EVT-20 (emisión),
+  EVT-21 a EVT-23, EVT-25, EVT-38; consumo de EVT-19 y EVT-20 por SVC-02,
+  de EVT-19 por SVC-05, de EVT-09 por SVC-03 y de VL-02, VL-03, VL-05, VL-07 por TRX-04.
+end note
+
+note as N_LEY
+  C4N2-contenedores · v1.0.0 · 2026-11-24 · P1 · HU-12
+end note
+
+' ---------- Pistas de layout (no son relaciones) ----------
+Lay_R(ext04, ud4)
+Lay_D(si, ext01)
+Lay_R(ext01, ext02)
+Lay_R(ext02, ext03)
+Lay_R(ext03, ext05)
+Lay_D(ext01, N_PRI02)
+Lay_R(N_PRI02, N_MVP)
+Lay_R(N_MVP, N_INT)
+Lay_R(N_INT, N_LEY)
+
+@enduml

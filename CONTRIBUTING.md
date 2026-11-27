@@ -16,10 +16,11 @@ Este documento define cómo trabaja el equipo para garantizar que los artefactos
 ## 2. Ubicación de los archivos
 
 - Tus documentos de trabajo, borradores y actas van en tu carpeta personal: `equipo/P?-tu-usuario/`.
-- Los diagramas fuente (`.drawio`, `.puml`, `.mmd`) van en `docs/diagramas/fuente/`.
-- Los diagramas exportados (`.png`, `.svg`) van en `docs/diagramas/export/`.
+- Los diagramas fuente (`.puml`, `.drawio`, `.mmd`) y exportados (`.png`, `.svg`) se organizan en la carpeta `diagramas/` en la raíz del proyecto (ver `docs/BACKLOG.md` §8.1):
+  - Fuentes en `diagramas/<tipo>/src/` (ej. `diagramas/c4/src/`, `diagramas/dashboard/src/`).
+  - Exportaciones en `diagramas/<tipo>/export/`.
 - Los ADR van en `docs/adr/ADR-nnn-titulo.md`.
-- El informe consolidado va en `docs/informe/`.
+- El informe consolidado y la presentación final van en `entregables/informe/` y `entregables/presentacion/`.
 
 ## 3. Reglas de diseño y nomenclatura
 
