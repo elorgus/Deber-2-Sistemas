@@ -1,5 +1,19 @@
 # Registro de Cambios (CHANGELOG)
 
+## diseno-v0.3.0 · Sprint 3 (En progreso)
+
+**HU incluidas:** HU-31
+
+**Artefactos**
+
+| Artefacto | Versión | Cambio | HU |
+|---|---|---|---|
+| docs/diseno/solid.md · CLS-SOLID-inventario · CLS-SOLID-reposicion · CLS-SOLID-flota (fuente y SVG) | 0.1.0 | Documenta los cinco principios SOLID con pseudocódigo, diagramas de clases y un cambio futuro por principio. | HU-31 |
+
+**ADR aceptados:** ninguno
+
+---
+
 ## diseno-v0.2.0 · Sprint 2 (En progreso)
 
 **HU incluidas:** HU-11, HU-16, HU-17, HU-22
