@@ -1,0 +1,37 @@
+@startuml CLS-SOLID-flota
+title LSP · Adaptadores de transporte
+
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam classBackgroundColor #F1F6FC
+skinparam classBorderColor #315376
+skinparam ArrowColor #315376
+skinparam packageBackgroundColor #F8FAFE
+skinparam packageBorderColor #829BB2
+skinparam noteBackgroundColor #FFF7E6
+skinparam noteBorderColor #B38B41
+hide empty members
+
+package "SVC-05 · Flota y Operación" {
+  interface PuertoTransportista <<puerto de salida>>
+  class AdaptadorTransportistaPropio <<adaptador>>
+  class AdaptadorTransportistaExterno <<adaptador>>
+}
+
+class "EXT-02 · Sistemas de transportistas" as Transportistas <<sistema externo>>
+
+AdaptadorTransportistaPropio ..|> PuertoTransportista
+AdaptadorTransportistaExterno ..|> PuertoTransportista
+AdaptadorTransportistaPropio ..> Transportistas : INT-27 (A)
+AdaptadorTransportistaExterno ..> Transportistas : INT-27 (A)
+
+note right of PuertoTransportista
+  Ambos adaptadores conservan el significado
+  de solicitud y confirmación de vehículo.
+  Sin confirmación, se aplica FAL-09.
+end note
+
+legend bottom
+  CLS-SOLID-flota · v0.1.0 · 2026-11-27 · luisdavidborjap-web (P7) · HU-31
+endlegend
+@enduml

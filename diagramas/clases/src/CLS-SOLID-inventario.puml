@@ -1,0 +1,45 @@
+@startuml CLS-SOLID-inventario
+title ISP y DIP · Inventario y reserva FEFO
+
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam classBackgroundColor #F1F6FC
+skinparam classBorderColor #315376
+skinparam ArrowColor #315376
+skinparam packageBackgroundColor #F8FAFE
+skinparam packageBorderColor #829BB2
+skinparam noteBackgroundColor #FFF7E6
+skinparam noteBorderColor #B38B41
+hide empty members
+
+class "TRX-02 · Capa de Aplicación" as Capa <<consumidor>>
+
+package "SVC-04 · Pedidos y Fulfillment" {
+  interface PuertoReservasInventario <<puerto de salida>>
+  class AdaptadorReservasInventario <<adaptador>>
+}
+
+package "SVC-02 · Inventario" {
+  interface ConsultaExistencias <<puerto de entrada>>
+  interface RegistroMovimientos <<puerto de entrada>>
+  interface GestionReservas <<puerto de entrada>>
+}
+
+Capa ..> ConsultaExistencias : INT-15 (S)\nConsultar existencias por lote
+Capa ..> RegistroMovimientos : INT-06 (S)\nRegistrar recepción
+AdaptadorReservasInventario ..|> PuertoReservasInventario
+AdaptadorReservasInventario ..> GestionReservas : INT-19 (S)\nSolicitar reserva FEFO
+
+note bottom of PuertoReservasInventario
+  Pedidos depende del puerto.
+  Al extraer Inventario, cambia el adaptador.
+end note
+
+note bottom of GestionReservas
+  Inventario confirma la reserva en TX-02.
+end note
+
+legend bottom
+  CLS-SOLID-inventario · v0.1.0 · 2026-11-27 · luisdavidborjap-web (P7) · HU-31
+endlegend
+@enduml
