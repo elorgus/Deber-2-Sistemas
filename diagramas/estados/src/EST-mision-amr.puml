@@ -13,5 +13,13 @@ Fallida --> Pendiente : Comando reasignar misión (INT-33 / OPS-08)
 
 Completada --> [*]
 
-footer EST-mision-amr · v1.0.0 · 2026-11-27 · P6 · HU-26
+note bottom of Fallida
+  <b>Transiciones inválidas</b>
+  • Completar una misión Pendiente o Asignada (debe pasar por EnCurso).
+  • Asignar una misión que ya está Asignada o EnCurso.
+  • Reasignar una misión Completada.
+  • Salir de Completada (estado final).
+end note
+
+footer EST-mision-amr · v1.1.0 · 2026-11-27 · P6 (revisión P5) · HU-26
 @enduml

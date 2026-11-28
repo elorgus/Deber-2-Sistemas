@@ -21,5 +21,12 @@ Cargando --> FueraDeServicio : Sin señal >10 s o falla hardware / EVT-31 Estado
 Detenido --> FueraDeServicio : Sin señal >10 s o falla hardware / EVT-31 EstadoAmrCambiado
 FueraDeServicio --> Disponible : Mantenimiento / señal restablecida / EVT-31 EstadoAmrCambiado
 
-footer EST-amr · v1.0.0 · 2026-11-27 · P6 · HU-26
+note bottom of FueraDeServicio
+  <b>Transiciones inválidas</b>
+  • Asignar una misión a un AMR que no está Disponible
+    (EnMision, Cargando, Detenido o FueraDeServicio).
+  • Pasar de FueraDeServicio a EnMision sin volver a Disponible.
+end note
+
+footer EST-amr · v1.1.0 · 2026-11-27 · P6 (revisión P5) · HU-26
 @enduml

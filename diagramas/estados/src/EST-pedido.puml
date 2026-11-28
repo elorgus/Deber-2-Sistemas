@@ -10,7 +10,7 @@ Registrado --> PendienteReserva : INT-19 Inventario no responde (sin evento)
 PendienteReserva --> Reservado : Reintento INT-19 exitoso / EVT-22 PedidoReservado
 PendienteReserva --> EnEspera : Reintento INT-19 sin stock / EVT-23 PedidoEnEspera
 
-EnEspera --> Reservado : Reevaluación con stock / EVT-22 PedidoReservado
+EnEspera --> Reservado : Reevaluación con stock / EVT-22 PedidoReservado\n(propuesta Q-1 de HU-18: §9 no define la salida de EnEspera)
 
 Reservado --> EnPreparacion : Iniciar preparación / EVT-24 PreparacionSolicitada
 EnPreparacion --> Preparado : INT-25 Confirmar preparación / EVT-25 PreparacionCompletada
@@ -27,5 +27,15 @@ Preparado --> Cancelado : Comando cancelar pedido / EVT-28 PedidoCancelado
 Despachado --> [*]
 Cancelado --> [*]
 
-footer EST-pedido · v1.0.0 · 2026-11-27 · P6 · HU-26
+note bottom of Cancelado
+  <b>Transiciones inválidas</b>
+  • Cancelar un pedido EnDespacho, Despachado o Cancelado.
+  • Pasar a EnPreparacion sin reserva confirmada
+    (desde Registrado, EnEspera o PendienteReserva).
+  • Confirmar la preparación (INT-25) de un pedido que no está EnPreparacion.
+  • Despachar un pedido que no está EnDespacho.
+  • Salir de Despachado o Cancelado (estados finales).
+end note
+
+footer EST-pedido · v1.1.0 · 2026-11-27 · P6 (revisión P5) · HU-26
 @enduml
