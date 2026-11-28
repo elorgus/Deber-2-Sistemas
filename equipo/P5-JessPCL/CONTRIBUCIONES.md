@@ -9,10 +9,12 @@
 
 | HU | Título | Sprint | Artefactos | PR · Issue | Revisor | Estado |
 |---|---|---|---|---|---|---|
-| HU-08 | Registro inicial de riesgos | S1 | `equipo/P5-JessPCL/HU-08-riesgos.md` (v1.1.0 en HU-27) | #15 · #9 | P4 | ✅ Fusionado (2026-11-23) |
-| HU-16 | Flujo A: recepción y actualización de existencias | S2 | `equipo/P5-JessPCL/HU-16-flujo-a-recepcion.md`, `ACT-FA-recepcion`, `SEC-FA-recepcion` | #17 · #47 | P4 | ✅ Aprobado y fusionado (2026-11-24) |
-| HU-17 | Flujo B: riesgo de agotamiento y reposición, ADR-006 | S2 | `equipo/P5-JessPCL/HU-17-flujo-b-reposicion.md`, `ACT-FB-reposicion`, `SEC-FB-reposicion`, `docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md` | #20 · #48 | P4 | ✅ Aprobado y fusionado (2026-11-24) |
-| HU-27 | Requisitos de calidad verificables | S3 | `equipo/P5-JessPCL/HU-27-requisitos-calidad.md` (33 RNF) | (por abrir) | P4 | 🔍 En revisión |
+| HU-08 | Registro inicial de riesgos | S1 | `docs/gestion/riesgos.md` (v1.1.1) | #15 · #9 | P4 | ✅ Fusionado (2026-11-23) |
+| HU-16 | Flujo A: recepción y actualización de existencias | S2 | `docs/arquitectura/flujos/flujo-a-recepcion.md` (v1.0.1), `ACT-FA-recepcion`, `SEC-FA-recepcion` | #17 · #47 | P4 | ✅ Aprobado y fusionado (2026-11-24) |
+| HU-17 | Flujo B: riesgo de agotamiento y reposición, ADR-006 | S2 | `docs/arquitectura/flujos/flujo-b-reposicion.md` (v1.1.0), `ACT-FB-reposicion`, `SEC-FB-reposicion`, `docs/adr/ADR-006-deteccion-riesgo-en-reposicion.md` | #20 · #48 | P4 | ✅ Aprobado y fusionado (2026-11-24) |
+| HU-27 | Requisitos de calidad verificables | S3 | `docs/arquitectura/requisitos-calidad.md` (33 RNF, v1.0.1) | #59 | P4 | ✅ Aprobado y fusionado (2026-11-27) |
+| HU-39 | Informe final | S4 | `entregables/informe/Informe-Smart-Inventory.docx` (v0.4.0, borrador) | #62 (draft) | P4 | 🟡 En curso: se actualiza a medida que se fusionan las HU |
+| — | Ubicación según BACKLOG §8.1 | S3 | Flujos A y B y sus diagramas (#79, cierra PC-08); HU-08 y HU-27 (este PR) | #79 | P4 | ✅ #79 fusionado (2026-11-27) |
 
 ## Hallazgos aportados al equipo
 
@@ -29,6 +31,8 @@
 |---|---|---|---|
 | #18 | HU-07 (anexo de SVC-04 y SVC-05) | P6 | Cambios solicitados (O-1); corregido por P6 con H-2 → aprobado y fusionado (2026-11-23) |
 | #19 | HU-15 (C4 N3 de SVC-03) | P7 | Comentario temprano con 5 ajustes (2026-11-23); P7 los incorporó en la v0.2.0 → **aprobado** (2026-11-24) |
+| #63 | HU-18 (flujo C) | P6 | Cambios solicitados (3 bloqueantes y 3 sugerencias); P6 los corrigió y regeneró los SVG → **aprobado** y fusionado (2026-11-26) |
+| #66 | HU-19 (C4 N3 de Flota y ADR-007) | P6 | Cambios solicitados (ADR-007 sin opciones, título, estado, ruta del diagrama); P6 los corrigió → **aprobado** y fusionado (2026-11-26) |
 | Contrato | HU-06 (contrato v1.0.0) | P1 | Aprobación de P5 con observaciones no bloqueantes (H-01 a H-07, PC-01 a PC-08); el acta del Sprint 1 (HU-10) registra la aprobación de los 7 |
 
 ## Historial
@@ -38,3 +42,4 @@
 | 2026-11-23 | Creación: HU-08, HU-16 y HU-17 |
 | 2026-11-23 | Revisiones de #18 y #19, aprobación del contrato; HU-16 y HU-17 pasan a revisión |
 | 2026-11-24 | HU-16 y HU-17 fusionadas; aprobación del #19; HU-27 en revisión |
+| 2026-11-27 | HU-27 fusionada; revisiones de #63 y #66; HU-39 en curso; los documentos pasan a las rutas de BACKLOG §8.1 |

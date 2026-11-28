@@ -2,15 +2,15 @@
 
 | Campo | Valor |
 |---|---|
-| Documento | `equipo/P5-JessPCL/HU-08-riesgos.md` (ubicación según `CONTRIBUTING.md` §2) |
+| Documento | `docs/gestion/riesgos.md` (ubicación según BACKLOG §8.1) |
 | Issue | #9 · HU-08: Registro inicial de riesgos del proyecto |
-| Versión | **1.1.0** |
-| Estado | Propuesto para revisión (Sprint 1 · HU-08) |
+| Versión | **1.1.1** |
+| Estado | Aprobado: PR #15 (v1.0.0) y PR #59 (v1.1.0) fusionados |
 | Dueño | P5 · Diseñador de procesos y calidad |
 | Revisor | P4 |
-| Fecha | 2026-11-23 |
-| Contrato de referencia | [`docs/ARQUITECTURA_BASE.md`](../../docs/ARQUITECTURA_BASE.md) v1.0.0 (§11.2 RNF semilla, §11.3 FAL) |
-| Backlog de referencia | [`docs/BACKLOG.md`](../../docs/BACKLOG.md) v1.0.0 (HU-08, §6, §7) |
+| Fecha | 2026-11-27 |
+| Contrato de referencia | [`docs/ARQUITECTURA_BASE.md`](../ARQUITECTURA_BASE.md) v1.0.0 (§11.2 RNF semilla, §11.3 FAL) |
+| Backlog de referencia | [`docs/BACKLOG.md`](../BACKLOG.md) v1.0.0 (HU-08, §6, §7) |
 | Criterio de la rúbrica | Gestión del proyecto y sprints |
 
 > **Identificadores locales.** Este registro numera los riesgos como `RIE-nn` y los hallazgos como `H-nn`.
@@ -292,3 +292,4 @@ Ninguno de estos hallazgos modifica el contrato por sí mismo: cada uno se trami
 |---|---|---|---|---|
 | 1.0.0 | 2026-11-23 | P5 | Registro inicial: 18 riesgos, alineación con §11.2 y §11.3, hallazgos H-01 a H-07 | HU-08 |
 | 1.1.0 | 2026-11-24 | P5 | Revisión del Sprint 3: RIE-05 y RIE-16 pasan a *En mitigación*; FAL-04 a FAL-09 quedan cubiertos por RNF-DIS-05 a RNF-DIS-10 | HU-27 |
+| 1.1.1 | 2026-11-27 | P5 | Pasa a `docs/gestion/riesgos.md`, la ubicación que pide BACKLOG para HU-08; se actualizan el estado y los enlaces. Sin cambios de contenido | HU-08 |
