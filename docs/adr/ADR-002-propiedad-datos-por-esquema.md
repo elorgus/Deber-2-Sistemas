@@ -1,4 +1,4 @@
-[ADR-002-propiedad-datos-por-esquema.md](https://github.com/user-attachments/files/35381867/ADR-002-propiedad-datos-por-esquema.md)
+[ADR-002-propiedad-datos-por-esquema (1).md](https://github.com/user-attachments/files/35537353/ADR-002-propiedad-datos-por-esquema.1.md)
 # ADR-002: Propiedad de datos por módulo con aislamiento por esquema
 
 | Campo | Valor |
@@ -10,8 +10,8 @@
 | Revisor | P7 |
 
 ## Contexto
-
-Con el monolito modular ([ADR-001](./ADR-001-monolito-modular-evolutivo.md)), cuatro
+ular-ev
+Con el monolito modular ([ADR-001](./ADR-001-monolito-modolutivo.md)), cuatro
 módulos (SVC-01 a SVC-04) comparten un despliegue (UD-1). Eso hace tentador que un
 módulo lea directamente las tablas de otro. Si lo hace, el acoplamiento por datos
 vuelve inútil cualquier extracción futura y deja de haber una fuente única de
@@ -86,6 +86,6 @@ aislamiento por esquema**.
 ## Historias y diagramas relacionados
 
 - Historias: [HU-20](../BACKLOG.md) (este ADR, §4.2), [HU-12](../BACKLOG.md), [HU-13](../BACKLOG.md), [HU-14](../BACKLOG.md).
-- Diagramas: [`C4N2-contenedores` (fuente)](../../diagramas/c4/src/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../../diagramas/c4/export/C4N2-contenedores.svg): un esquema lógico por SVC y nota PRI-02.
+- Diagramas: [`C4N2-contenedores` (fuente)](../diagramas/fuente/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../diagramas/export/C4N2-contenedores.svg): un esquema lógico por SVC y nota PRI-02.
 - ADR relacionados: [ADR-001](./ADR-001-monolito-modular-evolutivo.md), [ADR-004](./ADR-004-sincrono-y-eventos-con-outbox.md), [ADR-009](./ADR-009-replicas-locales-de-referencia.md).
 - Contrato: [ARQUITECTURA_BASE](../ARQUITECTURA_BASE.md) §2.2 (PRI-01 a PRI-04), §2.3 (Aislamiento de datos), §5; RNF-MAN-02.
