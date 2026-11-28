@@ -1,4 +1,4 @@
-[ADR-001-monolito-modular-evolutivo.md](https://github.com/user-attachments/files/35381851/ADR-001-monolito-modular-evolutivo.md)
+[ADR-001-monolito-modular-evolutivo (1).md](https://github.com/user-attachments/files/35537344/ADR-001-monolito-modular-evolutivo.1.md)
 # ADR-001: Monolito modular evolutivo con unidades de despliegue
 
 | Campo | Valor |
@@ -103,6 +103,6 @@ cruzada (`BACKLOG.md` §6.3) y RNF-MAN-02.
 ## Historias y diagramas relacionados
 
 - Historias: [HU-20](../BACKLOG.md) (este ADR, §4.2), [HU-12](../BACKLOG.md), [HU-19](../BACKLOG.md).
-- Diagramas: [`C4N2-contenedores` (fuente)](../../diagramas/c4/src/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../../diagramas/c4/export/C4N2-contenedores.svg): UD-1 a UD-5 y nota de evolución.
+- Diagramas: [`C4N2-contenedores` (fuente)](../diagramas/fuente/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../diagramas/export/C4N2-contenedores.svg): UD-1 a UD-5 y nota de evolución.
 - ADR relacionados: [ADR-002](./ADR-002-propiedad-datos-por-esquema.md), [ADR-004](./ADR-004-sincrono-y-eventos-con-outbox.md), [ADR-007](./ADR-007-flota-como-unidad-separada.md).
 - Contrato: [ARQUITECTURA_BASE](../ARQUITECTURA_BASE.md) §2.1, §2.3, §2.4, §7.3; PRI-09; RNF-REN-02, RNF-DIS-04, RNF-MAN-02.
