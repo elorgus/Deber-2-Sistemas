@@ -759,7 +759,8 @@ smart-inventory/
 │   └── versionamiento/
 │       └── politica-versionamiento.md # HU-21, HU-36 (P3)
 │
-├── diagramas/                         # Fuentes y exportaciones, siempre en pareja
+├── docs/
+│   ├── diagramas/                     # Fuentes y exportaciones, siempre en pareja
 │   ├── README.md                      # Convención §7.3 y cómo exportar
 │   ├── c4/
 │   │   ├── src/                       # C4N1-contexto.puml, C4N2-contenedores.puml, C4N3-SVC02-inventario.puml ...
