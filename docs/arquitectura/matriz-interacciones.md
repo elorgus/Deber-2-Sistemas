@@ -1,10 +1,9 @@
-[matriz_de_interacciones_completa.md](https://github.com/user-attachments/files/35535127/matriz_de_interacciones_completa.md)
 # Smart Inventory · Matriz de Interacciones Completa
 
 | Campo | Valor |
 |---|---|
 | Documento | `docs/arquitectura/matriz-interacciones.md` |
-| Versión | **1.0.0** |
+| Versión | **1.1.0** |
 | Estado | Propuesto para revisión (Sprint 3 · HU-24) |
 | Responsable | P6 · Diseñador de operación (asumida en suplencia) |
 | Revisor | P5 · Diseñador de procesos y calidad |
@@ -21,7 +20,7 @@ En la arquitectura de **Smart Inventory**, una **Interacción (`INT-nn`)** repre
 * **Síncrono (`S`):** El emisor espera una respuesta inmediata para continuar su ejecución (utilizado para comandos de usuario, consultas de datos exactos a la fuente de verdad o validación de invariantes críticas como la reserva FEFO). Incluye protección mediante tiempos límite y *Circuit Breaker*.
 * **Asíncrono (`A`):** El emisor publica un hecho de negocio ya ocurrido mediante eventos (`EVT-nn`) a través del broker (`TRX-03`) aplicando el patrón *Outbox* e idempotencia en los consumidores, desacoplando los tiempos de respuesta y garantizando consistencia eventual acotada.
 
-Esta matriz consolida las 34 interacciones canónicas definidas en `ARQUITECTURA_BASE.md` §7.2, garantizando total coherencia con el diagrama de contenedores (`C4N2-contenedores`) y los diagramas de secuencia de los flujos de negocio (`SEC-FA`, `SEC-FB`, `SEC-FC` y `SEC-VERTICAL`).
+Esta matriz consolida las 34 interacciones canónicas definidas en `ARQUITECTURA_BASE.md` §7.2, garantizando total coherencia con el diagrama de contenedores (`C4N2-contenedores`) y los diagramas de secuencia de los flujos de negocio (`SEC-FA-recepcion`, `SEC-FB-reposicion` y `SEC-FC-reserva-despacho`). Las flechas que todavía no tienen INT se listan en §3.1.
 
 ---
 
@@ -96,13 +95,38 @@ Comprende el ciclo completo del pedido: ingreso, reserva síncrona con FEFO, pic
 ## 3. Verificación de Coherencia Arquitectónica
 
 * **Alineación con C4 Nivel 2 (`C4N2-contenedores`):** Todas las interacciones síncronas (`S`) respetan los límites de contenedor y el máximo de dos saltos (`TRX-01 → TRX-02 → SVC-nn`, y únicamente `SVC-04 → SVC-02` en `INT-19`). Ningún módulo accede directamente al esquema de datos de otro (`PRI-02`, `RNF-MAN-02`).
-* **Alineación con Secuencias (`SEC-FA`, `SEC-FB`, `SEC-FC`, `SEC-VERTICAL`):**
-  * **Flujo A (`SEC-FA`):** Cubierto íntegramente por `INT-01`, `INT-06`, `INT-07`, `INT-08` e `INT-09`.
-  * **Flujo B (`SEC-FB`):** Cubierto íntegramente por `INT-10`, `INT-11`, `INT-12`, `INT-13`, `INT-14`, `INT-15` e `INT-16`.
-  * **Flujo C (`SEC-FC`):** Cubierto íntegramente por `INT-17` a `INT-33`.
+* **Alineación con Secuencias (`SEC-FA-recepcion`, `SEC-FB-reposicion`, `SEC-FC-reserva-despacho`):**
+  * **Flujo A:** usa `INT-01`, `INT-06`, `INT-07`, `INT-08` e `INT-09`, más una flecha «INT por definir» (P-01 en §3.1).
+  * **Flujo B:** usa `INT-01`, `INT-03`, `INT-10` a `INT-14` e `INT-16`, más cuatro flechas «INT por definir» (P-02 a P-05).
+  * **Flujo C:** usa `INT-17` a `INT-32`, más dos flechas «INT por definir» (P-06 y P-07).
+  * Todas las demás flechas de las tres secuencias tienen su INT. Las 7 sin ID se listan en §3.1 y quedan pendientes de aprobación como cambio MINOR del contrato (ARQUITECTURA_BASE §0.3). Por eso CA3 de HU-24 se cumple por completo solo cuando P1 las apruebe y se numeren como INT-35 en adelante.
+  * El recorrido integral (HU-38) se verificará contra esta matriz cuando exista su secuencia.
+
+### 3.1 Interacciones pendientes de aprobación
+
+Aparecen en las secuencias como «INT por definir». **No son IDs oficiales**: se usan los códigos locales P-nn hasta que se aprueben.
+
+| Código | Origen → destino | Propósito | Modo | EVT | Flujo | Origen del hallazgo |
+|---|---|---|---|---|---|---|
+| P-01 | SVC-03 → TRX-03 → SVC-02, SVC-05 | Mantener la réplica de OC (recepciones y llegadas esperadas) | A | EVT-19, EVT-20 | A, B | PC-01 (flujo A) |
+| P-02 | TRX-03 → TRX-04 | Actualizar VL-01 y VL-02 con la alerta, la sugerencia y la OC | A | EVT-14 a EVT-19 | B | PC-05 (a) (flujo B) |
+| P-03 | TRX-03 → SVC-03 | Llevar la demanda no atendida a la réplica de SVC-03 | A | EVT-09 | B, C | PC-05 (b) (flujo B) |
+| P-04 | TRX-02 → SVC-03 | Consultar el detalle de la sugerencia vigente | S | — | B | PC-05 (c) (flujo B) |
+| P-05 | TRX-02 → SVC-03 | Configurar la política de reposición del SKU (OPS-04) | S | — | B | PC-05 (d) (flujo B) |
+| P-06 | TRX-02 → SVC-04 | Cancelar un pedido (OPS-05) | S | EVT-28 | C | Flujo C, §7 |
+| P-07 | TRX-03 → TRX-04 | Actualizar VL-03 con el ciclo del pedido | A | EVT-21 a EVT-28 | C | Flujo C, §7 |
 
 ---
 
 ## 4. Nota de Alcance Técnico
 
 > **Exclusión explícita según `ARQUITECTURA_BASE.md` §14:** Este documento describe exclusivamente la arquitectura conceptual de interacciones (origen, destino, propósito, modo `S`/`A`, impacto en el negocio, resiliencia ante fallos y eventos asociados). **No incluye ni define** diseños detallados de APIs, rutas o *endpoints*, verbos o métodos HTTP, códigos de estado, contratos JSON/OpenAPI, esquemas de mensajes ni configuraciones técnicas de colas o del broker (`TRX-03`), los cuales corresponden al ámbito de *Desarrollo de Software Moderno*.
+
+---
+
+## Historial de cambios de este documento
+
+| Versión | Fecha | Autor | Cambio | HU |
+|---|---|---|---|---|
+| 1.0.0 | 2026-11-27 | P1 (suplencia de P6) | Versión inicial: 34 INT por flujo y verificación de coherencia | HU-24 |
+| 1.1.0 | 2026-11-27 | P5 (revisora) | Corrige §3: las secuencias tienen 7 flechas sin INT, que ahora se listan en §3.1 como pendientes de aprobación (CA3). Quita la referencia a la secuencia del recorrido vertical, que aún no existe (HU-38), y el enlace suelto a un adjunto en la línea 1 | HU-24 |

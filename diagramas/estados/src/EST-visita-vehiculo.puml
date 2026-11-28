@@ -10,5 +10,13 @@ EnOperacion --> Despachada : INT-28 Salida garita o INT-33 Manual / EVT-35 Vehic
 
 Despachada --> [*]
 
-footer EST-visita-vehiculo · v1.0.0 · 2026-11-27 · P6 · HU-26
+note bottom of Despachada
+  <b>Transiciones inválidas</b>
+  • Asignar muelle a una visita que no está EnPatio.
+  • Despachar una visita que no pasó por EnMuelle y EnOperacion.
+  • Registrar dos veces la llegada (EVT-33) de la misma visita.
+  • Salir de Despachada (estado final).
+end note
+
+footer EST-visita-vehiculo · v1.1.0 · 2026-11-27 · P6 (revisión P5) · HU-26
 @enduml

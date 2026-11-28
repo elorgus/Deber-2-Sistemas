@@ -10,5 +10,11 @@ Disponible --> FueraDeServicio : Bloqueo por mantenimiento o incidencia
 Ocupado --> FueraDeServicio : Incidencia crítica tras desalojo
 FueraDeServicio --> Disponible : Habilitación operativa en SVC-05
 
-footer EST-muelle · v1.0.0 · 2026-11-27 · P6 · HU-26
+note bottom of FueraDeServicio
+  <b>Transiciones inválidas</b>
+  • Asignar un muelle Ocupado o FueraDeServicio (TX-06 lo rechaza).
+  • Liberar (EVT-36) un muelle que no está Ocupado.
+end note
+
+footer EST-muelle · v1.1.0 · 2026-11-27 · P6 (revisión P5) · HU-26
 @enduml
