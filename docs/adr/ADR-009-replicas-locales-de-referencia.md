@@ -1,3 +1,4 @@
+[ADR-009-replicas-locales-de-referencia (1).md](https://github.com/user-attachments/files/35537315/ADR-009-replicas-locales-de-referencia.1.md)
 # ADR-009: Réplicas locales de datos de referencia en lugar de consultas síncronas
 
 | Campo | Valor |
@@ -36,7 +37,7 @@ SVC-02, SVC-03, SVC-04 y SVC-05 llaman a una operación de SVC-01 en cada valida
 Cada módulo que necesita datos de referencia mantiene una **copia de solo lectura** que actualiza al consumir los eventos del dueño (PRI-04). El dueño sigue siendo SVC-01.
 
 - **A favor:** validación local, sin salto y sin depender de SVC-01 en línea. Reutiliza interacciones que ya existen (INT-04, INT-16) y los mecanismos ya decididos en [ADR-004](./ADR-004-sincrono-y-eventos-con-outbox.md): eventos con Outbox, consumidores idempotentes y orden por entidad.
-- **En contra:** consistencia eventual (CE-02: ≤ 5 s), datos duplicados en cada módulo y lógica de sincronización por mantener.
+- **En contra:** consistencia eventual (CE-02: ≤ 5 s en las réplicas de catálogo y ubicaciones), datos duplicados en cada módulo y lógica de sincronización por mantener.
 
 ### Alternativa C: Leer directamente el esquema de SVC-01
 
@@ -60,7 +61,7 @@ Se adopta la **Alternativa B**: **réplicas locales de solo lectura de los datos
 
    SVC-01 y SVC-06 no tienen réplicas (§3.1, §3.6).
 2. **Cómo se accede:** a través del puerto de salida de solo lectura `ReplicaCatalogo` (§10), de modo que el dominio no depende de cómo se alimente la réplica (DIP, PRI-08).
-3. **Cómo se alimenta:** por eventos publicados por el dueño vía Outbox (PRI-06, INT-04 y INT-16), con `ConsumidorIdempotente` y orden por entidad. El retraso máximo objetivo es de **5 s** (CE-02).
+3. **Cómo se alimenta:** por eventos publicados por el dueño vía Outbox (PRI-06, INT-04 y INT-16), con `ConsumidorIdempotente` y orden por entidad. El objetivo de retraso de **≤ 5 s (CE-02) aplica solo a las réplicas de catálogo y ubicaciones** (EVT-01 a EVT-03). Para las demás réplicas (OC emitidas, disponible agregado, demanda no atendida, pronóstico, muelle asignado) el contrato no fija un objetivo propio de retraso de réplica **[PROPUESTA: definirlo en HU-27]**. CE-03 sí fija ≤ 5 s para detectar el riesgo de agotamiento desde EVT-05, que es el uso de la réplica de disponible agregado.
 4. **Qué nunca se decide con una réplica:** los invariantes críticos. El disponible y las reservas se verifican siempre en SVC-02 dentro de TX-02 (RNF-CON-01, S2). La réplica de "disponible agregado por SKU" en SVC-03 solo sirve para evaluar el riesgo de agotamiento, que tolera retraso (CE-03, PRI-05).
 5. **Cuándo sí se consulta al dueño:** si una operación necesita el dato exacto de la fuente de verdad en ese momento (S3), usa una operación síncrona del dueño y no la réplica. Es el criterio ya vigente en INT-15.
 
@@ -74,7 +75,7 @@ Se adopta la **Alternativa B**: **réplicas locales de solo lectura de los datos
 
 ## Consecuencias negativas
 
-- **Consistencia eventual (CE-02):** un SKU recién creado tarda hasta unos segundos en ser recibible. En sentido inverso, un SKU recién descontinuado o una ubicación recién bloqueada podría aceptar una recepción durante esa ventana. Ese caso no está tratado en CE-02. Se asume como riesgo residual y se corrige con un ajuste, porque los movimientos nunca se editan (§3.2).
+- **Consistencia eventual (CE-02, réplicas de catálogo y ubicaciones):** un SKU recién creado tarda hasta unos segundos en ser recibible. En sentido inverso, un SKU recién descontinuado o una ubicación recién bloqueada podría aceptar una recepción durante esa ventana. Ese caso no está tratado en CE-02. Se asume como riesgo residual y se corrige con un ajuste, porque los movimientos nunca se editan (§3.2).
 - **Datos duplicados:** cuatro módulos mantienen copias de referencia y cada copia necesita su propia sincronización.
 - **Con el broker caído (FAL-01), las réplicas se atrasan:** los módulos siguen funcionando con datos viejos hasta que los eventos pendientes se publiquen (INT-04, "réplica atrasada").
 - **No hay indicador de retraso de réplica:** §8.2 mide solo la frescura de las vistas, no la de las réplicas **[PROPUESTA: indicador de retraso de réplica, a decidir en HU-27]**.
@@ -84,7 +85,7 @@ Se adopta la **Alternativa B**: **réplicas locales de solo lectura de los datos
 ## Historias y diagramas relacionados
 
 - Historias: [HU-29](../BACKLOG.md) (este ADR), [HU-12](../BACKLOG.md), [HU-14](../BACKLOG.md).
-- Diagramas: [`C4N2-contenedores` (fuente)](../../diagramas/c4/src/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../../diagramas/c4/export/C4N2-contenedores.svg): INT-04 y esquema propio por módulo.
+- Diagramas: [`C4N2-contenedores` (fuente)](../diagramas/fuente/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../diagramas/export/C4N2-contenedores.svg): INT-04 y esquema propio por módulo.
 - Documento: [Disponibilidad y escalabilidad](../arquitectura/disponibilidad-escalabilidad.md) (FAL-01 y FAL-02).
 - ADR relacionados: [ADR-001](./ADR-001-monolito-modular-evolutivo.md), [ADR-002](./ADR-002-propiedad-datos-por-esquema.md), [ADR-004](./ADR-004-sincrono-y-eventos-con-outbox.md), [ADR-007](./ADR-007-flota-como-unidad-separada.md).
 - Contrato: [ARQUITECTURA_BASE](../ARQUITECTURA_BASE.md) §2.2 (PRI-04), §3, §7.1, §7.3 (CE-02), §10 (`ReplicaCatalogo`); RNF-REN-02, RNF-DIS-01.
