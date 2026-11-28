@@ -1,4 +1,4 @@
-[ADR-004-sincrono-y-eventos-con-outbox.md](https://github.com/user-attachments/files/35381971/ADR-004-sincrono-y-eventos-con-outbox.md)
+[ADR-004-sincrono-y-eventos-con-outbox (1).md](https://github.com/user-attachments/files/35537361/ADR-004-sincrono-y-eventos-con-outbox.1.md)
 # ADR-004: Comandos síncronos y eventos de negocio con Outbox e idempotencia
 
 | Campo | Valor |
@@ -94,6 +94,6 @@ estén caídos.
 ## Historias y diagramas relacionados
 
 - Historias: [HU-20](../BACKLOG.md) (este ADR, §4.2), [HU-12](../BACKLOG.md), [HU-24](../BACKLOG.md), [HU-30](../BACKLOG.md).
-- Diagramas: [`C4N2-contenedores` (fuente)](../../diagramas/c4/src/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../../diagramas/c4/export/C4N2-contenedores.svg): relaciones S y A con su INT; secuencias de los flujos [A](../arquitectura/flujos/flujo-a-recepcion.md), [B](../arquitectura/flujos/flujo-b-reposicion.md) y [C](../arquitectura/flujos/flujo-c-reserva-despacho.md).
+- Diagramas: [`C4N2-contenedores` (fuente)](../diagramas/fuente/C4N2-contenedores.puml) · [`C4N2-contenedores` (SVG)](../diagramas/export/C4N2-contenedores.svg): relaciones S y A con su INT; secuencias de los flujos [A](../arquitectura/flujos/flujo-a-recepcion.md), [B](../arquitectura/flujos/flujo-b-reposicion.md) y [C](../arquitectura/flujos/flujo-c-reserva-despacho.md).
 - ADR relacionados: [ADR-001](./ADR-001-monolito-modular-evolutivo.md), [ADR-002](./ADR-002-propiedad-datos-por-esquema.md), [ADR-005](./ADR-005-proyeccion-de-lectura-cqrs.md), [ADR-009](./ADR-009-replicas-locales-de-referencia.md).
 - Contrato: [ARQUITECTURA_BASE](../ARQUITECTURA_BASE.md) §6.1, §7.1, §7.3 (TX-01 a TX-06, CE-01 a CE-07); PRI-05 a PRI-07; FAL-01, FAL-08.
