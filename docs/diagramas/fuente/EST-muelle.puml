@@ -1,0 +1,14 @@
+@startuml
+title EST-muelle · Ciclo de vida de Muelle (SVC-05)
+
+[*] --> Disponible : Alta de muelle en SVC-05
+
+Disponible --> Ocupado : Asignar muelle a visita / EVT-34 MuelleAsignado
+Ocupado --> Disponible : Salida de vehículo / EVT-36 MuelleLiberado
+
+Disponible --> FueraDeServicio : Bloqueo por mantenimiento o incidencia
+Ocupado --> FueraDeServicio : Incidencia crítica tras desalojo
+FueraDeServicio --> Disponible : Habilitación operativa en SVC-05
+
+footer EST-muelle · v1.0.0 · 2026-11-27 · P6 · HU-26
+@enduml

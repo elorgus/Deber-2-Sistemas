@@ -1,0 +1,25 @@
+@startuml
+title EST-amr · Ciclo de vida de AMR (SVC-05)
+
+[*] --> Disponible : Alta de unidad en SVC-05
+
+Disponible --> EnMision : EVT-29 MisionAmrAsignada / EVT-31 EstadoAmrCambiado
+EnMision --> Disponible : EVT-30 MisionAmrCompletada / EVT-31 EstadoAmrCambiado
+
+Disponible --> Cargando : Batería bajo umbral (INT-23) / EVT-31 EstadoAmrCambiado
+EnMision --> Cargando : Fin de misión con batería baja / EVT-31 EstadoAmrCambiado
+Cargando --> Disponible : Carga completada (INT-23) / EVT-31 EstadoAmrCambiado
+
+Disponible --> Detenido : Obstáculo o pausa operativa (INT-23) / EVT-31 EstadoAmrCambiado
+EnMision --> Detenido : Obstáculo o pausa operativa (INT-23) / EVT-31 EstadoAmrCambiado
+Detenido --> Disponible : Despeje sin misión activa / EVT-31 EstadoAmrCambiado
+Detenido --> EnMision : Reanudación de misión activa / EVT-31 EstadoAmrCambiado
+
+Disponible --> FueraDeServicio : Sin señal >10 s o falla hardware / EVT-31 EstadoAmrCambiado
+EnMision --> FueraDeServicio : Sin señal >10 s o falla hardware / EVT-31 EstadoAmrCambiado
+Cargando --> FueraDeServicio : Sin señal >10 s o falla hardware / EVT-31 EstadoAmrCambiado
+Detenido --> FueraDeServicio : Sin señal >10 s o falla hardware / EVT-31 EstadoAmrCambiado
+FueraDeServicio --> Disponible : Mantenimiento / señal restablecida / EVT-31 EstadoAmrCambiado
+
+footer EST-amr · v1.0.0 · 2026-11-27 · P6 · HU-26
+@enduml
