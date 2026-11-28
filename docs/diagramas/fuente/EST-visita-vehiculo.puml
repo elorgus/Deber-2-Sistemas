@@ -1,0 +1,14 @@
+@startuml
+title EST-visita-vehiculo · Ciclo de vida de Visita de vehículo (SVC-05)
+
+[*] --> Esperada : EVT-19 OrdenCompraEmitida o INT-27 Vehículo confirmado
+
+Esperada --> EnPatio : INT-28 Garita o INT-33 Manual / EVT-33 VehiculoArribado
+EnPatio --> EnMuelle : AsignadorMuelles o INT-33 Manual / EVT-34 MuelleAsignado
+EnMuelle --> EnOperacion : Inicio de carga o descarga en muelle
+EnOperacion --> Despachada : INT-28 Salida garita o INT-33 Manual / EVT-35 VehiculoDespachado
+
+Despachada --> [*]
+
+footer EST-visita-vehiculo · v1.0.0 · 2026-11-27 · P6 · HU-26
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+title EST-mision-amr · Ciclo de vida de Misión AMR (SVC-05)
+
+[*] --> Pendiente : EVT-24 PreparacionSolicitada (crear misión)
+
+Pendiente --> Asignada : EstrategiaAsignacionAmr / EVT-29 MisionAmrAsignada
+Asignada --> EnCurso : INT-22 Confirmación de inicio por EXT-03
+EnCurso --> Completada : INT-23 / EVT-30 MisionAmrCompletada
+
+Asignada --> Fallida : Pérdida de señal (>10 s), fallo AMR o abortar (OPS-08)
+EnCurso --> Fallida : Pérdida de señal (>10 s), fallo AMR o abortar (OPS-08)
+Fallida --> Pendiente : Comando reasignar misión (INT-33 / OPS-08)
+
+Completada --> [*]
+
+footer EST-mision-amr · v1.0.0 · 2026-11-27 · P6 · HU-26
+@enduml

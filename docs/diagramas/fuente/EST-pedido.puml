@@ -1,0 +1,31 @@
+@startuml
+title EST-pedido · Ciclo de vida de Pedido (SVC-04)
+
+[*] --> Registrado : Comando registrar pedido / EVT-21 PedidoRegistrado
+
+Registrado --> Reservado : INT-19 Reserva exitosa / EVT-22 PedidoReservado
+Registrado --> EnEspera : INT-19 Sin stock disponible / EVT-23 PedidoEnEspera
+Registrado --> PendienteReserva : INT-19 Inventario no responde (sin evento)
+
+PendienteReserva --> Reservado : Reintento INT-19 exitoso / EVT-22 PedidoReservado
+PendienteReserva --> EnEspera : Reintento INT-19 sin stock / EVT-23 PedidoEnEspera
+
+EnEspera --> Reservado : Reevaluación con stock / EVT-22 PedidoReservado
+
+Reservado --> EnPreparacion : Iniciar preparación / EVT-24 PreparacionSolicitada
+EnPreparacion --> Preparado : INT-25 Confirmar preparación / EVT-25 PreparacionCompletada
+Preparado --> EnDespacho : Solicitar despacho / EVT-26 DespachoSolicitado
+EnDespacho --> Despachado : EVT-35 VehiculoDespachado / EVT-27 PedidoDespachado
+
+Registrado --> Cancelado : Comando cancelar pedido / EVT-28 PedidoCancelado
+PendienteReserva --> Cancelado : Comando cancelar pedido / EVT-28 PedidoCancelado
+EnEspera --> Cancelado : Comando cancelar pedido / EVT-28 PedidoCancelado
+Reservado --> Cancelado : Comando cancelar pedido / EVT-28 PedidoCancelado
+EnPreparacion --> Cancelado : Comando cancelar pedido (OPS-05) / EVT-28 PedidoCancelado
+Preparado --> Cancelado : Comando cancelar pedido / EVT-28 PedidoCancelado
+
+Despachado --> [*]
+Cancelado --> [*]
+
+footer EST-pedido · v1.0.0 · 2026-11-27 · P6 · HU-26
+@enduml
