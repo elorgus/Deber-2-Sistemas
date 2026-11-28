@@ -8,7 +8,7 @@
 | Artefacto | Versión | Cambio | HU |
 |---|---|---|---|
 | docs/arquitectura/documento-arquitectura.md | 1.0.0 | Documento consolidado de arquitectura | HU-37 |
-| docs/trazabilidad/matriz-trazabilidad.md | 1.0.0 | Matriz de trazabilidad final | HU-35 |
+| docs/trazabilidad/matriz-trazabilidad.md | 1.0.0 | Matriz HN → SVC → EVT/INT → diagramas → ADR → RNF → versión; 19 de 19 HN de prioridad M trazadas, matriz inversa sin huérfanos y hallazgos T-01 a T-06 para HU-36. | HU-35 |
 | docs/arquitectura/flujos/recorrido-integral.md | 1.0.0 | Recorrido integral del flujo vertical | HU-38 |
 | docs/trazabilidad/auditoria-versionamiento.md | 1.0.0 | Auditoría de versiones | HU-36 |
 | docs/trazabilidad/verificacion-entrega.md | 1.0.0 | Checklist de la rúbrica | HU-41 |
