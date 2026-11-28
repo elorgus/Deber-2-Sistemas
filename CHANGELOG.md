@@ -1,5 +1,19 @@
 # Registro de Cambios (CHANGELOG)
 
+## diseno-v0.4.0 · Sprint 4 (En progreso)
+
+**HU incluidas:** HU-35
+
+**Artefactos**
+
+| Artefacto | Versión | Cambio | HU |
+|---|---|---|---|
+| docs/trazabilidad/matriz-trazabilidad.md | 1.0.0 | Matriz HN → SVC → EVT/INT → diagramas → ADR → RNF → versión; 19 de 19 HN de prioridad M trazadas, matriz inversa sin huérfanos y hallazgos T-01 a T-06 para HU-36. | HU-35 |
+
+**ADR aceptados:** ninguno
+
+---
+
 ## diseno-v0.3.0 · 2026-11-27 · Sprint 3
 
 **HU incluidas:** HU-24, HU-25, HU-26, HU-27, HU-28, HU-29, HU-30, HU-31, HU-32, HU-33

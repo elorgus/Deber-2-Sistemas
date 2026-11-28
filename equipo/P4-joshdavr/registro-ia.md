@@ -21,3 +21,17 @@
 - La cancelación de la OC y la expiración de la reserva no tienen disparador en el contrato: se registraron como Q-3 y Q-4 sin inventar nombres.
 - Se verificó que cada ID citado (EVT, INT, TX, OPS, ROL, FAL, HN) existe en el contrato o en el backlog.
 - Las exportaciones SVG se generaron con Graphviz a partir del mismo contenido de las fuentes `.puml`. Si el revisor prefiere el estilo de PlantUML, basta con volver a exportar las fuentes.
+
+---
+
+## HU-35 · Matriz de trazabilidad (2026-11-27)
+
+**Prompt (resumen):** "Resuelve el issue #87 (HU-35): matriz de trazabilidad con la cadena HN → SVC → EVT/INT → diagramas → ADR → RNF → versión, el 100 % de las HN de prioridad M y sin huérfanos. Usa solo los artefactos que existen en `main` (release `diseno-v0.3.0`) y no inventes vínculos."
+
+**Qué se aceptó**
+- `docs/trazabilidad/matriz-trazabilidad.md`: catálogo de artefactos con versión, matriz de las 19 HN M, HN S y C, matriz inversa (artefacto → HN) y verificación de CA1 a CA3.
+
+**Qué se corrigió o verificó**
+- Con un script se verificó que todos los IDs citados existen en el contrato, el backlog o el documento de RNF, y que cada diagrama de una fila muestra al menos un EVT o INT de esa HN. Las excepciones (C4N1 por roles; CLS-SOLID por clases canónicas) se revisaron a mano y se documentaron en §1.
+- Se agregó INT-27 a HN-19 para justificar el vínculo con CLS-SOLID-flota.
+- Las versiones se tomaron de la leyenda o cabecera de cada archivo. Las diferencias con el CHANGELOG se reportaron como hallazgos (T-01 a T-06) sin modificar artefactos de otros integrantes.
