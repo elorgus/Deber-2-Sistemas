@@ -1,0 +1,81 @@
+@startuml
+title Flujo vertical · Recorrido integral: recepción → stock → alerta → reposición (Secuencia)
+caption SEC-VERTICAL-recorrido-integral · v1.0.0 · 2026-11-27 · CamGranda (P6) · HU-38
+autonumber
+
+actor "ROL-01\nOperador de bodega" as OB
+actor "ROL-03\nComprador" as CO
+participant "TRX-02\nCapa de Aplicación" as APP
+participant "SVC-02\nInventario" as INV
+participant "SVC-04\nPedidos y Fulfillment" as PED
+participant "SVC-03\nReposición y Compras" as REP
+participant "SVC-05\nFlota y Operación" as FLO
+participant "EXT-05\nGarita / Patio" as GAR
+participant "EXT-01\nERP corporativo" as ERP
+queue "TRX-03\nBroker de eventos" as BRK
+database "TRX-04\nProyección de lectura" as PRY
+
+== Paso 1 · Recepción del SKU X · Dueño: SVC-02 · Modo: S ==
+OB -> APP : Registrar recepción en el Dashboard\nINT-01 (TRX-01 → TRX-02) (S)
+APP -> INV : INT-06 Registrar recepción (S)\n(lote, vencimiento, ubicación)
+note over PRY : Dashboard: sin cambio visible
+
+== Paso 2 · Inventario guarda la recepción · Dueño: SVC-02 · Modo: A ==
+note over INV : TX-01: lote + movimiento + saldo + outbox
+INV --> APP : Recepción confirmada
+INV ->> BRK : INT-07: EVT-04 RecepcionRegistrada,\nEVT-05 SaldoActualizado
+BRK ->> PRY : INT-08: VL-01 unidades, VL-04 y VL-06
+
+== Paso 3 · Los pedidos consumen stock · Dueño: SVC-04 → SVC-02 · Modo: S y A ==
+PED -> INV : INT-19 Solicitar reserva FEFO (S)
+note over INV : TX-02: reserva FEFO (todo o nada)
+INV --> PED : Reserva confirmada
+INV ->> BRK : INT-20: EVT-08 ReservaConfirmada,\nEVT-05 SaldoActualizado
+PED ->> BRK : EVT-27 PedidoDespachado (ver SEC-FC)
+BRK ->> INV : INT-30: EVT-27 → registrar salida
+note over INV : TX-03: consume reserva + movimiento + saldo
+INV ->> BRK : EVT-11 SalidaRegistrada,\nEVT-05 SaldoActualizado
+BRK ->> PRY : INT-08: VL-01\nVL-03 (INT por definir)
+
+== Paso 4 · Detección del riesgo de agotamiento · Dueño: SVC-03 · Modo: A ==
+BRK ->> REP : INT-10: EVT-05 → evaluar política de X
+note over REP : Disponible de X < mínimo
+REP ->> BRK : INT-11: EVT-14 RiesgoAgotamientoDetectado
+BRK ->> PRY : INT-08: VL-01 «Productos bajo mínimo»\nVL-02 alerta (INT por definir)
+
+== Paso 5 · Cálculo de la sugerencia · Dueño: SVC-03 · Modo: A ==
+note over REP : EstrategiaReposicion:\nmínimo, demanda y lead time
+REP ->> BRK : INT-11: EVT-16 SugerenciaReposicionGenerada
+BRK ->> PRY : VL-02 botón «Aprobar» (INT por definir)
+
+== Paso 6 · Aprobación y emisión de la OC · Dueño: SVC-03 · Modo: S y A ==
+CO -> APP : Aprobar sugerencia en el Dashboard\nINT-01 (TRX-01 → TRX-02) (S)
+APP -> REP : INT-12 Aprobar sugerencia (S)
+note over REP : TX-04: sugerencia Aprobada + OC Emitida + outbox\n(valida el estado vigente)
+REP --> APP : OC emitida
+REP ->> BRK : INT-13: EVT-17 SugerenciaReposicionAprobada,\nEVT-19 OrdenCompraEmitida
+note over BRK : EVT-19 también llega a SVC-02 y SVC-05\n(réplica de las OC esperadas)
+BRK ->> PRY : VL-02 actualizada (INT por definir)
+
+== Paso 7 · Envío de la OC al ERP · Dueño: SVC-03 → EXT-01 · Modo: A ==
+REP ->> ERP : INT-14 Enviar OC (A, con reintentos)\n(vía adaptador)
+note over PRY : Dashboard: sin cambio visible
+
+== Paso 8 · Llega el camión y se recibe la OC · Dueños: SVC-05 y SVC-02 · Modo: A y S ==
+GAR ->> FLO : INT-28 Llegada del camión en garita (A)
+FLO ->> BRK : EVT-33 VehiculoArribado
+BRK ->> PRY : INT-32: VL-05
+OB -> APP : Registrar recepción de la OC en el Dashboard\nINT-01 (TRX-01 → TRX-02) (S)
+APP -> INV : INT-06 Registrar recepción con OC (S)
+note over INV : TX-01: lote + movimiento + saldo + outbox
+INV --> APP : Recepción confirmada
+INV ->> BRK : INT-07: EVT-04 RecepcionRegistrada,\nEVT-05 SaldoActualizado
+BRK ->> PRY : INT-08: VL-01
+
+== Paso 9 · Cierre de la OC y riesgo resuelto · Dueño: SVC-03 · Modo: A ==
+BRK ->> REP : INT-09: EVT-04 con OC → avance o cierre de OC
+BRK ->> REP : INT-10: EVT-05 → evaluar política de X
+note over REP : OC cerrada;\ndisponible de X sobre el mínimo
+REP ->> BRK : EVT-20 OrdenCompraCerrada (resultado de INT-09)\nINT-11: EVT-15 RiesgoAgotamientoResuelto
+BRK ->> PRY : La alerta desaparece de VL-02 (INT por definir)
+@enduml
