@@ -4,7 +4,7 @@
 |---|---|
 | Documento | `equipo/P5-JessPCL/HU-08-riesgos.md` (ubicación según `CONTRIBUTING.md` §2) |
 | Issue | #9 · HU-08: Registro inicial de riesgos del proyecto |
-| Versión | **1.0.0** |
+| Versión | **1.1.0** |
 | Estado | Propuesto para revisión (Sprint 1 · HU-08) |
 | Dueño | P5 · Diseñador de procesos y calidad |
 | Revisor | P4 |
@@ -41,7 +41,7 @@
 | RIE-02 | Técnico | UD-1 como punto único de fallo; FAL-02 sin definir para el MVP | 2 | 2 | 4 · Media | SVC-02, SVC-04 · FAL-02 · RNF-DIS-02, RNF-DIS-04 | P1 | Abierto | 2026-11-23 · S1 |
 | RIE-03 | Técnico | Eventos perdidos, duplicados o fuera de orden | 1 | 3 | 3 · Media | TRX-03 · FAL-01, FAL-08 · RNF-DIS-01 | P7 | Abierto | 2026-11-23 · S1 |
 | RIE-04 | Técnico | Sobrerreserva por concurrencia o reintentos de INT-19 | 1 | 3 | 3 · Media | SVC-02, SVC-04 · FAL-02 · RNF-CON-01, RNF-REN-02 | P4 | Abierto | 2026-11-23 · S1 |
-| RIE-05 | Técnico | Frescura del dashboard: latencia encadenada del flujo B y retraso no visible | 3 | 2 | **6 · Alta** | SVC-03, TRX-04 · FAL-06 · RNF-REN-03, RNF-CON-02 | P5 | Abierto | 2026-11-23 · S1 |
+| RIE-05 | Técnico | Frescura del dashboard: latencia encadenada del flujo B y retraso no visible | 3 | 2 | **6 · Alta** | SVC-03, TRX-04 · FAL-06 · RNF-REN-03, RNF-REN-05, RNF-CON-02 | P5 | En mitigación (HU-27) | 2026-11-24 · S3 |
 | RIE-06 | Técnico | Réplicas locales atrasadas (catálogo y OC) | 2 | 2 | 4 · Media | SVC-02, SVC-03 · FAL-01 · CE-02, CE-06 | P4 | Abierto | 2026-11-23 · S1 |
 | RIE-07 | Técnico | Dependencias externas inestables (EXT-01 a EXT-05) | 2 | 2 | 4 · Media | SVC-03, SVC-05 · FAL-03, FAL-05, FAL-07, FAL-09 · RNF-DIS-03 | P6 | Abierto | 2026-11-23 · S1 |
 | RIE-08 | Técnico | Autorización solo en la UI o separación de funciones no aplicable | 2 | 2 | 4 · Media | Todos los SVC · RNF-SEG-01, RNF-SEG-02 · OPS-03 | P2 | Abierto | 2026-11-23 · S1 |
@@ -52,7 +52,7 @@
 | RIE-13 | Equipo | Fuente, exportación y versión de diagramas desincronizadas | 2 | 2 | 4 · Media | ADR-008 · BACKLOG §7.2, §7.3 | P3 | Abierto | 2026-11-23 · S1 |
 | RIE-14 | Alcance | Contenido de Desarrollo de Software Moderno dentro de los artefactos | 2 | 2 | 4 · Media | Contrato §14 · BACKLOG §6.3 | P3 | Abierto | 2026-11-23 · S1 |
 | RIE-15 | Alcance | Sobrediseño frente a la capacidad del equipo | 2 | 3 | **6 · Alta** | UD-2, UD-3 · BACKLOG §2.2, §5.3 | P2 | Abierto | 2026-11-23 · S1 |
-| RIE-16 | Alcance | Requisitos de calidad incompletos o no verificables | 3 | 2 | **6 · Alta** | FAL-04 a FAL-09 · RNF-ESC-01, RNF-DIS-04 | P5 | Abierto | 2026-11-23 · S1 |
+| RIE-16 | Alcance | Requisitos de calidad incompletos o no verificables | 3 | 2 | **6 · Alta** | FAL-04 a FAL-09 · RNF-DIS-05 a RNF-DIS-10, RNF-ESC-02, RNF-ESC-03 | P5 | En mitigación (HU-27) | 2026-11-24 · S3 |
 | RIE-17 | Alcance | Decisiones de arquitectura percibidas como desvío del enunciado | 2 | 2 | 4 · Media | ADR-001, ADR-003, ADR-006 | P1 | Abierto | 2026-11-23 · S1 |
 | RIE-18 | Alcance | Trazabilidad incompleta: HN sin artefacto o artefactos huérfanos | 2 | 2 | 4 · Media | Todos los SVC · BACKLOG §2.2, HU-35 | P4 | Abierto | 2026-11-23 · S1 |
 
@@ -233,12 +233,12 @@ Cada riesgo indica causa, consecuencia, indicador de alerta (cuándo actuar), mi
 | FAL-01 Broker no disponible | RNF-DIS-01 (y RNF-CON-02 para el aviso en la vista) | RIE-03, RIE-06 | — |
 | FAL-02 SVC-02 no disponible | RNF-DIS-02 | RIE-02, RIE-04 | Definir qué significa dentro de UD-1 (H-03) |
 | FAL-03 Telemetría o EXT-03 sin señal | RNF-DIS-03 | RIE-07 | — |
-| FAL-04 SVC-06 no disponible | — | RIE-16 | Sin RNF (H-02) |
-| FAL-05 EXT-01 ERP no disponible | — | RIE-07, RIE-16 | Sin RNF (H-02) |
-| FAL-06 TRX-04 caída o corrupta | RNF-CON-02 (solo el aviso) | RIE-05 | Sin RNF de reconstrucción (H-02) |
-| FAL-07 EXT-04 IdP no disponible | — | RIE-07, RIE-16 | Sin RNF (H-02) |
-| FAL-08 Evento falla repetidamente | — (RNF-DIS-01 cubre solo la caída del broker) | RIE-03 | Sin RNF (H-02) |
-| FAL-09 EXT-02 transportista sin respuesta | — | RIE-07 | Sin RNF (H-02) |
+| FAL-04 SVC-06 no disponible | RNF-DIS-05 (HU-27) | RIE-16 | Cubierta en HU-27 |
+| FAL-05 EXT-01 ERP no disponible | RNF-DIS-06 (HU-27) | RIE-07, RIE-16 | Cubierta en HU-27 |
+| FAL-06 TRX-04 caída o corrupta | RNF-CON-02 y RNF-DIS-07 (HU-27) | RIE-05 | Cubierta en HU-27 |
+| FAL-07 EXT-04 IdP no disponible | RNF-DIS-08 (HU-27) | RIE-07, RIE-16 | Cubierta en HU-27 |
+| FAL-08 Evento falla repetidamente | RNF-DIS-09 (HU-27) | RIE-03 | Cubierta en HU-27 |
+| FAL-09 EXT-02 transportista sin respuesta | RNF-DIS-10 (HU-27) | RIE-07 | Cubierta en HU-27 |
 
 ### 4.2 RNF semilla → riesgo que lo amenaza
 
@@ -291,3 +291,4 @@ Ninguno de estos hallazgos modifica el contrato por sí mismo: cada uno se trami
 | Versión | Fecha | Autor | Cambio | HU |
 |---|---|---|---|---|
 | 1.0.0 | 2026-11-23 | P5 | Registro inicial: 18 riesgos, alineación con §11.2 y §11.3, hallazgos H-01 a H-07 | HU-08 |
+| 1.1.0 | 2026-11-24 | P5 | Revisión del Sprint 3: RIE-05 y RIE-16 pasan a *En mitigación*; FAL-04 a FAL-09 quedan cubiertos por RNF-DIS-05 a RNF-DIS-10 | HU-27 |
