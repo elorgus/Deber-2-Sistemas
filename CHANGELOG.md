@@ -9,12 +9,13 @@
 | Artefacto | Versión | Cambio | HU |
 |---|---|---|---|
 | EST-lote · EST-reserva · EST-sugerencia · EST-orden-compra (fuente y SVG) · equipo/P4-joshdavr/HU-25-diagramas-estado.md | 1.0.0 | Diagramas de estado de Lote, Reserva, Sugerencia de reposición y Orden de compra, con disparadores, transiciones inválidas y preguntas abiertas (Q-1 a Q-5) | HU-25 |
+| docs/arquitectura/disponibilidad-escalabilidad.md · docs/adr/ADR-009-replicas-locales-de-referencia.md | 0.1.0 | Análisis de fallos (FAL-01 a FAL-09), tabla de escalabilidad (RNF-ESC-01) y decisión de réplicas locales. | HU-29 |
 
 **ADR aceptados:** ninguno
 
 ---
 
-## diseno-v0.2.0 · Sprint 2 (En progreso)
+## diseno-v0.2.0 · Sprint 2
 
 **HU incluidas:** HU-11, HU-13, HU-14, HU-16, HU-17, HU-22
 
