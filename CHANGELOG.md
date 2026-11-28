@@ -1,16 +1,22 @@
 # Registro de Cambios (CHANGELOG)
 
-## diseno-v0.4.0 · Sprint 4 (En progreso)
+## diseno-v1.0.0 · 2026-11-27 · Sprint 4 (Versión Final)
 
-**HU incluidas:** HU-35
+**HU incluidas:** HU-34 a HU-42
 
 **Artefactos**
-
 | Artefacto | Versión | Cambio | HU |
 |---|---|---|---|
+| docs/arquitectura/documento-arquitectura.md | 1.0.0 | Documento consolidado de arquitectura | HU-37 |
 | docs/trazabilidad/matriz-trazabilidad.md | 1.0.0 | Matriz HN → SVC → EVT/INT → diagramas → ADR → RNF → versión; 19 de 19 HN de prioridad M trazadas, matriz inversa sin huérfanos y hallazgos T-01 a T-06 para HU-36. | HU-35 |
+| docs/arquitectura/flujos/recorrido-integral.md | 1.0.0 | Recorrido integral del flujo vertical | HU-38 |
+| docs/trazabilidad/auditoria-versionamiento.md | 1.0.0 | Auditoría de versiones | HU-36 |
+| docs/trazabilidad/verificacion-entrega.md | 1.0.0 | Checklist de la rúbrica | HU-41 |
+| entregables/informe/ | 1.0.0 | Informe final en PDF/Word | HU-39 |
+| entregables/presentacion/ | 1.0.0 | Presentación final | HU-40 |
+| docs/gestion/sprints/sprint-4.md | 1.0.0 | Acta del Sprint 4 | HU-42 |
 
-**ADR aceptados:** ninguno
+**ADR aceptados:** Todos (ADR-001 a ADR-009)
 
 ---
 
